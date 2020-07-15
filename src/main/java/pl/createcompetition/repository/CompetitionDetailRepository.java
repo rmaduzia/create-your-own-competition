@@ -1,13 +1,15 @@
 package pl.createcompetition.repository;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import pl.createcompetition.model.CompetitionDetail;
 
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 public interface CompetitionDetailRepository extends JpaRepository<CompetitionDetail, Long>{

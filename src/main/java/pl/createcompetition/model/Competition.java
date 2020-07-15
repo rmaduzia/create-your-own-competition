@@ -36,7 +36,8 @@ public class Competition {
     private Set<UserDetail> userDetails = new HashSet<>();
 
 
-    @OneToMany(mappedBy="competition_tags")
+
+    @OneToMany(mappedBy="competition")
     private Set<CompetitionTags> tags;
 
 

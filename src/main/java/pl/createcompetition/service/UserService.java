@@ -27,7 +27,7 @@ public class UserService {
     }
 
     User createUser(User user){
-        Optional<User> userByLogin = userRepository.findByLogin(user.getLogin());
+        Optional<User> userByLogin = userRepository.findByUsername(user.getUsername());
         userByLogin.ifPresent(u->{
             throw new DuplicateLoginException();
         });
@@ -37,7 +37,7 @@ public class UserService {
     }
 
     User changePassword(User user, String newPassword){
-        Optional<User> findUser = userRepository.findByLogin(user.getLogin());
+        Optional<User> findUser = userRepository.findByUsername(user.getUsername());
         if (findUser.isPresent()){
             User userModel = findUser.get();
             userModel.setPassword(passwordEncoder.encode(newPassword));

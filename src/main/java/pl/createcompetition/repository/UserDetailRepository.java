@@ -19,7 +19,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
 
 
 
-    List<UserDetail> findAllByAgeBetweenAndUser_Login(int low, int high, String login);
+    List<UserDetail> findAllByAgeBetweenAndUser_Username(int low, int high, String username);
 
 
 }

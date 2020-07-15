@@ -23,7 +23,7 @@ public class User {
 
     @NotBlank(message="Bad username")
     @Column(unique = true)
-    private String login;
+    private String username;
 
 
     @Size(min=8, message= "your password must be at least 8 characters")
