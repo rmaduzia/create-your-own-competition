@@ -1,13 +1,23 @@
 package pl.createcompetition.controller;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import pl.createcompetition.service.UserDetailService;
+
+import java.util.List;
 
 @RestController
 @Controller
+@RequestMapping("/user")
 public class UserController {
+
+
+
+    private UserDetailService userDetailService;
+
+    UserController(UserDetailService userDetailService){
+        this.userDetailService = userDetailService;
+    }
 
     @RequestMapping({"/hello"})
     public String hello(){
@@ -18,4 +28,19 @@ public class UserController {
     public String getEmployees() {
         return "Welcome!";
     }
+
+
+
+    @GetMapping()
+    public List findByCity(@RequestParam String city){
+        System.out.println("Get user ##############################");
+        return userDetailService.findByCity(city);
+    }
+
+
+
+
+
+    
+
 }

@@ -1,8 +1,10 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import pl.createcompetition.annotations.ValidPassword;
 
 import javax.persistence.*;
 import java.util.*;
@@ -26,10 +28,8 @@ public class User {
     private String username;
 
 
-    @Size(min=8, message= "your password must be at least 8 characters")
-    @NotBlank(message="Bad password")
+    @ValidPassword
     private String password;
-
 
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;

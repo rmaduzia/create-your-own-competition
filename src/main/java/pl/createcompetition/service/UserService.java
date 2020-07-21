@@ -10,6 +10,7 @@ import pl.createcompetition.model.User;
 import pl.createcompetition.repository.UserRepository;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,6 @@ public class UserService {
             return userRepository.save(userModel);
         }
         throw new LoginNotExistException();
-
     }
 
 }

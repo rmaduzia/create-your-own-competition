@@ -1,5 +1,6 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,7 +36,6 @@ public class UserDetail {
     @Enumerated(EnumType.STRING)
     @NotBlank(message="Gender can't be empty")
     private Gender gender;
-
 
     @OneToOne
     @MapsId
