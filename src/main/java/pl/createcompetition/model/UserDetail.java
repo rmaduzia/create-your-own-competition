@@ -1,9 +1,11 @@
 package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -17,10 +19,11 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@DynamicUpdate
 public class UserDetail {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="user_detail_id")
     private Long id;
 

@@ -10,7 +10,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public interface UserRepository extends JpaRepository<User, Long>{
-    Optional<User> findByUsername(String login);
+    Optional<User> findByUsername(String username);
     List<User> findAllByUsernameContainingIgnoreCase(String login);
 
     /*
@@ -18,4 +18,5 @@ public interface UserRepository extends JpaRepository<User, Long>{
             "from users INNER JOIN user_detail ON users.user_id = user_detail.user_user_id WHERE user_detail.city=Gdynia", nativeQuery =true)
     Stream<User> streamAllUserByCity(String city);
      */
+
 }
