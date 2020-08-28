@@ -1,9 +1,7 @@
 package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +17,7 @@ import javax.validation.constraints.Size;
 @Entity(name="users")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User implements UserDetails {
 
     @Id
@@ -37,6 +36,9 @@ public class User implements UserDetails {
 
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;
+
+
+
 
 
     @Override
@@ -63,4 +65,14 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+/*
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+     */
+
 }
+
+

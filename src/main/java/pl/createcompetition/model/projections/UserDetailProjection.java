@@ -7,7 +7,7 @@ public interface UserDetailProjection {
 
 //    public String getCompetitionName();
 
-    public String getUsername();
+    public String getusername();
 
     public String getCity();
 

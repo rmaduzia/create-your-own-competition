@@ -1,7 +1,5 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +25,7 @@ public class UserDetail {
     @Column(name="user_detail_id")
     private Long id;
 
-    @NotBlank(message="City can't be empty")
     private String city;
-
 
     @Min(value = 15, message="you must be at least 15 years old")
     @Max(value=100, message="you cannot be more than 100 years old")
@@ -50,6 +46,7 @@ public class UserDetail {
         joinColumns=@JoinColumn(name="user_id"),
         inverseJoinColumns=@JoinColumn(name="competition_id"))
     private Set<Competition> competitions = new HashSet<>();
+
 
 
 }

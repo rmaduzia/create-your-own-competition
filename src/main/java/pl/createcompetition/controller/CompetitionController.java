@@ -1,10 +1,7 @@
 package pl.createcompetition.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.service.CompetitionService;
 
@@ -23,6 +20,17 @@ public class CompetitionController {
     public ResponseEntity<Competition> addCompetition(@RequestBody Competition competition){
         competitionService.addCompetition(competition);
         return ResponseEntity.noContent().build();
+    }
+
+
+
+    @DeleteMapping("/{competitionName}")
+    public ResponseEntity<Competition> deleteCompetition(@PathVariable String competitionName){
+        competitionService.deleteCompetition(competitionName);
+        return ResponseEntity.noContent().build();
+
+
+
     }
 
 

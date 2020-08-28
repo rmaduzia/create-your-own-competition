@@ -51,8 +51,12 @@ public class UserDetailService {
         return new ArrayList<>(userQueryRepository.findAllByCity(city));
     }
 
-    public List<UserDetailProjection> findByAge(int low, int high){
+    public List<UserDetailProjection> findAlldByAge(int low, int high){
         return new ArrayList<>(userQueryRepository.findAllByAge(low,high));
+    }
+
+    public List<UserDetailProjection>findAllByCityAndAgeBetween(String city, int low, int high){
+        return new ArrayList<>(userQueryRepository.findAllByCityAndAgeBetween(city,  low, high));
     }
 
 
