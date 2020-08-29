@@ -1,7 +1,9 @@
-package pl.createcompetition.temp_testing;
+package pl.createcompetition.dao;
 
 import org.springframework.stereotype.Repository;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.searchQuery.SearchCriteriaTesting;
+import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,13 +15,13 @@ import java.util.List;
 
 @Repository
 
-public class UserDAO implements IUserDAO {
+public class UserDetailsDAO implements IUserDetailsDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
-    public List<UserDetail> searchUser(final List<SearchCriteria> params) {
+    public List<UserDetail> searchUser(final List<SearchCriteriaTesting> params) {
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         final CriteriaQuery<UserDetail> query = builder.createQuery(UserDetail.class);
         final Root r = query.from(UserDetail.class);

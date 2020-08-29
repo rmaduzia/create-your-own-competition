@@ -1,4 +1,4 @@
-package pl.createcompetition.temp_testing;
+package pl.createcompetition.searchQuery;
 
 
 import java.util.function.Consumer;
@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteria> {
+public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteriaTesting> {
 
         private Predicate predicate;
         private CriteriaBuilder builder;
@@ -21,7 +21,7 @@ public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteria>
         }
 
         @Override
-        public void accept(SearchCriteria param) {
+        public void accept(SearchCriteriaTesting param) {
 
             if (param.getOperation().equalsIgnoreCase(">")) {
                 predicate = builder.and(predicate, builder.greaterThanOrEqualTo(r.get(param.getKey()), param.getValue().toString()));

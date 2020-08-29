@@ -1,4 +1,4 @@
-package pl.createcompetition.temp_testing;
+package pl.createcompetition.searchQuery;
 
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchCriteria {
+public class SearchCriteriaTesting {
     private String key;
     private String operation;
     private Object value;
