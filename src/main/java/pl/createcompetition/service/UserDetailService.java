@@ -1,70 +1,44 @@
 package pl.createcompetition.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
+
 import org.springframework.stereotype.Service;
-import pl.createcompetition.exception.LoginNotExistException;
+import pl.createcompetition.dao.IUserDetailsDAO;
 import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.model.projections.UserDetailProjection;
 import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserQueryRepository;
 import pl.createcompetition.repository.UserRepository;
-import pl.createcompetition.security.UserAuthenticationFilter;
-import pl.createcompetition.security.UserDetailsServiceImplementation;
-import pl.createcompetition.supportingMethods.SupportingStaticsFields;
+import pl.createcompetition.searchQuery.SearchCriteria;
+import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 import pl.createcompetition.supportingMethods.getLogedUserName;
 
-
-import java.lang.reflect.Field;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
-public class UserDetailService {
+public class UserDetailService implements IUserDetailsDAO {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
     private UserDetailRepository userDetailRepository;
 
-    @Autowired
-    private UserQueryRepository userQueryRepository;
-
-    @Autowired
     private UserRepository userRepository;
 
-
-    UserDetailService(UserDetailRepository userDetailRepository){
+    UserDetailService(UserDetailRepository userDetailRepository, UserRepository userRepository ) {
+        this.userRepository = userRepository;
         this.userDetailRepository = userDetailRepository;
     }
-
-
-   // String userName = new getLogedUserName().username;
-
-    public List<UserDetailProjection> findByCity(String city){
-        return new ArrayList<>(userQueryRepository.findAllByCity(city));
-    }
-
-    public List<UserDetailProjection> findAlldByAge(int low, int high){
-        return new ArrayList<>(userQueryRepository.findAllByAge(low,high));
-    }
-
-    public List<UserDetailProjection>findAllByCityAndAgeBetween(String city, int low, int high){
-        return new ArrayList<>(userQueryRepository.findAllByCityAndAgeBetween(city,  low, high));
-    }
-
-
 
     public UserDetail addUserDetail(UserDetail userDetail)  {
 
         String userName = new getLogedUserName().username;
-        Optional<User> foundUser = userRepository.findByUsername(userName);
+        Optional<User> foundUser = userRepository.findByUserName(userName);
 
         if(foundUser.isPresent()){
             userDetail.setUser(foundUser.get());
@@ -78,23 +52,39 @@ public class UserDetailService {
     public UserDetail updateUserDetail(UserDetail userDetail){
         String userName = new getLogedUserName().username;
 
-        Optional<User> foundUser = userRepository.findByUsername(userName);
+        Optional<User> foundUser = userRepository.findByUserName(userName);
         foundUser.ifPresent(user -> userDetail.setId(user.getId()));
         userDetailRepository.save(userDetail);
         return userDetail;
     }
 
-    public List<UserDetail> getUserDetails(){
+    @PersistenceContext
+    private EntityManager entityManager;
 
-        List<UserDetail> users = userDetailRepository.findAll();
-        return users;
+    @Override
+    public List<UserDetail> searchUser(String search) {
+
+        final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<UserDetail> query = builder.createQuery(UserDetail.class);
+        final Root r = query.from(UserDetail.class);
+
+        List<SearchCriteria> params = new ArrayList<>();
+        if (search != null) {
+            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
+            Matcher matcher = pattern.matcher(search + ",");
+            while (matcher.find()) {
+                params.add(new SearchCriteria(matcher.group(1), matcher.group(2), matcher.group(3)));
+            }
+        }
+
+        Predicate predicate = builder.conjunction();
+        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, builder, r);
+        params.forEach(searchConsumer);
+        predicate = searchConsumer.getPredicate();
+        query.where(predicate);
+
+        return entityManager.createQuery(query).getResultList();
     }
-
-
-
-
-
-
 
 
 }

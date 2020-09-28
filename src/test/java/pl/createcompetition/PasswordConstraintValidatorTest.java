@@ -27,7 +27,7 @@ public class PasswordConstraintValidatorTest {
         validator = factory.getValidator();
 
     }
-
+/*
     @Test
     public void testValidPassword(){
         User userRegistration = new User();
@@ -48,4 +48,5 @@ public class PasswordConstraintValidatorTest {
         assertEquals(constraintViolations.size(), 1);
     }
 
+ */
 }

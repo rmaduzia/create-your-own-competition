@@ -3,7 +3,7 @@ package pl.createcompetition.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.createcompetition.exception.CompetitionExistsException;
+import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.supportingMethods.getLogedUserName;
@@ -21,7 +21,7 @@ public class CompetitionService {
     }
 
 
-    public Competition addCompetition(Competition competition){
+    public Competition addCompetition(Competition competition) throws ResourceNotFoundException {
         String userName = new getLogedUserName().username;
 
         Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
@@ -32,7 +32,8 @@ public class CompetitionService {
             return competition;
         } else{
             System.out.println("competition exist");
-            throw new CompetitionExistsException();
+            throw new ResourceNotFoundException("cos", "cos2","Competition already exists");
+            //throw new CompetitionExistsException();
         }
     }
 

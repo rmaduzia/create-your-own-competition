@@ -15,6 +15,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
     List<UserQueryMapper> findAllByCity(String column_name, String city);
     UserQueryMapper tk = new UserQueryMapper("cos", "cos", 12,1 );
 */
+/*
     UserDetail findByUser_Username(String userName);
 
     List<UserDetail> findAllByCityAndGender(String city, Gender gender);
@@ -31,5 +32,7 @@ public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
     List<UserDetail> findAllByAgeBetweenAndUser_Username(int low, int high, String username);
 
 
+
+ */
 //    void save(List<? extends UserDetail> UserDetail);
 }

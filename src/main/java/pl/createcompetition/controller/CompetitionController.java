@@ -18,18 +18,15 @@ public class CompetitionController {
 
     @PostMapping("")
     public ResponseEntity<Competition> addCompetition(@RequestBody Competition competition){
-        competitionService.addCompetition(competition);
+     //   competitionService.addCompetition(competition);
         return ResponseEntity.noContent().build();
     }
-
 
 
     @DeleteMapping("/{competitionName}")
     public ResponseEntity<Competition> deleteCompetition(@PathVariable String competitionName){
         competitionService.deleteCompetition(competitionName);
         return ResponseEntity.noContent().build();
-
-
 
     }
 

@@ -2,25 +2,23 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import pl.createcompetition.annotations.ValidPassword;
 
-import javax.persistence.*;
-import java.util.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
-@EqualsAndHashCode
-@Entity(name="users")
-@Getter
-@Setter
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+@Entity
+@Table(name = "users", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "email")
+})
+@Data
+@Builder
 @NoArgsConstructor
-public class User implements UserDetails {
+@AllArgsConstructor
+public class User{
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -29,52 +27,32 @@ public class User implements UserDetails {
 
     @NotBlank(message="Bad username")
     @Column(unique = true)
-    private String username;
+    private String userName;
 
+    private String imageUrl;
 
-    //@JsonIgnore
-    @ValidPassword
+    @Email
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private Boolean emailVerified = false;
+
+    @JsonIgnore
     private String password;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    private AuthProvider provider;
+
+    private String providerId;
+
+    private Integer age;
+
 
     @JsonBackReference
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;
-
-
-
-
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority("USER"));
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
-    }
-
-/*
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
-    }
-     */
 
 }
 

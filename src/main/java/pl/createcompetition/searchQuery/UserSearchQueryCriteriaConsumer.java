@@ -7,7 +7,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteriaTesting> {
+public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteria> {
 
         private Predicate predicate;
         private CriteriaBuilder builder;
@@ -21,7 +21,7 @@ public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteriaT
         }
 
         @Override
-        public void accept(SearchCriteriaTesting param) {
+        public void accept(SearchCriteria param) {
 
             if (param.getOperation().equalsIgnoreCase(">")) {
                 predicate = builder.and(predicate, builder.greaterThanOrEqualTo(r.get(param.getKey()), param.getValue().toString()));

@@ -1,96 +1,63 @@
 package pl.createcompetition.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.model.projections.UserDetailProjection;
+import pl.createcompetition.model.User;
+import pl.createcompetition.payload.ChangeMailRequest;
+import pl.createcompetition.payload.ChangePasswordRequest;
+import pl.createcompetition.security.CurrentUser;
+import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.UserService;
 
-import pl.createcompetition.service.UserDetailService;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
 @RestController
-@Controller
-@CrossOrigin
-@RequestMapping("/user")
 public class UserController {
+    final private UserService userService;
 
-
-
-    private UserDetailService userDetailService;
-
-
-
-
-    UserController(UserDetailService userDetailService){
-        this.userDetailService = userDetailService;
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
+    @GetMapping("/user/me")
+    @PreAuthorize("hasRole('USER')")
+    public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
+        return userService.getCurrentUser(userPrincipal);
+    }
 
-    @GetMapping
-    public List<UserDetailProjection> findByCity(@RequestParam(required = false) String city,
-                                                 @RequestParam(required = false) Integer low,
-                                                 @RequestParam(required = false) Integer high){
+    @GetMapping("/user")
+    @PreAuthorize("hasRole('ADMIN')")
+    public Iterable<User> getUsers(
+            @RequestParam(required = false) Optional<Long> publicId,
+            @RequestParam(required = false) Optional<String> name,
+            @RequestParam(required = false) Optional<String> age,
+            @RequestParam(required = false) Optional<String> email) {
 
-        return userDetailService.findAllByCityAndAgeBetween(city, low, high);
+        return userService.getUsersByProps(publicId, name, age, email);
+    }
+
+    @PostMapping("changeMail")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> changeEmail(@RequestBody @Valid ChangeMailRequest changeMail){
+        return userService.changeEmail(changeMail);
+    }
+
+    @PostMapping("changePassword")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordRequest changePassword){
+        return userService.changePassword(changePassword);
+    }
+
 /*
-        if(city != null){
-            return userDetailService.findByCity(city);
-        }else{
-            return userDetailService.findAlldByAge(high, low);
-        }
+    @GetMapping("statusList")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> getStatusList(){
+        return userService.getStatusList();
+    }
 
  */
-    }
-
-    @PostMapping("")
-    public ResponseEntity<UserDetail> addUserDetail(@RequestBody UserDetail userDetail){
-        System.out.println(userDetail.toString());
-        userDetailService.addUserDetail(userDetail);
-        return ResponseEntity.noContent().build();
-    }
-
-    @PutMapping("")
-    public ResponseEntity<UserDetail> updateUserDetail(@RequestBody UserDetail userDetail){
-        userDetailService.updateUserDetail(userDetail);
-        return ResponseEntity.noContent().build();
-
-    }
-
-
-
-
-    /*
-    @RequestMapping(method = RequestMethod.GET, value = "/users")
-    @ResponseBody
-    public List<UserDetail> search(@RequestParam(value = "search") String search) {
-        UserSpecificationsBuilder builder = new UserSpecificationsBuilder();
-        Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-        Matcher matcher = pattern.matcher(search + ",");
-        while (matcher.find()) {
-            builder.with(matcher.group(1), matcher.group(2), matcher.group(3));
-        }
-
-        Specification<UserDetail> spec = builder.build();
-        return userDetailRepositoryTemp.findAll(spec);
-    }
-
-
-     */
-/*
-    @GetMapping("/tmp")
-    public List <UserDetail> getUsersDetails()  {
-        return userDetailService.getUserDetails();
-        //return ResponseEntity.noContent().build();
-    }
-*/
-
-    
-
 }

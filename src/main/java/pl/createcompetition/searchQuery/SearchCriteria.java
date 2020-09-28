@@ -8,9 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class SearchCriteriaTesting {
+public class SearchCriteria {
     private String key;
     private String operation;
     private Object value;
-
 }

@@ -1,17 +1,13 @@
 package pl.createcompetition.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.repository.UserDetailsRepository;
-import pl.createcompetition.dao.IUserDetailsDAO;
-import pl.createcompetition.searchQuery.SearchCriteriaTesting;
+import pl.createcompetition.service.UserDetailService;
 
-import java.util.ArrayList;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 @Controller
@@ -19,32 +15,32 @@ import java.util.regex.Pattern;
 public class UserDetailsController {
 
 
-    @Autowired
-    private IUserDetailsDAO service;
+    private UserDetailService userDetailService;
 
-    @Autowired
-    private UserDetailsRepository myUserRepository;
-
-    public UserDetailsController() {
-        super();
+    public UserDetailsController(UserDetailService userDetailService) {
+        this.userDetailService = userDetailService;
     }
 
-    // API - READ
-    //@RequestMapping(method = RequestMethod.GET, value = "/1")
 
     @GetMapping
     @ResponseBody
-    public List<UserDetail> search(@RequestParam(value = "search", required = false) String search) {
+    public List<UserDetail> search(@RequestParam(value = "search") @NotBlank String search) {
 
-        List<SearchCriteriaTesting> params = new ArrayList<SearchCriteriaTesting>();
-        if (search != null) {
-            Pattern pattern = Pattern.compile("(\\w+?)(:|<|>)(\\w+?),");
-            Matcher matcher = pattern.matcher(search + ",");
-            while (matcher.find()) {
-                params.add(new SearchCriteriaTesting(matcher.group(1), matcher.group(2), matcher.group(3)));
-            }
-        }
-        return service.searchUser(params);
+        return userDetailService.searchUser(search);
+
+    }
+
+    @PostMapping("")
+    public ResponseEntity<UserDetail> addUserDetail(@RequestBody UserDetail userDetail){
+        System.out.println(userDetail.toString());
+        //return userDetailService.addUserDetail(userDetail);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("")
+    public ResponseEntity<UserDetail> updateUserDetail(@RequestBody UserDetail userDetail){
+        userDetailService.updateUserDetail(userDetail);
+        return ResponseEntity.noContent().build();
 
     }
 
