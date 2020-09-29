@@ -11,60 +11,16 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-import pl.createcompetition.model.User;
 
-
-import pl.createcompetition.model.UserDetail;
 
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 
-import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+@SpringBootTest
+class CreateCompetitionApplicationTests {
 
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.collection.IsIn.isIn;
-import static org.hamcrest.core.IsNot.not;
-
-//@RunWith(SpringRunner.class)
-///@SpringBootTest
-//@DataJpaTest
-//@Transactional
-//@ContextConfiguration(classes=CreatecompetitionApplication.class)
-
-/*
-@RunWith(SpringRunner.class)
-@ActiveProfiles("test")
-@Transactional
-@DataJpaTest
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-
- */
-
-
-@RunWith(SpringRunner.class)
-@DataJpaTest
-@AutoConfigureTestDatabase(replace= AutoConfigureTestDatabase.Replace.NONE)
-class CreatecompetitionApplicationTests {
-
-
-
-    @Autowired
-    private UserRepository userRepository;
-
-     @Autowired
-     private UserDetailRepository userDetailRepository;
 
 /*
      @Autowired
