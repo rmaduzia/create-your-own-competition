@@ -32,7 +32,7 @@ import static org.mockito.Mockito.*;
 public class UserServiceTest {
 
     @Mock
-    private UserRepository userDao;
+    private UserRepository userRepository;
     @Mock
     private MailService mailService;
     @InjectMocks
@@ -49,7 +49,6 @@ public class UserServiceTest {
         user = User.builder()
                 .id(1L)
                 .userName("Test")
-                .age(18)
                 .email("test@test.com")
                 .imageUrl("test Url")
                 .emailVerified(true)
@@ -62,13 +61,13 @@ public class UserServiceTest {
         passwordRequest = new ChangePasswordRequest("NewPassword", user.getId(), "Password");
         mailRequest = new ChangeMailRequest("test2@test.com", user.getId(), "Password");
 
-        when(userDao.save(this.user)).thenReturn(mockUser);
-        when(userDao.findByIdAndPassword(user.getId(), user.getPassword())).thenReturn(Optional.of(this.user));
+        when(userRepository.save(this.user)).thenReturn(mockUser);
+        when(userRepository.findByIdAndPassword(user.getId(), user.getPassword())).thenReturn(Optional.of(this.user));
     }
 
     @Test
     public void should_GetCurrentUser() {
-        when(userDao.findById(ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Assert.assertEquals(userService.getCurrentUser(userPrincipal).getEmail(),user.getEmail());
     }
 
@@ -78,18 +77,18 @@ public class UserServiceTest {
         mockUser.setEmail("test2@test.com");
 
         ResponseEntity<ApiResponse> isChanged = userService.changeEmail(mailRequest);
-        User user = userDao.findByIdAndPassword(this.user.getId(), "Password").get();
+        User user = userRepository.findByIdAndPassword(this.user.getId(), "Password").get();
 
         assertTrue(isChanged.getBody().isSuccess());
         assertEquals("testChangeEmail Success", "test2@test.com", user.getEmail());
-        verify(userDao, times(1)).save(this.user);
+        verify(userRepository, times(1)).save(this.user);
         verify(mailService, times(1)).send(any(Mail.class));
     }
 
     @Test
     public void should_NotChangeEmail() {
 
-        when(userDao.findByIdAndPassword(this.user.getId(), "Password")).thenReturn(Optional.empty());
+        when(userRepository.findByIdAndPassword(this.user.getId(), "Password")).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () ->{
             userService.changeEmail(mailRequest);
@@ -104,14 +103,14 @@ public class UserServiceTest {
         ResponseEntity<ApiResponse> isChanged = userService.changePassword(passwordRequest);
 
         assertTrue(isChanged.getBody().isSuccess());
-        verify(userDao, times(1)).save(this.user);
+        verify(userRepository, times(1)).save(this.user);
         verify(mailService, times(1)).send(any(Mail.class));
     }
 
     @Test
     public void should_NotChangePassword() {
 
-        when(userDao.findByIdAndPassword(user.getId(), user.getPassword())).thenReturn(Optional.empty());
+        when(userRepository.findByIdAndPassword(user.getId(), user.getPassword())).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () ->{
             userService.changePassword(passwordRequest);

@@ -3,6 +3,7 @@ package pl.createcompetition.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,7 @@ import java.util.Set;
 @Setter
 @Entity
 @DynamicUpdate
+@Builder
 public class UserDetail {
 
     @Id
@@ -43,7 +45,6 @@ public class UserDetail {
     @MapsId
     @JsonManagedReference
     private User user;
-
 
     @ManyToMany
     @JoinTable(name="user_competition",

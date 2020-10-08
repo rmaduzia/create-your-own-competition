@@ -47,9 +47,6 @@ public class User{
 
     private String providerId;
 
-    private Integer age;
-
-
     @JsonBackReference
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;

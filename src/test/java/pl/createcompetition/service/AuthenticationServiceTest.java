@@ -36,10 +36,10 @@ public class AuthenticationServiceTest {
     Authentication authentication = Mockito.mock(Authentication.class);
 
     PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
-    UserRepository userDao = Mockito.mock(UserRepository.class);
+    UserRepository userRepository = Mockito.mock(UserRepository.class);
 
     TokenProvider tokenProvider = Mockito.mock(TokenProvider.class);
-    AuthenticationService authenticationService = new AuthenticationService(authenticationManager, userDao, passwordEncoder, tokenProvider);
+    AuthenticationService authenticationService = new AuthenticationService(authenticationManager, userRepository, passwordEncoder, tokenProvider);
 
     @BeforeAll
     static void setUp() {
@@ -53,8 +53,8 @@ public class AuthenticationServiceTest {
     @Test
     public void should_RegisterNewUser() {
 
-        Mockito.when(userDao.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
-        Mockito.when(userDao.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+        Mockito.when(userRepository.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
+        Mockito.when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
         Assert.assertEquals(authenticationService.registerUser(signUpRequest).getStatusCode(), HttpStatus.CREATED);
     }

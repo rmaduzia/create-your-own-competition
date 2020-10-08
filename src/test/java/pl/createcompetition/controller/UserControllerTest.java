@@ -49,7 +49,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(1)
     void should_ChangePasswordCorrect() throws Exception {
         when(userService.changePassword(any(ChangePasswordRequest.class))).thenReturn(response);
 
@@ -58,7 +57,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(2)
     void should_ChangePasswordInValid() throws Exception {
         when(userService.changePassword(any(ChangePasswordRequest.class))).thenThrow(ResourceNotFoundException.class);
 
@@ -67,7 +65,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(3)
     void should_ChangeMailCorrect() throws Exception {
         when(userService.changeEmail(any(ChangeMailRequest.class))).thenReturn(response);
 
@@ -76,7 +73,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Order(4)
     void should_NotChangeMail() throws Exception {
         when(userService.changeEmail(any(ChangeMailRequest.class))).thenThrow(ResourceNotFoundException.class);
 

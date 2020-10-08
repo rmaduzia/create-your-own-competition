@@ -1,14 +1,16 @@
 package pl.createcompetition.service;
 
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.createcompetition.dao.IUserDetailsDAO;
+import pl.createcompetition.model.dao.IUserDetailsDAO;
 import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.searchQuery.SearchCriteria;
 import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
+import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.supportingMethods.getLogedUserName;
 
 import javax.persistence.EntityManager;
@@ -35,28 +37,30 @@ public class UserDetailService implements IUserDetailsDAO {
         this.userDetailRepository = userDetailRepository;
     }
 
-    public UserDetail addUserDetail(UserDetail userDetail)  {
+    public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
-        String userName = new getLogedUserName().username;
-        Optional<User> foundUser = userRepository.findByUserName(userName);
+        //String userName = new getLogedUserName().username;
+        Optional<User> foundUser = userRepository.findByUserName(userPrincipal.getUsername());
+
+
 
         if(foundUser.isPresent()){
             userDetail.setUser(foundUser.get());
             userDetail.setId(foundUser.get().getId());
         }
-        userDetailRepository.save(userDetail);
-
-        return userDetail;
+        //userDetailRepository.save(userDetail);
+        return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
-    public UserDetail updateUserDetail(UserDetail userDetail){
-        String userName = new getLogedUserName().username;
+    public ResponseEntity<?> updateUserDetail(UserDetail userDetail, UserPrincipal userPrincipal){
+        //String userName = new getLogedUserName().username;
 
-        Optional<User> foundUser = userRepository.findByUserName(userName);
+        Optional<User> foundUser = userRepository.findByUserName(userPrincipal.getUsername());
         foundUser.ifPresent(user -> userDetail.setId(user.getId()));
-        userDetailRepository.save(userDetail);
-        return userDetail;
+
+        return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
+
 
     @PersistenceContext
     private EntityManager entityManager;

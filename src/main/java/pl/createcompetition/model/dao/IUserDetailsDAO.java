@@ -1,4 +1,4 @@
-package pl.createcompetition.dao;
+package pl.createcompetition.model.dao;
 
 import pl.createcompetition.model.UserDetail;
 

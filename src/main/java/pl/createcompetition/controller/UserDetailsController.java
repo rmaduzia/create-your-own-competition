@@ -1,9 +1,12 @@
 package pl.createcompetition.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.security.CurrentUser;
+import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.UserDetailService;
 
 import javax.validation.constraints.NotBlank;
@@ -30,39 +33,20 @@ public class UserDetailsController {
 
     }
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("")
-    public ResponseEntity<UserDetail> addUserDetail(@RequestBody UserDetail userDetail){
+    public ResponseEntity<?> addUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal){
         System.out.println(userDetail.toString());
-        //return userDetailService.addUserDetail(userDetail);
-        return ResponseEntity.noContent().build();
+        return userDetailService.addUserDetail(userDetail, userPrincipal);
     }
 
     @PutMapping("")
-    public ResponseEntity<UserDetail> updateUserDetail(@RequestBody UserDetail userDetail){
-        userDetailService.updateUserDetail(userDetail);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> updateUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal){
+        return userDetailService.updateUserDetail(userDetail, userPrincipal);
 
     }
 
 
-    // API - WRITE
-/*
-    @RequestMapping(method = RequestMethod.POST, value = "/users")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody UserDetail resource) {
-        Preconditions.checkNotNull(resource);
-        dao.save(resource);
-    }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/myusers")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addMyUser(@RequestBody UserDetail resource) {
-        Preconditions.checkNotNull(resource);
-        myUserRepository.save(resource);
-
-    }
-
- */
-    
 
 }
