@@ -34,17 +34,26 @@ public class UserDetailsController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("")
-    public ResponseEntity<?> addUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal){
+    @PostMapping()
+    public ResponseEntity<?> addUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
         System.out.println(userDetail.toString());
         return userDetailService.addUserDetail(userDetail, userPrincipal);
     }
 
-    @PutMapping("")
-    public ResponseEntity<?> updateUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal){
+    @PreAuthorize("hasRole('USER')")
+    @PutMapping()
+    public ResponseEntity<?> updateUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
         return userDetailService.updateUserDetail(userDetail, userPrincipal);
-
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @DeleteMapping()
+    public ResponseEntity<?> deleteUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
+        return userDetailService.deleteUserDetail(userDetail, userPrincipal);
+    }
+
+
+
 
 
 

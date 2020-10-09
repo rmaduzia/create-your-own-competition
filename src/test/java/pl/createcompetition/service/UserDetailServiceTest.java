@@ -1,18 +1,16 @@
 package pl.createcompetition.service;
 
-
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.runner.RunWith;
-import org.mockito.ArgumentMatchers;
-import org.mockito.InjectMocks;
-import org.mockito.Mockito;
-import org.mockito.Spy;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import pl.createcompetition.model.AuthProvider;
 import pl.createcompetition.model.Gender;
 import pl.createcompetition.model.User;
@@ -22,24 +20,26 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Optional;
-import java.util.UUID;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
-@RunWith(MockitoJUnitRunner.class)
+//@AutoConfigureTestDatabase(connection = EmbeddedDatabaseConnection.H2)
+@ExtendWith(MockitoExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserDetailServiceTest {
 
-    /*
+
     @Spy
     UserRepository userRepository;
     @Spy
     UserDetailRepository userDetailRepository;
     @InjectMocks
     UserDetailService userDetailService;
-*/
-    UserRepository userRepository = Mockito.mock(UserRepository.class);
-    UserDetailRepository userDetailRepository = Mockito.mock(UserDetailRepository.class);
-    UserDetailService userDetailService = Mockito.mock(UserDetailService.class);
 
 
     User user;
@@ -48,6 +48,8 @@ public class UserDetailServiceTest {
 
     @BeforeAll
     public void setUp() {
+        MockitoAnnotations.initMocks(this);
+
         user = User.builder()
                 .userName("Test")
                 .password("Password%123")
@@ -57,7 +59,7 @@ public class UserDetailServiceTest {
         userPrincipal = UserPrincipal.create(user);
 
         userDetail = UserDetail.builder()
-                .id(1l)
+                .id(1L)
                 .user(user)
                 .age(15)
                 .city("Gdynia")
@@ -68,12 +70,43 @@ public class UserDetailServiceTest {
 
     @Test
     public void shouldAddUserDetail() {
+
+        ResponseEntity<?> responseEntity = new ResponseEntity<>(HttpStatus.OK);
+
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
-        System.out.println(user);
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
-        System.out.println(user);
-        Assert.assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getBody(),userDetail);
+
+        //  Mockito.when(userDetailService.addUserDetail(userDetail, userPrincipal)).thenReturn(responseEntity);
+        //doReturn(responseEntity).when(userDetailService).addUserDetail(userDetail, userPrincipal);
+        // System.out.println("fffff" + userDetailService.addUserDetail(userDetail, userPrincipal).getBody());
+
+        userDetailService.addUserDetail(userDetail, userPrincipal);
+        verify(userDetailRepository, times(1)).save(userDetail);
+
+        System.out.println("dadad" + userDetailService.addUserDetail(userDetail, userPrincipal).getBody());
+
+        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
+
+
     }
+
+    @Test
+    public void shouldUpdateUserDetail() {
+
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
+        Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
+
+        userDetailService.updateUserDetail(userDetail, userPrincipal);
+        verify(userDetailRepository, times(1)).save(userDetail);
+
+        assertEquals(userDetailService.updateUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
+
+    }
+
+
+
+
+
 
 
 
