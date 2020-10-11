@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pl.createcompetition.exception.BadRequestException;
+import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.AuthProvider;
 import pl.createcompetition.model.Gender;
 import pl.createcompetition.model.User;
@@ -43,8 +45,11 @@ public class UserDetailServiceTest {
 
 
     User user;
+    User userException;
     UserDetail userDetail;
     UserPrincipal userPrincipal;
+    UserPrincipal userPrincipalException;
+
 
     @BeforeAll
     public void setUp() {
@@ -65,6 +70,15 @@ public class UserDetailServiceTest {
                 .city("Gdynia")
                 .gender(Gender.FEMALE).build();
 
+        userException = User.builder()
+                .userName("Test")
+                .password("Password%123")
+                .id(7L).provider(AuthProvider.local)
+                .email("test@mail.com").emailVerified(true).build();
+
+        userPrincipalException = UserPrincipal.create(userException);
+
+
 
     }
 
@@ -76,19 +90,25 @@ public class UserDetailServiceTest {
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
-        //  Mockito.when(userDetailService.addUserDetail(userDetail, userPrincipal)).thenReturn(responseEntity);
-        //doReturn(responseEntity).when(userDetailService).addUserDetail(userDetail, userPrincipal);
-        // System.out.println("fffff" + userDetailService.addUserDetail(userDetail, userPrincipal).getBody());
-
         userDetailService.addUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
 
-        System.out.println("dadad" + userDetailService.addUserDetail(userDetail, userPrincipal).getBody());
-
         assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
 
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUserNotFound() {
+
+        Exception exception = assertThrows(
+                ResourceNotFoundException.class,
+                () -> userDetailService.addUserDetail(userDetail, userPrincipal),
+                "Expected doThing() to throw, but it didn't"
+        );
+        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
 
     }
+
 
     @Test
     public void shouldUpdateUserDetail() {
@@ -102,6 +122,24 @@ public class UserDetailServiceTest {
         assertEquals(userDetailService.updateUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
 
     }
+
+    @Test
+    public void shouldDeleteUserDetail() {
+
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
+
+        userDetailService.deleteUserDetail(userDetail, userPrincipal);
+        verify(userDetailRepository, times(1)).deleteById(userDetail.getId());
+
+        assertEquals(userDetailService.deleteUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+
+    }
+
+
+
+
+
+
 
 
 
