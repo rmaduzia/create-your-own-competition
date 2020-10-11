@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceNotFoundException;
@@ -52,29 +53,27 @@ public class UserDetailService implements IUserDetailsDAO {
     }
 
     public ResponseEntity<?> updateUserDetail(UserDetail userDetail, UserPrincipal userPrincipal){
-        //String userName = new getLogedUserName().username;
 
-        Optional<User> foundUser = findUser(userPrincipal.getId());
-
-        foundUser.ifPresent(user -> userDetail.setId(user.getId()));
+        findUser(userPrincipal.getId());
+        userDetail.setId(userPrincipal.getId());
 
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
     public ResponseEntity<?> deleteUserDetail(UserDetail userDetail, UserPrincipal userPrincipal) {
 
-        Optional<User> foundUser = findUser(userPrincipal.getId());
+        findUser(userPrincipal.getId());
 
         if (userDetail.getId().equals(userPrincipal.getId())) {
                 userDetailRepository.deleteById(userPrincipal.getId());
+            return ResponseEntity.noContent().build();
             }
-
-
-        return ResponseEntity.ok(userDetailRepository.save(userDetail));
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
     public Optional<User> findUser(Long id) {
-        return Optional.of(userRepository.findById(id)).orElseThrow(() -> new ResourceNotFoundException("User", "ID", id));
+        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", id)));
     }
 
 

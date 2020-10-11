@@ -27,15 +27,18 @@ public class Competition {
     @NotBlank(message="Owner of competition can't be empty")
     private String owner;
 
+    @NotBlank(message="Competition can't be empty")
+    private int maxAmountUsers;
 
-    @OneToOne(mappedBy="competition", cascade= CascadeType.ALL)
-    private CompetitionDetail competitionDetail;
+    @Column(columnDefinition="DATE")
+    private java.sql.Date competitionStart;
 
+    //java.sql.Date = "RRRR-MM-DD"
+    @Column(columnDefinition = "DATE")
+    private java.sql.Date competitionEnd;
 
     @ManyToMany(mappedBy="competitions")
     private Set<UserDetail> userDetails = new HashSet<>();
-
-
 
     @OneToMany(mappedBy="competition")
     private Set<CompetitionTags> tags;
