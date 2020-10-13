@@ -35,7 +35,6 @@ import static org.mockito.Mockito.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserDetailServiceTest {
 
-
     @Spy
     UserRepository userRepository;
     @Spy
@@ -43,13 +42,9 @@ public class UserDetailServiceTest {
     @InjectMocks
     UserDetailService userDetailService;
 
-
     User user;
-    User userException;
     UserDetail userDetail;
     UserPrincipal userPrincipal;
-    UserPrincipal userPrincipalException;
-
 
     @BeforeAll
     public void setUp() {
@@ -69,17 +64,6 @@ public class UserDetailServiceTest {
                 .age(15)
                 .city("Gdynia")
                 .gender(Gender.FEMALE).build();
-
-        userException = User.builder()
-                .userName("Test")
-                .password("Password%123")
-                .id(7L).provider(AuthProvider.local)
-                .email("test@mail.com").emailVerified(true).build();
-
-        userPrincipalException = UserPrincipal.create(userException);
-
-
-
     }
 
     @Test
@@ -87,14 +71,13 @@ public class UserDetailServiceTest {
 
         ResponseEntity<?> responseEntity = new ResponseEntity<>(HttpStatus.OK);
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.addUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
 
         assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
-
     }
 
     @Test
@@ -103,17 +86,16 @@ public class UserDetailServiceTest {
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> userDetailService.addUserDetail(userDetail, userPrincipal),
-                "Expected doThing() to throw, but it didn't"
-        );
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
+                "Expected doThing() to throw, but it didn't");
 
+        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
     }
 
 
     @Test
     public void shouldUpdateUserDetail() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.updateUserDetail(userDetail, userPrincipal);
@@ -126,26 +108,11 @@ public class UserDetailServiceTest {
     @Test
     public void shouldDeleteUserDetail() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.ofNullable(user));
+        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
 
         userDetailService.deleteUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).deleteById(userDetail.getId());
 
         assertEquals(userDetailService.deleteUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
-
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
