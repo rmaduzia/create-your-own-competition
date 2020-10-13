@@ -3,6 +3,7 @@ package pl.createcompetition.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.repository.CompetitionRepository;
@@ -25,37 +26,34 @@ public class CompetitionService {
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal.getId());
-        Optional<Competition> findCompetition = findCompetition(competition.getCompetitionName());
+
+        Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
 
         if (findCompetition.isEmpty()){
             competition.setOwner(userPrincipal.getUsername());
             return ResponseEntity.ok(competitionRepository.save(competition));
         } else{
-            throw new ResourceNotFoundException("Competition", "Name", competition.getCompetitionName());
+            throw new ResourceAlreadyExistException("Competition", "Name", competition.getCompetitionName());
         }
     }
 
     public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal.getId());
-        Optional<Competition> findCompetition = findCompetition(competition.getCompetitionName());
+        Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
         return ResponseEntity.ok(competitionRepository.save(competition));
-        }
+    }
 
     public ResponseEntity<?> deleteCompetition(Competition competition, UserPrincipal userPrincipal){
 
         findUser(userPrincipal.getId());
-        Optional<Competition> findCompetition = findCompetition(competition.getCompetitionName());
+        Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
-        if(findCompetition.get().getOwner().equals(userPrincipal.getUsername())){
-            competitionRepository.delete(findCompetition.get());
-            return ResponseEntity.noContent().build();
-        } else {
-            throw new ResourceNotFoundException("Competition don't belong to user", "Name", competition.getCompetitionName());
-        }
+        competitionRepository.deleteById(findCompetition.get().getId());
+        return ResponseEntity.noContent().build();
     }
 
     public void findUser(Long id) {
@@ -63,14 +61,14 @@ public class CompetitionService {
                 new ResourceNotFoundException("UserProfile", "ID", id));
     }
 
-    public Optional<Competition> findCompetition(String competitionName) {
+    public Optional<Competition> shouldFindCompetition(String competitionName) {
         return Optional.ofNullable(competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
-                new ResourceNotFoundException("Competition", "Name", competitionName)));
+                new ResourceNotFoundException("Competition not exists", "Name", competitionName)));
     }
 
     public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
         if(!competition.getOwner().equals(userPrincipal.getUsername())){
-            throw new ResourceNotFoundException("Competition don't belong to user", "Name", competition.getCompetitionName());
+            throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }
 

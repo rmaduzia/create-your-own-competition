@@ -46,6 +46,7 @@ public class UserDetail {
     @JsonManagedReference
     private User user;
 
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name="user_competition",
         joinColumns=@JoinColumn(name="user_id"),

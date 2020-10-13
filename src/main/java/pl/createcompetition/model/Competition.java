@@ -1,5 +1,7 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +15,7 @@ import java.util.*;
 @Entity
 @Getter
 @Setter
+@Builder
 public class Competition {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +40,7 @@ public class Competition {
     @Column(columnDefinition = "DATE")
     private java.sql.Date competitionEnd;
 
+    @JsonManagedReference
     @ManyToMany(mappedBy="competitions")
     private Set<UserDetail> userDetails = new HashSet<>();
 
