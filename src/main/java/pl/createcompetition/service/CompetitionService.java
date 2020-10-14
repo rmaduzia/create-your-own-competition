@@ -56,6 +56,33 @@ public class CompetitionService {
         return ResponseEntity.noContent().build();
     }
 
+    //*TODO IMPLEMENT FUNCTION
+    public ResponseEntity<?> joinCompetition(String competitionName, UserPrincipal userPrincipal) {
+
+        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
+
+        return ResponseEntity.noContent().build();
+
+
+
+    }
+    //*TODO IMPLEMENTS FUNCTION
+    public ResponseEntity<?> rejectionCompetition(String competitionName, UserPrincipal userPrincipal) {
+
+        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
+
+        return ResponseEntity.noContent().build();
+
+    }
+
+
+
+
+
+
+
+
+
     public void findUser(Long id) {
         userRepository.findById(id).orElseThrow(() ->
                 new ResourceNotFoundException("UserProfile", "ID", id));

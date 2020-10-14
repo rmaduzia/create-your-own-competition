@@ -12,7 +12,7 @@ import pl.createcompetition.service.CompetitionService;
 @RequestMapping("/competition")
 public class CompetitionController {
 
-    private CompetitionService competitionService;
+    private final CompetitionService competitionService;
 
     CompetitionController(CompetitionService competitionService) {
         this.competitionService = competitionService;
@@ -35,4 +35,24 @@ public class CompetitionController {
     public ResponseEntity<?> deleteCompetition(@RequestBody Competition Competition, @CurrentUser UserPrincipal userPrincipal) {
         return competitionService.deleteCompetition(Competition, userPrincipal);
     }
+
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/join")
+    public ResponseEntity<?> joinCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
+        return competitionService.joinCompetition(competitionName, userPrincipal);
+
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/rejection")
+    public ResponseEntity<?> rejectionCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
+        return competitionService.rejectionCompetition(competitionName, userPrincipal);
+    }
+
+
+
+
+
+
 }

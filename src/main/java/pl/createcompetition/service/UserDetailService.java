@@ -41,14 +41,12 @@ public class UserDetailService implements IUserDetailsDAO {
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
-        //String userName = new getLogedUserName().username;
         Optional<User> foundUser = findUser(userPrincipal.getId());
 
         if(foundUser.isPresent()){
             userDetail.setUser(foundUser.get());
             userDetail.setId(foundUser.get().getId());
         }
-        //userDetailRepository.save(userDetail);
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 

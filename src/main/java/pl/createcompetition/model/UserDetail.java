@@ -1,12 +1,8 @@
 package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.Builder;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
@@ -23,6 +19,8 @@ import java.util.Set;
 @Entity
 @DynamicUpdate
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDetail {
 
     @Id
@@ -52,6 +50,12 @@ public class UserDetail {
         joinColumns=@JoinColumn(name="user_id"),
         inverseJoinColumns=@JoinColumn(name="competition_id"))
     private Set<Competition> competitions = new HashSet<>();
+
+
+    public void addUserToCompetition(Competition competition) {
+        this.competitions.add(competition);
+        competition.getUserDetails().add(this);
+    }
 
 
 
