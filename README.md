@@ -2,7 +2,7 @@
 
 _ _ _
 
-Application for organizing amateur informal and official sports events with tables with results, team draws, etc.
+Application for organizing amateur informal and official sports events with tables, results, tree of matches, etc.
 
 - - -
 
