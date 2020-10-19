@@ -42,7 +42,7 @@ public class Competition {
     @ManyToMany(mappedBy = "competitions")
     private Set<UserDetail> userDetails = new HashSet<>();
 
-    @JsonBackReference
+    //@JsonBackReference
     @ManyToMany
     @JoinTable(name = "competition_tag",
             joinColumns = @JoinColumn(name = "competition_id"),

@@ -8,7 +8,7 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.model.CompetitionTags;
 import pl.createcompetition.repository.CompetitionRepository;
-import pl.createcompetition.repository.CompetitionTagRepository;
+import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.List;
@@ -17,12 +17,12 @@ import java.util.Set;
 @Service
 public class CompetitionTagService {
 
-    private final CompetitionTagRepository competitionTagRepository;
     private final CompetitionRepository competitionRepository;
+    private final UserRepository userRepository;
 
-    CompetitionTagService(CompetitionTagRepository competitionTagRepository, CompetitionRepository competitionRepository){
-        this.competitionTagRepository = competitionTagRepository;
+    CompetitionTagService(CompetitionRepository competitionRepository, UserRepository userRepository){
         this.competitionRepository = competitionRepository;
+        this.userRepository = userRepository;
     }
 
     public ResponseEntity<?> getCompetitionTag(List<String> competitionTag) {
@@ -31,6 +31,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> addCompetitionTag(Set<CompetitionTags> competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
+        findUser(userPrincipal.getId());
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
 
@@ -45,8 +46,10 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> updateCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
+        findUser(userPrincipal.getId());
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
+        System.out.println("33333" + competitionTag);
         competition.addTagToCompetition(competitionTag);
 
         return ResponseEntity.ok(competitionRepository.save(competition));
@@ -55,6 +58,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> deleteCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
+        findUser(userPrincipal.getId());
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
 
@@ -72,11 +76,15 @@ public class CompetitionTagService {
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
 
-
     public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
         if(!competition.getOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
+    }
+
+    public void findUser(Long id) {
+        userRepository.findById(id).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", id));
     }
 
 

@@ -24,7 +24,7 @@ public class CompetitionTags {
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
-    @JsonManagedReference
+    //@JsonManagedReference
     private Set<Competition> competitions = new HashSet<>();
 
 }

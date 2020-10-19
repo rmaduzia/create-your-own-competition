@@ -89,7 +89,6 @@ public class CompetitionServiceTest {
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        System.out.println(competition.getOwner());
         competition.setMaxAmountUsers(15);
 
         competitionService.updateCompetition(competition, userPrincipal);
