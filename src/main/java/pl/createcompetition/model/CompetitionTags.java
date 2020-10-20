@@ -1,14 +1,22 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id", "tag"})
 @Entity
 @Getter
 @Setter
@@ -25,6 +33,7 @@ public class CompetitionTags {
 
     @ManyToMany(mappedBy = "tags")
     //@JsonManagedReference
+    @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
 }
