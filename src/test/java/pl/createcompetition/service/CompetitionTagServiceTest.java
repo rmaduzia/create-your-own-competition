@@ -24,7 +24,7 @@ import java.sql.Date;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
@@ -95,7 +95,7 @@ public class CompetitionTagServiceTest {
 
         // Then
         verify(competitionRepository, times(1)).save(competition);
-        assertEquals(status.getStatusCode(), HttpStatus.OK);
+        assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
 /*
