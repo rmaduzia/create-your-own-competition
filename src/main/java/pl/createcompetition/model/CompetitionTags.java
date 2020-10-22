@@ -6,9 +6,10 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id", "tag"})
 @Entity
 @Getter
 @Setter
@@ -24,7 +25,12 @@ public class CompetitionTags {
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
+    @Builder.Default
     //@JsonManagedReference
     private Set<Competition> competitions = new HashSet<>();
 
+
 }
+
+
+

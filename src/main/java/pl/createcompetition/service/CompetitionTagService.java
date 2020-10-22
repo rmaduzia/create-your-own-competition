@@ -49,7 +49,6 @@ public class CompetitionTagService {
         findUser(userPrincipal.getId());
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
-        System.out.println("33333" + competitionTag);
         competition.addTagToCompetition(competitionTag);
 
         return ResponseEntity.ok(competitionRepository.save(competition));

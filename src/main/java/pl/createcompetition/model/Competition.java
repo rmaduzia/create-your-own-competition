@@ -8,7 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id", "competitionName"})
 @Entity
 @Getter
 @Setter
@@ -47,6 +47,7 @@ public class Competition {
     @JoinTable(name = "competition_tag",
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
+    @Builder.Default
     private Set<CompetitionTags> tags = new HashSet<>();
 
 
@@ -57,9 +58,11 @@ public class Competition {
 
     public void addManyTagToCompetition(Set<CompetitionTags> competitionTags) {
         for(CompetitionTags tag: competitionTags) {
+
             this.tags.add(tag);
             tag.getCompetitions().add(this);
         }
     }
+
 
 }
