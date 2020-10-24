@@ -40,7 +40,7 @@ public class CompetitionTagService {
         try {
             return ResponseEntity.ok(competitionRepository.save(competition));
         } catch (DataIntegrityViolationException exception) {
-            throw new ResourceAlreadyExistException("Tag", "CompetitionTag", competitionTag);
+            throw new ResourceAlreadyExistException("Tag", "CompetitionTag", competitionTag.iterator().next().getTag());
         }
     }
 
