@@ -1,11 +1,9 @@
 package pl.createcompetition.service;
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.dao.IUserDetailsDAO;
 import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.UserDetailRepository;
@@ -13,7 +11,6 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.searchQuery.SearchCriteria;
 import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.supportingMethods.getLogedUserName;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -21,14 +18,21 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import java.lang.reflect.*;
 
 @Service
-public class UserDetailService implements IUserDetailsDAO {
+public class UserDetailService {
 
     private UserDetailRepository userDetailRepository;
 
@@ -78,12 +82,31 @@ public class UserDetailService implements IUserDetailsDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Override
-    public List<UserDetail> searchUser(String search) {
+
+    public List<?> searchUser(String search) {
+
+        //return entityManager.createQuery(query).getResultStream().map(UserDetail::toUserDetailDto).collect(Collectors.toList());
+
+
+        //List<?> result = getQuery(search, UserDetail.class);
+
+        //return getQuery(search, UserDetail.class).stream().map(UserDetail::toUserDetailDto);
+       // result.stream().map(UserDetail::toUserDetailDto);
+        //GetQueryyy tmp = new GetQueryyy().getQuery(search, UserDetail.class);
+
+        //return new GetQueryyy().getQuery(search, UserDetail.class);
+        return  getQuery(search, UserDetail.class);
+
+        //return GetQueryyy.(search, UserDetail.class);
+
+    }
+
+    public <T> List<?> getQuery (String search, Class<T> t) {
+
 
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<UserDetail> query = builder.createQuery(UserDetail.class);
-        final Root r = query.from(UserDetail.class);
+        final CriteriaQuery<T> query = builder.createQuery(t);
+        final Root r = query.from(t);
 
         List<SearchCriteria> params = new ArrayList<>();
         if (search != null) {
@@ -100,8 +123,29 @@ public class UserDetailService implements IUserDetailsDAO {
         predicate = searchConsumer.getPredicate();
         query.where(predicate);
 
-        return entityManager.createQuery(query).getResultList();
-    }
+        return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
+/*
+        //TODO HAVE TO FIND OUT IF I SHOULD MAP HERE OR INSIDE THIS FUNCTION OR OUTSIDE
 
+        String toDto = "to"+t.getSimpleName()+ "Dto";
+        MethodType methodType = MethodType.methodType(t);
+        MethodHandles.Lookup lookup = MethodHandles.lookup();
+     //   MethodHandle handle = lookup.findVirtual(t, toDto, methodType);
+
+        Method method = t.getMethod(toDto, null);
+
+        t.getMethod(toDto,null);
+
+        Method methodInfo = t.getMethod(toDto);
+
+
+        Consumer<T> consumer = T::methodInfo
+
+        return entityManager.createQuery(query).getResultStream().map(T::methodInfo).collect(Collectors.toList());
+
+
+*/
+
+    }
 
 }

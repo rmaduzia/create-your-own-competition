@@ -58,5 +58,21 @@ public class UserDetail {
     }
 
 
+    public UserDetailDto toUserDetailDto() {
+        return new UserDetailDto(
+                this.city,
+                this.age,
+                this.gender);
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class UserDetailDto {
+        private String city;
+        private int age;
+        private Gender gender;
+    }
+
+
 
 }

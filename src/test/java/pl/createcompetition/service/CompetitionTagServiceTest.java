@@ -176,9 +176,9 @@ public class CompetitionTagServiceTest {
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
+        competition.setOwner("test@mail.com");  // RollBack Values, have to change it
     }
 
-    /*
     @Test
     @Order(7)
     public void shouldDeleteTag() {
@@ -186,17 +186,9 @@ public class CompetitionTagServiceTest {
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        //Mockito.when(competitionTagRepository.findById())
-
-        Mockito.when(competition.getTags().contains(competitionTag)).thenReturn(true);
-
-        System.out.println(competitionTag.getId());
         ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition, userPrincipal);
 
         verify(competitionRepository, times(1)).deleteById(competitionTag.getId());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }
-  
-     */
-
 }

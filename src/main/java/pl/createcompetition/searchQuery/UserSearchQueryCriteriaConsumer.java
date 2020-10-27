@@ -1,6 +1,5 @@
 package pl.createcompetition.searchQuery;
 
-
 import java.util.function.Consumer;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -35,9 +34,7 @@ public class UserSearchQueryCriteriaConsumer implements Consumer<SearchCriteria>
                 }
             }
         }
-
         public Predicate getPredicate() {
             return predicate;
         }
-
 }
