@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import org.springframework.stereotype.Service;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.searchQuery.SearchCriteria;
 import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
@@ -16,6 +17,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+@Service
 public class GetQueryyy {
 
     @PersistenceContext

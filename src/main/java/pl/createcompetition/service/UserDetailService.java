@@ -11,6 +11,7 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.searchQuery.SearchCriteria;
 import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.tempTest.slaveAbstractTesting;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -79,8 +80,8 @@ public class UserDetailService {
     }
 
 
-    @PersistenceContext
-    private EntityManager entityManager;
+   // @PersistenceContext
+//    private EntityManager entityManager;
 
 
     public List<?> searchUser(String search) {
@@ -95,12 +96,22 @@ public class UserDetailService {
         //GetQueryyy tmp = new GetQueryyy().getQuery(search, UserDetail.class);
 
         //return new GetQueryyy().getQuery(search, UserDetail.class);
-        return  getQuery(search, UserDetail.class);
 
-        //return GetQueryyy.(search, UserDetail.class);
+
+        //GetQueryyy tmp = new GetQueryyy();
+        //return tmp.getQuery(search, UserDetail.class);]
+
+
+
+        //return  getQuery(search, UserDetail.class);
+
+        slaveAbstractTesting ftp = new slaveAbstractTesting();
+
+        return ftp.gty(search, UserDetail.class);
+
 
     }
-
+/*
     public <T> List<?> getQuery (String search, Class<T> t) {
 
 
@@ -124,28 +135,31 @@ public class UserDetailService {
         query.where(predicate);
 
         return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
-/*
+
+        //return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
+
         //TODO HAVE TO FIND OUT IF I SHOULD MAP HERE OR INSIDE THIS FUNCTION OR OUTSIDE
 
-        String toDto = "to"+t.getSimpleName()+ "Dto";
-        MethodType methodType = MethodType.methodType(t);
-        MethodHandles.Lookup lookup = MethodHandles.lookup();
+        //String toDto = "to"+t.getSimpleName()+ "Dto";
+        //MethodType methodType = MethodType.methodType(t);
+      //  MethodHandles.Lookup lookup = MethodHandles.lookup();
      //   MethodHandle handle = lookup.findVirtual(t, toDto, methodType);
 
-        Method method = t.getMethod(toDto, null);
+       // Method method = t.getMethod(toDto, null);
 
-        t.getMethod(toDto,null);
+      //  t.getMethod(toDto,null);
 
-        Method methodInfo = t.getMethod(toDto);
-
-
-        Consumer<T> consumer = T::methodInfo
-
-        return entityManager.createQuery(query).getResultStream().map(T::methodInfo).collect(Collectors.toList());
+      //  Method methodInfo = t.getMethod(toDto);
 
 
-*/
+      //  Consumer<T> consumer = T::methodInfo
+
+        //return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
 
     }
+ */
+
+
+
 
 }
