@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -11,38 +12,33 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.searchQuery.SearchCriteria;
 import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.tempTest.slaveAbstractTesting;
+import pl.createcompetition.service.tempTest.GetQueryUserService;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import java.lang.reflect.*;
-
+@RequiredArgsConstructor
 @Service
 public class UserDetailService {
 
-    private UserDetailRepository userDetailRepository;
+    private final UserDetailRepository userDetailRepository;
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    UserDetailService(UserDetailRepository userDetailRepository, UserRepository userRepository ) {
-        this.userRepository = userRepository;
-        this.userDetailRepository = userDetailRepository;
-    }
+    private final GetQueryUserService quer;
+
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
@@ -80,38 +76,21 @@ public class UserDetailService {
     }
 
 
-   // @PersistenceContext
-//    private EntityManager entityManager;
-
 
     public List<?> searchUser(String search) {
 
-        //return entityManager.createQuery(query).getResultStream().map(UserDetail::toUserDetailDto).collect(Collectors.toList());
 
 
-        //List<?> result = getQuery(search, UserDetail.class);
-
-        //return getQuery(search, UserDetail.class).stream().map(UserDetail::toUserDetailDto);
-       // result.stream().map(UserDetail::toUserDetailDto);
-        //GetQueryyy tmp = new GetQueryyy().getQuery(search, UserDetail.class);
-
-        //return new GetQueryyy().getQuery(search, UserDetail.class);
-
-
-        //GetQueryyy tmp = new GetQueryyy();
-        //return tmp.getQuery(search, UserDetail.class);]
-
-
-
-        //return  getQuery(search, UserDetail.class);
-
-        slaveAbstractTesting ftp = new slaveAbstractTesting();
-
-        return ftp.gty(search, UserDetail.class);
+        return quer.execute(search);
+        //return getQuery(search, UserDetail.class);
 
 
     }
-/*
+
+
+    @PersistenceContext
+    protected EntityManager entityManager;
+
     public <T> List<?> getQuery (String search, Class<T> t) {
 
 
@@ -157,7 +136,9 @@ public class UserDetailService {
         //return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
 
     }
- */
+
+
+
 
 
 

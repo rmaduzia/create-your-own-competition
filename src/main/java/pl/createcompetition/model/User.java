@@ -10,6 +10,7 @@ import pl.createcompetition.annotations.ValidPassword;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+@EqualsAndHashCode(of = {"id"})
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")

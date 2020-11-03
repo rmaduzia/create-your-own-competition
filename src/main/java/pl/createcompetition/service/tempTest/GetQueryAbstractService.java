@@ -1,9 +1,6 @@
-package pl.createcompetition.service;
+package pl.createcompetition.service.tempTest;
 
-import org.springframework.stereotype.Service;
-import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.searchQuery.SearchCriteria;
-import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -15,18 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
-@Service
-public class GetQueryyy {
+public abstract class GetQueryAbstractService<B, R> {
 
     @PersistenceContext
-    private EntityManager entityManager;
+    protected EntityManager entityManager;
 
-    public  <T> List<?> getQuery (String search, Class<T> t) {
+    protected abstract Class<B> getClazz();
+
+    protected abstract Predicate getPredicate(Predicate predicate, CriteriaBuilder builder, Root r, List<SearchCriteria> params);
+
+    protected abstract List<R> getDtos(CriteriaQuery<B> query);
+
+    public List<R> execute(String search) {
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<T> query = builder.createQuery(t);
-        final Root r = query.from(t);
+        final CriteriaQuery<B> query = builder.createQuery(getClazz());
+        final Root r = query.from(getClazz());
 
         List<SearchCriteria> params = new ArrayList<>();
         if (search != null) {
@@ -38,17 +39,9 @@ public class GetQueryyy {
         }
 
         Predicate predicate = builder.conjunction();
-        UserSearchQueryCriteriaConsumer searchConsumer = new UserSearchQueryCriteriaConsumer(predicate, builder, r);
-        params.forEach(searchConsumer);
-        predicate = searchConsumer.getPredicate();
+        predicate = getPredicate(predicate, builder, r, params);
         query.where(predicate);
 
-        return entityManager.createQuery(query).getResultStream().collect(Collectors.toList());
-
-
-        //return entityManager.createQuery(query).getResultStream().map(UserDetail::toUserDetailDto).collect(Collectors.toList());
-
+        return getDtos(query);
     }
-
-
 }

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode
+@EqualsAndHashCode(of = {"id"})
 @Getter
 @Setter
 @Entity
