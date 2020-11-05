@@ -1,4 +1,4 @@
-package pl.createcompetition.email;
+package pl.createcompetition.util.email;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

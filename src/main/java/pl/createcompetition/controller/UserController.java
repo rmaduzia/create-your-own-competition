@@ -1,6 +1,7 @@
 package pl.createcompetition.controller;
 
 import jakarta.validation.Valid;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,14 +15,11 @@ import pl.createcompetition.service.UserService;
 
 import java.util.Optional;
 
+@AllArgsConstructor
 @RestController
 public class UserController {
-    final private UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    final private UserService userService;
 
     @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
@@ -52,12 +50,4 @@ public class UserController {
         return userService.changePassword(changePassword);
     }
 
-/*
-    @GetMapping("statusList")
-    @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> getStatusList(){
-        return userService.getStatusList();
-    }
-
- */
 }

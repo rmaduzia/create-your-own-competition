@@ -1,6 +1,4 @@
-package pl.createcompetition.service.tempTest;
-
-import pl.createcompetition.searchQuery.SearchCriteria;
+package pl.createcompetition.service.query;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

@@ -1,6 +1,7 @@
 package pl.createcompetition.controller;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -13,17 +14,12 @@ import pl.createcompetition.service.CompetitionTagService;
 import java.util.List;
 import java.util.Set;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/competition/tags")
 public class CompetitionTagController {
 
     private final CompetitionTagService competitionTagService;
-
-    CompetitionTagController(CompetitionTagService competitionTagService) {
-        this.competitionTagService = competitionTagService;
-    }
-
-
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping()

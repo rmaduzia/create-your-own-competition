@@ -1,4 +1,4 @@
-package pl.createcompetition.email;
+package pl.createcompetition.util.email;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

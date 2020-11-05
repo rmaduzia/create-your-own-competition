@@ -25,10 +25,14 @@ public class CompetitionTags {
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
+    @JsonManagedReference
     @Builder.Default
-    //@JsonManagedReference
     private Set<Competition> competitions = new HashSet<>();
 
+    @ManyToMany(mappedBy = "tags")
+    @JsonManagedReference
+    @Builder.Default
+    private Set<Tournament> tournaments = new HashSet<>();
 
 }
 

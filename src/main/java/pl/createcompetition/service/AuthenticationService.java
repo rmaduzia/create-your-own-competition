@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,21 +22,15 @@ import pl.createcompetition.security.TokenProvider;
 
 import java.net.URI;
 
-@Service
+@RequiredArgsConstructor
 @Slf4j
+@Service
 public class AuthenticationService {
+
     final private AuthenticationManager authenticationManager;
     final private UserRepository userDao;
     final private PasswordEncoder passwordEncoder;
     final private TokenProvider tokenProvider;
-
-    public AuthenticationService(AuthenticationManager authenticationManager, UserRepository userDao, PasswordEncoder passwordEncoder, TokenProvider tokenProvider) {
-        this.authenticationManager = authenticationManager;
-        this.passwordEncoder = passwordEncoder;
-        this.tokenProvider = tokenProvider;
-        this.userDao = userDao;
-
-    }
 
     public ResponseEntity<?> authenticationUser(LoginRequest loginRequest) {
 

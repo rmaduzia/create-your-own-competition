@@ -1,4 +1,4 @@
-package pl.createcompetition.searchQuery;
+package pl.createcompetition.service.query;
 
 
 import lombok.AllArgsConstructor;

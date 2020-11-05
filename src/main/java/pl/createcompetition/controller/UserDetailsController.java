@@ -1,5 +1,6 @@
 package pl.createcompetition.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,18 +13,12 @@ import pl.createcompetition.service.UserDetailService;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-
+@AllArgsConstructor
 @Controller
 @RequestMapping(value = "/user_details")
 public class UserDetailsController {
 
-
-    private UserDetailService userDetailService;
-
-    public UserDetailsController(UserDetailService userDetailService) {
-        this.userDetailService = userDetailService;
-    }
-
+    private final UserDetailService userDetailService;
 
     @GetMapping
     @ResponseBody
@@ -51,11 +46,4 @@ public class UserDetailsController {
     public ResponseEntity<?> deleteUserDetail(@RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
         return userDetailService.deleteUserDetail(userDetail, userPrincipal);
     }
-
-
-
-
-
-
-
 }

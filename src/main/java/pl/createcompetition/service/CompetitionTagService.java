@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,12 @@ import pl.createcompetition.security.UserPrincipal;
 import java.util.List;
 import java.util.Set;
 
+@RequiredArgsConstructor
 @Service
 public class CompetitionTagService {
 
     private final CompetitionRepository competitionRepository;
     private final UserRepository userRepository;
-
-    CompetitionTagService(CompetitionRepository competitionRepository, UserRepository userRepository){
-        this.competitionRepository = competitionRepository;
-        this.userRepository = userRepository;
-    }
 
     public ResponseEntity<?> getCompetitionTag(List<String> competitionTag) {
         return ResponseEntity.noContent().build();

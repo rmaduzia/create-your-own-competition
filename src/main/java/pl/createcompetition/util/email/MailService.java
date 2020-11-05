@@ -1,4 +1,4 @@
-package pl.createcompetition.email;
+package pl.createcompetition.util.email;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.MailException;

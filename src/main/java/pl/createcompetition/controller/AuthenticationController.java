@@ -1,5 +1,6 @@
 package pl.createcompetition.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +11,10 @@ import pl.createcompetition.service.AuthenticationService;
 import javax.validation.Valid;
 
 
-
+@AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
-
-    public AuthenticationController(AuthenticationService authenticationService) {
-        this.authenticationService = authenticationService;
-    }
 
     private final AuthenticationService authenticationService;
 

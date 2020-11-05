@@ -1,6 +1,6 @@
 package pl.createcompetition.service;
 
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -12,16 +12,12 @@ import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CompetitionService {
 
-    private CompetitionRepository competitionRepository;
-    private UserRepository userRepository;
-
-    CompetitionService(CompetitionRepository competitionRepository, UserRepository userRepository){
-        this.userRepository = userRepository;
-        this.competitionRepository = competitionRepository;
-    }
+    private final CompetitionRepository competitionRepository;
+    private final UserRepository userRepository;
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 
@@ -56,7 +52,7 @@ public class CompetitionService {
         return ResponseEntity.noContent().build();
     }
 
-    //*TODO IMPLEMENT FUNCTION
+    //TODO IMPLEMENT FUNCTION
     public ResponseEntity<?> joinCompetition(String competitionName, UserPrincipal userPrincipal) {
 
         Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
@@ -66,7 +62,7 @@ public class CompetitionService {
 
 
     }
-    //*TODO IMPLEMENTS FUNCTION
+    //TODO IMPLEMENTS FUNCTION
     public ResponseEntity<?> rejectionCompetition(String competitionName, UserPrincipal userPrincipal) {
 
         Optional<Competition> findCompetition = shouldFindCompetition(competitionName);

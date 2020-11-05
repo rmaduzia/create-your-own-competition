@@ -1,12 +1,13 @@
 package pl.createcompetition.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import pl.createcompetition.email.Mail;
-import pl.createcompetition.email.MailService;
-import pl.createcompetition.email.TemplateValues;
+import pl.createcompetition.util.email.Mail;
+import pl.createcompetition.util.email.MailService;
+import pl.createcompetition.util.email.TemplateValues;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.User;
 import pl.createcompetition.payload.ApiResponse;
@@ -19,16 +20,12 @@ import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Optional;
 
-@Service
+@RequiredArgsConstructor
 @Slf4j
+@Service
 public class UserService {
     final private UserRepository userDao;
     final private MailService mailService;
-
-    public UserService(UserRepository userDao, MailService mailService) {
-        this.userDao = userDao;
-        this.mailService = mailService;
-    }
 
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userDao.findById(userPrincipal.getId())

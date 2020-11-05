@@ -38,17 +38,25 @@ public class Competition {
     @Column(columnDefinition = "DATE")
     private java.sql.Date competitionEnd;
 
+    private Boolean isOpenRecruitment;
+
     @JsonManagedReference
     @ManyToMany(mappedBy = "competitions")
     private Set<UserDetail> userDetails = new HashSet<>();
 
-    //@JsonBackReference
+    @JsonBackReference
     @ManyToMany
     @JoinTable(name = "competition_tag",
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Builder.Default
     private Set<CompetitionTags> tags = new HashSet<>();
+
+    @JsonManagedReference
+    @ManyToMany(mappedBy = "competitions")
+    @Builder.Default
+    private Set<Tournament> tournaments = new HashSet<>();
+
 
 
     public void addTagToCompetition(CompetitionTags competitionTags) {

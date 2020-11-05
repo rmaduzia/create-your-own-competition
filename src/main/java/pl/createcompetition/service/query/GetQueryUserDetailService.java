@@ -1,9 +1,7 @@
-package pl.createcompetition.service.tempTest;
+package pl.createcompetition.service.query;
 
 import org.springframework.stereotype.Service;
 import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.searchQuery.SearchCriteria;
-import pl.createcompetition.searchQuery.UserSearchQueryCriteriaConsumer;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GetQueryUserService extends GetQueryAbstractService<UserDetail, UserDetail.UserDetailDto> {
+public class GetQueryUserDetailService extends GetQueryAbstractService<UserDetail, UserDetail.UserDetailDto> {
 
     @Override
     protected Class<UserDetail> getClazz() {

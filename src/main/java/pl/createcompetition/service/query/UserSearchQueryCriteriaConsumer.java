@@ -1,4 +1,6 @@
-package pl.createcompetition.searchQuery;
+package pl.createcompetition.service.query;
+
+import pl.createcompetition.service.query.SearchCriteria;
 
 import java.util.function.Consumer;
 

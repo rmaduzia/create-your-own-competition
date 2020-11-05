@@ -1,4 +1,4 @@
-package pl.createcompetition.email;
+package pl.createcompetition.util.email;
 
 import lombok.Builder;
 import lombok.Getter;
