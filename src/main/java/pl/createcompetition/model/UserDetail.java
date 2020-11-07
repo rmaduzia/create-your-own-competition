@@ -51,11 +51,25 @@ public class UserDetail {
         inverseJoinColumns=@JoinColumn(name="competition_id"))
     private Set<Competition> competitions = new HashSet<>();
 
+    @JsonBackReference
+    @ManyToMany
+    @JoinTable(name="user_team",
+        joinColumns=@JoinColumn(name="user_id"),
+        inverseJoinColumns=@JoinColumn(name="team_id"))
+    private Set<Team> teams = new HashSet<>();
+
 
     public void addUserToCompetition(Competition competition) {
         this.competitions.add(competition);
         competition.getUserDetails().add(this);
     }
+
+
+    public void addUserToTeam(Team team){
+        this.teams.add(team);
+        team.getUserDetails().add(this);
+    }
+
 
 
     public UserDetailDto toUserDetailDto() {

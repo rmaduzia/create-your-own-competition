@@ -25,6 +25,11 @@ public class Competition {
     private String competitionName;
     @NotBlank(message = "City can't be empty")
     private String city;
+    @NotBlank(message = "Street can't be empty")
+    private String street;
+    @NotBlank(message = "Street number can't be empty")
+    private int street_number;
+
     @NotBlank(message = "Owner of competition can't be empty")
     private String owner;
 
@@ -44,7 +49,7 @@ public class Competition {
     @ManyToMany(mappedBy = "competitions")
     private Set<UserDetail> userDetails = new HashSet<>();
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "competition_tag",
             joinColumns = @JoinColumn(name = "competition_id"),
@@ -52,7 +57,7 @@ public class Competition {
     @Builder.Default
     private Set<CompetitionTags> tags = new HashSet<>();
 
-    @JsonManagedReference
+    @JsonBackReference
     @ManyToMany(mappedBy = "competitions")
     @Builder.Default
     private Set<Tournament> tournaments = new HashSet<>();

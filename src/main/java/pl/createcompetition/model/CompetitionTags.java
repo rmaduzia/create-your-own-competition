@@ -1,5 +1,6 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -25,14 +26,23 @@ public class CompetitionTags {
     private String tag;
 
     @ManyToMany(mappedBy = "tags")
-    @JsonManagedReference
+    @JsonBackReference
     @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
     @ManyToMany(mappedBy = "tags")
-    @JsonManagedReference
+    @JsonBackReference
     @Builder.Default
     private Set<Tournament> tournaments = new HashSet<>();
+
+    @ManyToMany(mappedBy = "tags")
+    @JsonBackReference
+    @Builder.Default
+    private Set<Team> teams = new HashSet<>();
+
+
+
+
 
 }
 

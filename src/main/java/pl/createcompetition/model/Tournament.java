@@ -1,6 +1,7 @@
 package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,16 +20,18 @@ public class Tournament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "tournament_competition",
     joinColumns = @JoinColumn(name = "tournament_id"),
     inverseJoinColumns = @JoinColumn(name = "competition_id"))
     private Set<Competition> competitions = new HashSet<>();
 
+    private String city;
+    private String street;
+    private int street_number;
 
-
-    @JsonBackReference
+    @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "tournament_tags",
     joinColumns = @JoinColumn(name = "tournament_id"),
