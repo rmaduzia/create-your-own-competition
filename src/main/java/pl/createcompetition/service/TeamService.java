@@ -17,6 +17,8 @@ public class TeamService {
     public ResponseEntity<?> addTeam (Team team, UserPrincipal currentUser) {
 
 
+
+
         return ResponseEntity.ok().build();
     }
 
@@ -32,6 +34,11 @@ public class TeamService {
 
     }
 
+
+
+    public void findUser() {
+
+    }
 
 
 

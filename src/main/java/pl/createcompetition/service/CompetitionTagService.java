@@ -28,7 +28,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> addCompetitionTag(Set<CompetitionTags> competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
 
@@ -43,7 +43,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> updateCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
         competition.addTagToCompetition(competitionTag);
@@ -54,7 +54,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> deleteCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
         checkIfCompetitionExists(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(competition, userPrincipal);
 
@@ -78,9 +78,9 @@ public class CompetitionTagService {
         }
     }
 
-    public void findUser(Long id) {
-        userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", id));
+    public void findUser(UserPrincipal userPrincipal) {
+        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
 

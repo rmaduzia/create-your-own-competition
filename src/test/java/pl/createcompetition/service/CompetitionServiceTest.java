@@ -71,6 +71,8 @@ public class CompetitionServiceTest {
     public void shouldAddCompetition() {
 
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
 
         competitionService.addCompetition(competition, userPrincipal);
@@ -83,7 +85,7 @@ public class CompetitionServiceTest {
     @Order(2)
     public void shouldUpdateCompetition() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setMaxAmountUsers(15);
@@ -99,7 +101,7 @@ public class CompetitionServiceTest {
     @Order(3)
     public void shouldDeleteCompetition() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionService.deleteCompetition(competition, userPrincipal);
@@ -116,14 +118,14 @@ public class CompetitionServiceTest {
                 ResourceNotFoundException.class,
                 () -> competitionService.addCompetition(competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
+        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
 
     @Test
     @Order(5)
     public void shouldThrowExceptionCompetitionNotExists() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -137,7 +139,7 @@ public class CompetitionServiceTest {
     @Order(6)
     public void shouldThrowExceptionCompetitionAlreadyExists() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
 
@@ -153,7 +155,7 @@ public class CompetitionServiceTest {
     @Order(7)
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setOwner("OtherOwner");

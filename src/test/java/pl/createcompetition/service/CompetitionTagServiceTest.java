@@ -82,7 +82,7 @@ public class CompetitionTagServiceTest {
     @Order(1)
     public void shouldAddTags() {
 
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
 
         Set<CompetitionTags> tags = Set.of(competitionTag);
@@ -97,7 +97,7 @@ public class CompetitionTagServiceTest {
     @Order(2)
     public void shouldUpdateTag() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionTag.setTag("updatedTag");
@@ -112,7 +112,7 @@ public class CompetitionTagServiceTest {
     @Order(3)
     public void shouldThrowExceptionCompetitionNotExistsWhenAddTag() {
 
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Set<CompetitionTags> tags = Set.of(competitionTag);
 
         Exception exception = assertThrows(
@@ -133,14 +133,14 @@ public class CompetitionTagServiceTest {
                 ResourceNotFoundException.class,
                 () -> competitionTagService.addCompetitionTag(tags, competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
+        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
 
     @Test
     @Order(5)
     public void shouldThrowExceptionTagAlreadyExists() {
 
-        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
         Set<CompetitionTags> tags = Set.of(competitionTag);
 
@@ -158,7 +158,7 @@ public class CompetitionTagServiceTest {
     @Order(6)
     public void shouldThrowExceptionWhenCompetitionNotBelongToUser() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
         Set<CompetitionTags> tags = Set.of(competitionTag);
 
@@ -177,7 +177,7 @@ public class CompetitionTagServiceTest {
     @Order(7)
     public void shouldDeleteTag() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition, userPrincipal);

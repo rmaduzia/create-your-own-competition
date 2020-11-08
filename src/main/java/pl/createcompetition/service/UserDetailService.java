@@ -28,7 +28,7 @@ public class UserDetailService {
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
-        Optional<User> foundUser = findUser(userPrincipal.getId());
+        Optional<User> foundUser = findUser(userPrincipal);
 
         if(foundUser.isPresent()){
             userDetail.setUser(foundUser.get());
@@ -39,7 +39,7 @@ public class UserDetailService {
 
     public ResponseEntity<?> updateUserDetail(UserDetail userDetail, UserPrincipal userPrincipal){
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
         userDetail.setId(userPrincipal.getId());
 
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
@@ -47,7 +47,7 @@ public class UserDetailService {
 
     public ResponseEntity<?> deleteUserDetail(UserDetail userDetail, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
 
         if (userDetail.getId().equals(userPrincipal.getId())) {
                 userDetailRepository.deleteById(userPrincipal.getId());
@@ -56,12 +56,10 @@ public class UserDetailService {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
-    public Optional<User> findUser(Long id) {
-        return Optional.ofNullable(userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", id)));
+    public Optional<User> findUser(UserPrincipal userPrincipal) {
+        return Optional.ofNullable(userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername())));
     }
-
-
 
     public List<?> searchUser(String search) {
 

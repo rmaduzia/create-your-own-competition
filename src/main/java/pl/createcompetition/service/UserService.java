@@ -65,38 +65,8 @@ public class UserService {
         // This is just creating userSpecification to be able to use and, doing nothing to query
         Specification<User> userSpecification = Specification.where((Specification<User>) (root, criteriaQuery, criteriaBuilder) -> root.isNotNull());
 
-    /*    // Creating specification based on props. If prop is null than we're not including it in query
-        publicId.ifPresent(var -> userSpecification.and(publicIdEquals(var)));
-        name.ifPresent(var -> userSpecification.and(nameEquals(var)));
-        age.ifPresent(var -> userSpecification.and(getSpecificationForAge(UrlNumberParser.parse(var))));
-        email.ifPresent(var -> userSpecification.and(emailEquals(var)));
-     */
-        //return userDao.findAll(userSpecification);
         return userDao.findAll();
     }
-
-
-    /*
-    private Specification<User> getSpecificationForAge(UrlNumberParser.UrlNumberParserResponse<Integer> numberParserResponse) {
-        switch (numberParserResponse.getNumberSpecifier()) {
-            case EQUAL:
-                return ageEquals(numberParserResponse.getNumber());
-            case NOT_EQUAL:
-                return ageNotEqual(numberParserResponse.getNumber());
-            case GRATER:
-                return ageGraterThan(numberParserResponse.getNumber());
-            case GRATER_EQUAL:
-                return ageGraterEqualThan(numberParserResponse.getNumber());
-            case LOWER:
-                return ageLowerThan(numberParserResponse.getNumber());
-            case LOWER_EQUAL:
-                return ageLowerEqualThan(numberParserResponse.getNumber());
-            default:
-                throw new AgeSpecifierNotFoundException();
-        }
-    }
-
-     */
 
     public User save(User user) {
         return userDao.save(user);

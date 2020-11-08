@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -21,7 +22,7 @@ public class CompetitionService {
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
 
         Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
 
@@ -35,7 +36,7 @@ public class CompetitionService {
 
     public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal.getId());
+        findUser(userPrincipal);
         Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
@@ -44,7 +45,8 @@ public class CompetitionService {
 
     public ResponseEntity<?> deleteCompetition(Competition competition, UserPrincipal userPrincipal){
 
-        findUser(userPrincipal.getId());
+        //findUser(userPrincipal);
+        findUser(userPrincipal);
         Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
@@ -72,16 +74,9 @@ public class CompetitionService {
     }
 
 
-
-
-
-
-
-
-
-    public void findUser(Long id) {
-        userRepository.findById(id).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", id));
+    public void findUser(UserPrincipal userPrincipal) {
+        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
     public Optional<Competition> shouldFindCompetition(String competitionName) {

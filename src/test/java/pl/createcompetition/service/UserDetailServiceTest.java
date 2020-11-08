@@ -62,9 +62,7 @@ public class UserDetailServiceTest {
     @Test
     public void shouldAddUserDetail() {
 
-        ResponseEntity<?> responseEntity = new ResponseEntity<>(HttpStatus.OK);
-
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.addUserDetail(userDetail, userPrincipal);
@@ -81,14 +79,13 @@ public class UserDetailServiceTest {
                 () -> userDetailService.addUserDetail(userDetail, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getId()+"'", exception.getMessage());
+        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
-
-
+    
     @Test
     public void shouldUpdateUserDetail() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.updateUserDetail(userDetail, userPrincipal);
@@ -101,7 +98,7 @@ public class UserDetailServiceTest {
     @Test
     public void shouldDeleteUserDetail() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         userDetailService.deleteUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).deleteById(userDetail.getId());
