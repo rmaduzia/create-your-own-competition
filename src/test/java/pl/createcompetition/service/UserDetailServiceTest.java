@@ -81,7 +81,7 @@ public class UserDetailServiceTest {
 
         assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
-    
+
     @Test
     public void shouldUpdateUserDetail() {
 

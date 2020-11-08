@@ -45,7 +45,6 @@ public class CompetitionService {
 
     public ResponseEntity<?> deleteCompetition(Competition competition, UserPrincipal userPrincipal){
 
-        //findUser(userPrincipal);
         findUser(userPrincipal);
         Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);

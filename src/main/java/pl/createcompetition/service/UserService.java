@@ -24,6 +24,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 public class UserService {
+
     final private UserRepository userDao;
     final private MailService mailService;
 

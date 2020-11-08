@@ -20,9 +20,7 @@ import java.util.Optional;
 public class UserDetailService {
 
     private final UserDetailRepository userDetailRepository;
-
     private final UserRepository userRepository;
-
     private final GetQueryUserDetailService quer;
 
 
@@ -63,9 +61,7 @@ public class UserDetailService {
 
     public List<?> searchUser(String search) {
 
-
         return quer.execute(search);
-
     }
 
 }
