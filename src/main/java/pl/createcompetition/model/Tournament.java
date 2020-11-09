@@ -27,9 +27,14 @@ public class Tournament {
     inverseJoinColumns = @JoinColumn(name = "competition_id"))
     private Set<Competition> competitions = new HashSet<>();
 
+    private String tournamentOwner;
+    private String tournamentName;
+    private int maxAmountOfTeams;
+
     private String city;
     private String street;
     private int street_number;
+
 
     @JsonManagedReference
     @ManyToMany

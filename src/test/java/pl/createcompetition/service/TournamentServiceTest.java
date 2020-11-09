@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -8,7 +9,7 @@ import org.springframework.http.HttpStatus;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.repository.TeamRepository;
+import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
@@ -21,20 +22,20 @@ import static org.junit.Assert.assertEquals;
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TeamServiceTest {
+public class TournamentServiceTest {
 
 
     @Spy
-    TeamRepository teamRepository;
+    TournamentRepository tournamentRepository;
     @Spy
     UserRepository userRepository;
     @InjectMocks
-    TeamService teamService;
+    TournamentService tournamentService;
 
     User user;
     UserDetail userDetail;
     UserPrincipal userPrincipal;
-    Team team;
+    Tournament tournament;
 
     @BeforeAll
     public void setUp() {
@@ -55,13 +56,11 @@ public class TeamServiceTest {
                 .city("Gdynia")
                 .gender(Gender.FEMALE).build();
 
-
-        team = Team.builder()
+        tournament = Tournament.builder()
                 .id(1L)
-                .teamOwner("test@mail.com")
-                .teamName("team1")
-                .isOpenRecruitment(true)
-                .city("Gdynia").build();
+                .maxAmountOfTeams(10)
+                .tournamentOwner("test@mail.com")
+                .tournamentName("Tourtnament1").build();
 
     }
 
@@ -71,12 +70,12 @@ public class TeamServiceTest {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
-        Mockito.when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.empty());
+        Mockito.when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.empty());
 
-        teamService.addTeam(team, userPrincipal);
-        verify(teamRepository, times(1)).save(team);
+        tournamentService.addTournament(tournament, userPrincipal);
+        verify(tournamentRepository, times(1)).save(tournament);
 
-        assertEquals(teamService.addTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(tournamentService.addTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -84,15 +83,15 @@ public class TeamServiceTest {
     public void shouldUpdateTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-        team.setMaxAmountMembers(15);
+        tournament.setMaxAmountOfTeams(15);
 
-        teamService.updateTeam(team, userPrincipal);
-        verify(teamRepository, times(1)).save(team);
+        tournamentService.updateTournament(tournament, userPrincipal);
+        verify(tournamentRepository, times(1)).save(tournament);
 
-        assertEquals(teamService.updateTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(team.getMaxAmountMembers(), 15);
+        assertEquals(tournamentService.updateTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(tournament.getMaxAmountOfTeams(), 15);
     }
 
     @Test
@@ -100,12 +99,12 @@ public class TeamServiceTest {
     public void shouldDeleteTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-        teamService.deleteTeam(team, userPrincipal);
-        verify(teamRepository, times(1)).deleteById(team.getId());
+        tournamentService.deleteTournament(tournament, userPrincipal);
+        verify(tournamentRepository, times(1)).deleteById(tournament.getId());
 
-        assertEquals(teamService.deleteTeam(team, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(tournamentService.deleteTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -114,7 +113,7 @@ public class TeamServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> teamService.addTeam(team, userPrincipal),
+                () -> tournamentService.addTournament(tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
         assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
@@ -127,10 +126,10 @@ public class TeamServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> teamService.updateTeam(team, userPrincipal),
+                () -> tournamentService.updateTournament(tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        assertEquals("Team not exists not found with Name : '"+ team.getTeamName()+ "'", exception.getMessage());
+        assertEquals("Tournament not exists not found with Name : '"+ tournament.getTournamentName()+ "'", exception.getMessage());
     }
 
     @Test
@@ -138,14 +137,14 @@ public class TeamServiceTest {
     public void shouldThrowExceptionTeamAlreadyExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.of(team));
+        Mockito.when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.of(tournament));
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,
-                () -> teamService.addTeam(team, userPrincipal),
+                () -> tournamentService.addTournament(tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        assertEquals("Team already exists with Name : '"+ team.getTeamName()+ "'", exception.getMessage());
+        assertEquals("Tournament already exists with Name : '"+ tournament.getTournamentName()+ "'", exception.getMessage());
     }
 
     @Test
@@ -153,16 +152,16 @@ public class TeamServiceTest {
     public void shouldThrowExceptionTeamNotBelongToUser() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-        team.setTeamOwner("OtherOwner");
+        tournament.setTournamentOwner("OtherOwner");
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> teamService.updateTeam(team, userPrincipal),
+                () -> tournamentService.updateTournament(tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        assertEquals("Team named: "+ team.getTeamName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
+        assertEquals("Tournament named: "+ tournament.getTournamentName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
     }
-
+    
 }

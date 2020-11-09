@@ -60,7 +60,6 @@ public class TeamService {
     }
 
     public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
-        System.out.println(team.getTeamOwner() + " ++++" +userPrincipal.getUsername());
         if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
         }
