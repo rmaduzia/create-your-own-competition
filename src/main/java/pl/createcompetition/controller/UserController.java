@@ -27,17 +27,6 @@ public class UserController {
         return userService.getCurrentUser(userPrincipal);
     }
 
-    @GetMapping("/user")
-    @PreAuthorize("hasRole('ADMIN')")
-    public Iterable<User> getUsers(
-            @RequestParam(required = false) Optional<Long> publicId,
-            @RequestParam(required = false) Optional<String> name,
-            @RequestParam(required = false) Optional<String> age,
-            @RequestParam(required = false) Optional<String> email) {
-
-        return userService.getUsersByProps(publicId, name, age, email);
-    }
-
     @PostMapping("changeMail")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> changeEmail(@RequestBody @Valid ChangeMailRequest changeMail){

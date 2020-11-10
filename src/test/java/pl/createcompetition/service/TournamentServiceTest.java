@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -24,7 +23,6 @@ import static org.junit.Assert.assertEquals;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TournamentServiceTest {
 
-
     @Spy
     TournamentRepository tournamentRepository;
     @Spy
@@ -33,7 +31,6 @@ public class TournamentServiceTest {
     TournamentService tournamentService;
 
     User user;
-    UserDetail userDetail;
     UserPrincipal userPrincipal;
     Tournament tournament;
 
@@ -48,13 +45,6 @@ public class TournamentServiceTest {
                 .email("test@mail.com").emailVerified(true).build();
 
         userPrincipal = UserPrincipal.create(user);
-
-        userDetail = UserDetail.builder()
-                .id(1L)
-                .user(user)
-                .age(15)
-                .city("Gdynia")
-                .gender(Gender.FEMALE).build();
 
         tournament = Tournament.builder()
                 .id(1L)

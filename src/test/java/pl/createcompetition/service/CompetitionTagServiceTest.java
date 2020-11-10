@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
+import pl.createcompetition.model.Tags;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
@@ -18,7 +19,6 @@ import java.sql.Date;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,7 +42,7 @@ public class CompetitionTagServiceTest {
     UserDetail userDetail;
     UserPrincipal userPrincipal;
     Competition competition;
-    CompetitionTags competitionTag;
+    Tags competitionTag;
 
     @BeforeAll
     public void setUp() {
@@ -75,7 +75,7 @@ public class CompetitionTagServiceTest {
                 .tags(Sets.newHashSet())
                 .build();
 
-        competitionTag = CompetitionTags.builder().tag("Tag").id(1L).competitions(Sets.newHashSet()).build();
+        competitionTag = Tags.builder().tag("Tag").id(1L).competitions(Sets.newHashSet()).build();
     }
 
     @Test
@@ -85,8 +85,8 @@ public class CompetitionTagServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
 
-        Set<CompetitionTags> tags = Set.of(competitionTag);
-        ResponseEntity<?> status = competitionTagService.addCompetitionTag(tags, competition, userPrincipal);
+        Set<Tags> tags = Set.of(competitionTag);
+        ResponseEntity<?> status = competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
 
@@ -101,23 +101,22 @@ public class CompetitionTagServiceTest {
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionTag.setTag("updatedTag");
-        ResponseEntity<?> status = competitionTagService.updateCompetitionTag(competitionTag, competition, userPrincipal);
+        ResponseEntity<?> status = competitionTagService.updateCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
-
 
     @Test
     @Order(3)
     public void shouldThrowExceptionCompetitionNotExistsWhenAddTag() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Set<CompetitionTags> tags = Set.of(competitionTag);
+        Set<Tags> tags = Set.of(competitionTag);
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () ->  competitionTagService.addCompetitionTag(tags, competition, userPrincipal),
+                () ->  competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Competition not exists not found with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
@@ -127,11 +126,11 @@ public class CompetitionTagServiceTest {
     @Order(4)
     public void shouldThrowExceptionWhenUserNotFound() {
 
-        Set<CompetitionTags> tags = Set.of(competitionTag);
+        Set<Tags> tags = Set.of(competitionTag);
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> competitionTagService.addCompetitionTag(tags, competition, userPrincipal),
+                () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
         assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
@@ -142,13 +141,13 @@ public class CompetitionTagServiceTest {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
-        Set<CompetitionTags> tags = Set.of(competitionTag);
+        Set<Tags> tags = Set.of(competitionTag);
 
-        Mockito.when(competitionTagService.addCompetitionTag(tags, competition, userPrincipal)).thenThrow(DataIntegrityViolationException.class);
+        Mockito.when(competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal)).thenThrow(DataIntegrityViolationException.class);
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,
-                () -> competitionTagService.addCompetitionTag(tags, competition, userPrincipal),
+                () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Tag already exists with CompetitionTag : '" + competitionTag.getTag() + "'", exception.getMessage());
@@ -160,13 +159,13 @@ public class CompetitionTagServiceTest {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
-        Set<CompetitionTags> tags = Set.of(competitionTag);
+        Set<Tags> tags = Set.of(competitionTag);
 
         competition.setOwner("OtherOwner");
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> competitionTagService.addCompetitionTag(tags, competition, userPrincipal),
+                () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
@@ -180,7 +179,7 @@ public class CompetitionTagServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition, userPrincipal);
+        ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).deleteById(competitionTag.getId());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);

@@ -49,26 +49,6 @@ public class UserService {
         return changeResponse(request.getNewPassword().equals(user.getPassword())," Password", mail);
     }
 
-    public Optional<User> getUserById(Long id) {
-        return userDao.findById(id);
-    }
-
-    public Optional<User> getUserByEmail(String email) {
-        return userDao.findByEmail(email);
-    }
-
-    public Iterable<User> getUsersByProps(
-            Optional<Long> publicId,
-            Optional<String> name,
-            Optional<String> age,
-            Optional<String> email) {
-
-        // This is just creating userSpecification to be able to use and, doing nothing to query
-        Specification<User> userSpecification = Specification.where((Specification<User>) (root, criteriaQuery, criteriaBuilder) -> root.isNotNull());
-
-        return userDao.findAll();
-    }
-
     public User save(User user) {
         return userDao.save(user);
     }
@@ -87,7 +67,6 @@ public class UserService {
         }
         throw new RuntimeException(parameter + " hasn't change");
     }
-
 
     private Mail sendInformationEmile(User user, String data, String link, String value) {
         TemplateValues values = TemplateValues.builder()

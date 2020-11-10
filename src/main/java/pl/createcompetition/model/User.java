@@ -10,7 +10,7 @@ import pl.createcompetition.annotations.ValidPassword;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "email"})
 @Entity
 @Table(name = "users", uniqueConstraints = {
         @UniqueConstraint(columnNames = "email")
@@ -51,6 +51,24 @@ public class User{
     @JsonBackReference
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;
+
+
+
+    public UserDto userToDto() {
+        return new UserDto(
+                this.userName,
+                this.email,
+                this.userDetail);
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class UserDto {
+        private String userName;
+        private String email;
+        private UserDetail userDetail;
+    }
+
 
 }
 

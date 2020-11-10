@@ -1,6 +1,5 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -20,31 +19,53 @@ public class Tournament {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @JsonManagedReference
-    @ManyToMany
-    @JoinTable(name = "tournament_competition",
-    joinColumns = @JoinColumn(name = "tournament_id"),
-    inverseJoinColumns = @JoinColumn(name = "competition_id"))
-    private Set<Competition> competitions = new HashSet<>();
-
     private String tournamentOwner;
+
     private String tournamentName;
+
     private int maxAmountOfTeams;
 
     private String city;
-    private String street;
-    private int street_number;
 
+    private String street;
+
+    private int street_number;
 
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "tournament_tags",
     joinColumns = @JoinColumn(name = "tournament_id"),
     inverseJoinColumns = @JoinColumn(name = "tag_id"))
-    private Set<CompetitionTags> tags = new HashSet<>();
+    private Set<Tags> tags = new HashSet<>();
 
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(name = "tournament_team",
+            joinColumns = @JoinColumn(name = "tournament_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    private Set<Competition> teams = new HashSet<>();
 
+    public TournamentDto TournamentToDto(){
+        return new TournamentDto(
+                this.tournamentOwner,
+                this.tournamentName,
+                this.maxAmountOfTeams,
+                this.city,
+                this.street,
+                this.street_number,
+                this.tags);
+    }
 
-
+    @Data
+    @AllArgsConstructor
+    public static class TournamentDto {
+        private String tournamentOwner;
+        private String tournamentName;
+        private int maxAmountOfTeams;
+        private String city;
+        private String street;
+        private int street_number;
+        private Set<Tags> tags;
+    }
 
 }

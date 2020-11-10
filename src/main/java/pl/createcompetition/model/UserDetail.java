@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of = {"id", "user"})
 @Getter
 @Setter
 @Entity
@@ -64,13 +64,10 @@ public class UserDetail {
         competition.getUserDetails().add(this);
     }
 
-
     public void addUserToTeam(Team team){
         this.teams.add(team);
         team.getUserDetails().add(this);
     }
-
-
 
     public UserDetailDto toUserDetailDto() {
         return new UserDetailDto(
@@ -86,7 +83,5 @@ public class UserDetail {
         private int age;
         private Gender gender;
     }
-
-
 
 }

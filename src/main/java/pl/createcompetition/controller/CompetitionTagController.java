@@ -5,8 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.createcompetition.model.Competition;
-import pl.createcompetition.model.CompetitionTags;
+import pl.createcompetition.model.Tags;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.CompetitionTagService;
@@ -29,30 +28,30 @@ public class CompetitionTagController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping()
-    public ResponseEntity<?> addTagsToCompetition(@RequestBody Set<CompetitionTags> tagCompetition,
-                                                  @RequestBody Competition competition,
+    @PostMapping("{competitionName}")
+    public ResponseEntity<?> addTagsToCompetition(@RequestBody Set<Tags> tagCompetition,
+                                                  @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
-        return competitionTagService.addCompetitionTag(tagCompetition, competition, userPrincipal);
+        return competitionTagService.addCompetitionTag(tagCompetition, competitionName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping()
-    public ResponseEntity<?> updateTagCompetition(@RequestBody CompetitionTags tagCompetition,
-                                                  @RequestBody Competition competition,
+    @PutMapping("{competitionName}")
+    public ResponseEntity<?> updateTagCompetition(@RequestBody Tags tagCompetition,
+                                                  @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
-        return competitionTagService.updateCompetitionTag(tagCompetition, competition, userPrincipal);
+        return competitionTagService.updateCompetitionTag(tagCompetition, competitionName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping
-    public ResponseEntity<?> deleteTagCompetition(@RequestBody CompetitionTags tagCompetition,
-                                                  @RequestBody Competition competition,
+    @DeleteMapping("{competitionName}")
+    public ResponseEntity<?> deleteTagCompetition(@RequestBody Tags tagCompetition,
+                                                  @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
-        return competitionTagService.deleteCompetitionTag(tagCompetition, competition, userPrincipal);
+        return competitionTagService.deleteCompetitionTag(tagCompetition, competitionName, userPrincipal);
     }
 
 

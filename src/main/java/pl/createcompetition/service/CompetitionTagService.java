@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
-import pl.createcompetition.model.CompetitionTags;
+import pl.createcompetition.model.Tags;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
@@ -26,51 +26,53 @@ public class CompetitionTagService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<?> addCompetitionTag(Set<CompetitionTags> competitionTag, Competition competition, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addCompetitionTag(Set<Tags> competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
-        checkIfCompetitionExists(competition.getCompetitionName());
-        checkIfCompetitionBelongToUser(competition, userPrincipal);
+        Competition findCompetition =  checkIfCompetitionExists(competitionName);
+        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
-        competition.addManyTagToCompetition(competitionTag);
+        findCompetition.addManyTagToCompetition(competitionTag);
 
         try {
-            return ResponseEntity.ok(competitionRepository.save(competition));
+            return ResponseEntity.ok(competitionRepository.save(findCompetition));
         } catch (DataIntegrityViolationException exception) {
             throw new ResourceAlreadyExistException("Tag", "CompetitionTag", competitionTag.iterator().next().getTag());
         }
     }
 
-    public ResponseEntity<?> updateCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
-        checkIfCompetitionExists(competition.getCompetitionName());
-        checkIfCompetitionBelongToUser(competition, userPrincipal);
-        competition.addTagToCompetition(competitionTag);
 
-        return ResponseEntity.ok(competitionRepository.save(competition));
+        Competition findCompetition =  checkIfCompetitionExists(competitionName);
+        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
+
+        findCompetition.addTagToCompetition(competitionTag);
+
+        return ResponseEntity.ok(competitionRepository.save(findCompetition));
 
     }
 
-    public ResponseEntity<?> deleteCompetitionTag(CompetitionTags competitionTag, Competition competition, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
-        checkIfCompetitionExists(competition.getCompetitionName());
-        checkIfCompetitionBelongToUser(competition, userPrincipal);
+        Competition findCompetition =  checkIfCompetitionExists(competitionName);
+        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
-        if (competition.getTags().contains(competitionTag)) {
-            competitionRepository.deleteById(competition.getId());
+        if (findCompetition.getTags().contains(competitionTag)) {
+            competitionRepository.deleteById(findCompetition.getId());
             return ResponseEntity.noContent().build();
         } else {
             throw new ResourceNotFoundException("CompetitionTag", "Tag", competitionTag.getId());
         }
     }
 
-
-    public void checkIfCompetitionExists(String competitionName) {
-        competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
+    public Competition checkIfCompetitionExists(String competitionName) {
+        return competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
+
 
     public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
         if(!competition.getOwner().equals(userPrincipal.getUsername())) {

@@ -1,6 +1,5 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -55,27 +54,57 @@ public class Competition {
             joinColumns = @JoinColumn(name = "competition_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id"))
     @Builder.Default
-    private Set<CompetitionTags> tags = new HashSet<>();
+    private Set<Tags> tags = new HashSet<>();
 
-    @JsonBackReference
-    @ManyToMany(mappedBy = "competitions")
-    @Builder.Default
-    private Set<Tournament> tournaments = new HashSet<>();
+    @JsonManagedReference
+    @ManyToMany
+    @JoinTable(name = "competition_team",
+            joinColumns = @JoinColumn(name = "tournament_id"),
+            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    private Set<Team> teams = new HashSet<>();
 
-
-
-    public void addTagToCompetition(CompetitionTags competitionTags) {
-        this.tags.add(competitionTags);
-        competitionTags.getCompetitions().add(this);
+    public void addTagToCompetition(Tags tags) {
+        this.tags.add(tags);
+        tags.getCompetitions().add(this);
     }
 
-    public void addManyTagToCompetition(Set<CompetitionTags> competitionTags) {
-        for(CompetitionTags tag: competitionTags) {
+    public void addManyTagToCompetition(Set<Tags> tags) {
+        for(Tags tag: tags) {
 
             this.tags.add(tag);
             tag.getCompetitions().add(this);
         }
     }
+
+    public CompetitionDto toCompetition() {
+        return new CompetitionDto(
+                this.competitionName,
+                this.city,
+                this.street,
+                this.street_number,
+                this.competitionStart,
+                this.competitionEnd,
+                this.isOpenRecruitment,
+                this.teams,
+                this.tags);
+    }
+
+    @Data
+    @AllArgsConstructor
+    public static class CompetitionDto {
+        private String competitionName;
+        private String city;
+        private String street;
+        private int street_number;
+        private java.sql.Date competitionStart;
+        private java.sql.Date competitionEnd;
+        private Boolean isOpenRecruitment;
+        private Set<Team> teams;
+        private Set<Tags> tags;
+    }
+
+
+
 
 
 }

@@ -1,13 +1,9 @@
 package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 @EqualsAndHashCode(of = {"id", "tag"})
@@ -17,7 +13,7 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CompetitionTags {
+public class Tags {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,8 +38,23 @@ public class CompetitionTags {
 
 
 
+    public TagsDto TagsToDto() {
+        return new TagsDto(
+                this.tag,
+                this.competitions,
+                this.tournaments,
+                this.teams
+        );
+    }
 
-
+    @Data
+    @AllArgsConstructor
+    public static class TagsDto {
+        private String tag;
+        private Set<Competition> competitions;
+        private Set<Tournament> tournaments;
+        private Set<Team> teams;
+    }
 }
 
 
