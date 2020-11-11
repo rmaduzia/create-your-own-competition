@@ -6,7 +6,9 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Team;
+import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.TeamRepository;
+import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
@@ -18,35 +20,39 @@ public class TeamService {
 
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
 
-    public ResponseEntity<?> addTeam (Team team, UserPrincipal currentUser) {
+    public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
-        findUser(currentUser);
+        findUser(userPrincipal);
         Optional<Team> findTeam = teamRepository.findByTeamName(team.getTeamName());
 
         if (findTeam.isEmpty()) {
-            team.setTeamOwner(currentUser.getUsername());
-            return ResponseEntity.ok(teamRepository.save(team));
+            Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
+            team.setTeamOwner(userPrincipal.getUsername());
+            userDetail.get().addUserToTeam(team);
+            //return ResponseEntity.ok(teamRepository.save(team));
+            return ResponseEntity.ok(userDetailRepository.save(userDetail.get()));
         } else{
             throw new ResourceAlreadyExistException("Team", "Name", team.getTeamName());
         }
     }
 
-    public ResponseEntity<?> updateTeam (Team team, UserPrincipal currentUser) {
+    public ResponseEntity<?> updateTeam (Team team, UserPrincipal userPrincipal) {
 
-        findUser(currentUser);
-        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), currentUser.getUsername());
-        checkIfTeamBelongToUser(foundTeam.get(), currentUser);
+        findUser(userPrincipal);
+        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
+        checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
         return ResponseEntity.ok(teamRepository.save(team));
 
     }
 
-    public ResponseEntity<?> deleteTeam (Team team, UserPrincipal currentUser) {
+    public ResponseEntity<?> deleteTeam (Team team, UserPrincipal userPrincipal) {
 
-        findUser(currentUser);
-        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), currentUser.getUsername());
-        checkIfTeamBelongToUser(foundTeam.get(), currentUser);
+        findUser(userPrincipal);
+        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
+        checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
         teamRepository.deleteById(team.getId());
 

@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
+import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.CompetitionRepository;
+import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
@@ -19,6 +21,7 @@ public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
     private final UserRepository userRepository;
+    private final UserDetailRepository userDetailRepository;
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 
@@ -27,8 +30,10 @@ public class CompetitionService {
         Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
 
         if (findCompetition.isEmpty()){
+            Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
             competition.setOwner(userPrincipal.getUsername());
-            return ResponseEntity.ok(competitionRepository.save(competition));
+            userDetail.get().addUserToCompetition(competition);
+            return ResponseEntity.ok(userDetailRepository.save(userDetail.get()));
         } else{
             throw new ResourceAlreadyExistException("Competition", "Name", competition.getCompetitionName());
         }
@@ -71,7 +76,6 @@ public class CompetitionService {
         return ResponseEntity.noContent().build();
 
     }
-
 
     public void findUser(UserPrincipal userPrincipal) {
         userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->

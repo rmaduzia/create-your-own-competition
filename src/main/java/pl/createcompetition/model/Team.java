@@ -33,6 +33,7 @@ public class Team {
 
     @JsonManagedReference
     @ManyToMany(mappedBy="teams")
+    @Builder.Default
     private Set<UserDetail> userDetails = new HashSet<>();
 
     @JsonManagedReference
@@ -50,7 +51,10 @@ public class Team {
     @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
-
+    public void addTeamToTournament(Tournament tournament) {
+        this.tournaments.add(tournament);
+        tournament.getTeams().add(this);
+    }
 
     public TeamDto TeamToDto() {
         return new TeamDto(

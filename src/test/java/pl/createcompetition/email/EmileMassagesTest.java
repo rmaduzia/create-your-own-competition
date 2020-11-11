@@ -1,6 +1,7 @@
-package pl.createcompetition.util.email;
+package pl.createcompetition.email;
 
 import org.junit.jupiter.api.Test;
+import pl.createcompetition.util.email.EmailMassageTemplate;
 
 import java.time.LocalDate;
 

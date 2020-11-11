@@ -9,6 +9,7 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.CompetitionRepository;
+import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Date;
@@ -28,6 +29,8 @@ public class CompetitionServiceTest {
     CompetitionRepository competitionRepository;
     @Spy
     UserRepository userRepository;
+    @Spy
+    UserDetailRepository userDetailRepository;
     @InjectMocks
     CompetitionService competitionService;
 
@@ -72,11 +75,13 @@ public class CompetitionServiceTest {
 
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        Mockito.when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
+
 
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
 
         competitionService.addCompetition(competition, userPrincipal);
-        verify(competitionRepository, times(1)).save(competition);
+        verify(userDetailRepository, times(1)).save(userDetail);
 
         assertEquals(competitionService.addCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
     }

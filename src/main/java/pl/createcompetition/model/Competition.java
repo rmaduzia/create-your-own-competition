@@ -46,6 +46,7 @@ public class Competition {
 
     @JsonManagedReference
     @ManyToMany(mappedBy = "competitions")
+    @Builder.Default
     private Set<UserDetail> userDetails = new HashSet<>();
 
     @JsonManagedReference
@@ -61,6 +62,7 @@ public class Competition {
     @JoinTable(name = "competition_team",
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))
+    @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
     public void addTagToCompetition(Tags tags) {
@@ -70,7 +72,6 @@ public class Competition {
 
     public void addManyTagToCompetition(Set<Tags> tags) {
         for(Tags tag: tags) {
-
             this.tags.add(tag);
             tag.getCompetitions().add(this);
         }

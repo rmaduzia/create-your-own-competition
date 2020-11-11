@@ -43,7 +43,7 @@ public class Tournament {
     @JoinTable(name = "tournament_team",
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))
-    private Set<Competition> teams = new HashSet<>();
+    private Set<Team> teams = new HashSet<>();
 
     public TournamentDto TournamentToDto(){
         return new TournamentDto(

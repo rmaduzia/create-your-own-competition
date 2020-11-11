@@ -22,6 +22,7 @@ public class UserDetailService {
     private final UserDetailRepository userDetailRepository;
     private final UserRepository userRepository;
     private final GetQueryUserDetailService quer;
+    private UserDetail userDetail;
 
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {

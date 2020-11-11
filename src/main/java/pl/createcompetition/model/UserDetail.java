@@ -49,6 +49,7 @@ public class UserDetail {
     @JoinTable(name="user_competition",
         joinColumns=@JoinColumn(name="user_id"),
         inverseJoinColumns=@JoinColumn(name="competition_id"))
+    @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
     @JsonBackReference
@@ -56,6 +57,7 @@ public class UserDetail {
     @JoinTable(name="user_team",
         joinColumns=@JoinColumn(name="user_id"),
         inverseJoinColumns=@JoinColumn(name="team_id"))
+    @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
 

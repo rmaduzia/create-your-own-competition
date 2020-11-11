@@ -9,6 +9,7 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.TeamRepository;
+import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
@@ -28,6 +29,8 @@ public class TeamServiceTest {
     TeamRepository teamRepository;
     @Spy
     UserRepository userRepository;
+    @Spy
+    UserDetailRepository userDetailRepository;
     @InjectMocks
     TeamService teamService;
 
@@ -70,11 +73,11 @@ public class TeamServiceTest {
     public void shouldAddTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-
+        Mockito.when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
         Mockito.when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.empty());
 
         teamService.addTeam(team, userPrincipal);
-        verify(teamRepository, times(1)).save(team);
+        verify(userDetailRepository, times(1)).save(userDetail);
 
         assertEquals(teamService.addTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
