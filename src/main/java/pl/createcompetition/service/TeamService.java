@@ -6,12 +6,14 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Team;
+import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
+import javax.xml.ws.Response;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -60,8 +62,22 @@ public class TeamService {
 
     }
 
+    public ResponseEntity<?> addMemberToTeam(Team team, String userName,UserPrincipal userPrincipal) {
+        findUser(userPrincipal);
+        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
+        checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
+
+        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userName).orElseThrow(() ->
+                new ResourceNotFoundException("UserName not exists", "Name", userName)));
+
+        team.addRecruitToTeam(findRecruit.get());
+
+        return ResponseEntity.noContent().build();
+    }
+
+
     public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(()->
+        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 

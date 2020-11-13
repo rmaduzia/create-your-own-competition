@@ -56,6 +56,11 @@ public class Team {
         tournament.getTeams().add(this);
     }
 
+    public void addRecruitToTeam(UserDetail userDetail) {
+        this.userDetails.add(userDetail);
+        userDetail.getTeams().add(this);
+    }
+
     public TeamDto TeamToDto() {
         return new TeamDto(
                 this.teamName,

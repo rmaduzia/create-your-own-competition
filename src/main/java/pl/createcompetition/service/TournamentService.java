@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
+import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
@@ -19,18 +20,18 @@ public class TournamentService {
     private final TournamentRepository tournamentRepository;
     private final UserRepository userRepository;
 
-    public ResponseEntity<?> getTournament(Tournament tournament, UserPrincipal currentUser) {
+    public ResponseEntity<?> getTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
         return ResponseEntity.ok().build();
 
     }
 
-    public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal currentUser) {
-        findUser(currentUser);
+    public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
+        findUser(userPrincipal);
         Optional<Tournament> findTeam = tournamentRepository.findByTournamentName(tournament.getTournamentName());
 
         if (findTeam.isEmpty()) {
-            tournament.setTournamentOwner(currentUser.getUsername());
+            tournament.setTournamentOwner(userPrincipal.getUsername());
             return ResponseEntity.ok(tournamentRepository.save(tournament));
         } else {
             throw new ResourceAlreadyExistException("Tournament", "Name", tournament.getTournamentName());
@@ -39,32 +40,39 @@ public class TournamentService {
 
     }
 
-    public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal currentUser) {
+    public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        findUser(currentUser);
-        Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), currentUser.getUsername());
-        checkIfTeamBelongToUser(foundTeam.get(), currentUser);
+        findUser(userPrincipal);
+        Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
 
         return ResponseEntity.ok(tournamentRepository.save(tournament));
     }
 
-    public ResponseEntity<?> deleteTournament(Tournament tournament, UserPrincipal currentUser) {
+    public ResponseEntity<?> deleteTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        findUser(currentUser);
-        Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), currentUser.getUsername());
-        checkIfTeamBelongToUser(foundTeam.get(), currentUser);
+        findUser(userPrincipal);
+        Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
 
         tournamentRepository.deleteById(tournament.getId());
 
         return ResponseEntity.noContent().build();
     }
 
+    public ResponseEntity<?> teamJoinTournament(Team team, String tournamentName,UserPrincipal userPrincipal) {
+        return ResponseEntity.noContent().build();
+
+    }
+    
+    
+
     public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(()->
+        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
-    public void checkIfTeamBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {
+    public void checkIfTournamentBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {
         if (!tournament.getTournamentOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Tournament named: " + tournament.getTournamentName(), "Owner", userPrincipal.getUsername());
         }

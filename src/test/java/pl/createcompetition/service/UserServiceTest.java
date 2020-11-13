@@ -48,7 +48,6 @@ public class UserServiceTest {
     void setUp() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         user = User.builder()
                 .id(1L)
-                .userName("Test")
                 .email("test@test.com")
                 .imageUrl("test Url")
                 .emailVerified(true)

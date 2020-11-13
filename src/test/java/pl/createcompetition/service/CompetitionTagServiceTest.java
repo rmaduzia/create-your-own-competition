@@ -49,7 +49,6 @@ public class CompetitionTagServiceTest {
         MockitoAnnotations.initMocks(this);
 
         user = User.builder()
-                .userName("Test")
                 .password("Password%123")
                 .id(1L)
                 .provider(AuthProvider.local)

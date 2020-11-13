@@ -28,6 +28,10 @@ public class UserDetail {
     @Column(name="user_detail_id")
     private Long id;
 
+    @NotBlank(message="Bad username")
+    @Column(unique = true)
+    private String userName;
+
     private String city;
 
     @Min(value = 15, message="you must be at least 15 years old")

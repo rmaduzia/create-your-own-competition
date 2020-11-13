@@ -41,8 +41,8 @@ public class AuthenticationServiceTest {
 
     @BeforeAll
     static void setUp() {
-        user = User.builder().userName("MockName").password("Password").id(1L).provider(AuthProvider.local).email("grzesiek12@gmail.com").emailVerified(true).build();
-        signUpRequest = SignUpRequest.builder().email(user.getEmail()).name(user.getUserName()).password(user.getPassword()).build();
+        user = User.builder().password("Password").id(1L).provider(AuthProvider.local).email("grzesiek12@gmail.com").emailVerified(true).build();
+        signUpRequest = SignUpRequest.builder().email(user.getEmail()).password(user.getPassword()).build();
         loginRequest = LoginRequest.builder().email(user.getEmail()).password(user.getPassword()).build();
         MockHttpServletRequest request = new MockHttpServletRequest();
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request));

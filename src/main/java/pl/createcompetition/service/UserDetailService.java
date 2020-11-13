@@ -11,6 +11,7 @@ import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryUserDetailService;
+import pl.createcompetition.service.query.temp.TempGetQueryUserDetailService;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class UserDetailService {
     private final UserRepository userRepository;
     private final GetQueryUserDetailService quer;
     private UserDetail userDetail;
+
 
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {

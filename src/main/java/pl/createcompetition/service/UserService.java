@@ -72,7 +72,7 @@ public class UserService {
         TemplateValues values = TemplateValues.builder()
                 .changedData(data)
                 .changeDataLink(link)
-                .dataValue(user.getUserName())
+                .dataValue(user.getEmail())
                 .name(value).build();
 
         return new Mail(user.getEmail(),values);

@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface UserDetailRepository extends JpaRepository<UserDetail, Long>{
+
+    Optional<UserDetail> findByUserName(String userName);
+
+
 /*
     @Query(value = "SELECT ?1, user_detail.city, user_detail.age, user_detail.user_user_id from users INNER JOIN user_detail ON users.user_id = user_detail.user_user_id WHERE user_detail.city=?2", nativeQuery =true)
     List<UserQueryMapper> findAllByCity(String column_name, String city);

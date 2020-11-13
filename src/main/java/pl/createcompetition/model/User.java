@@ -4,8 +4,6 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
-import pl.createcompetition.annotations.ValidPassword;
-
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -19,16 +17,12 @@ import javax.validation.constraints.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User{
+public class User {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name="user_id")
     private Long id;
-
-    @NotBlank(message="Bad username")
-    @Column(unique = true)
-    private String userName;
 
     private String imageUrl;
 
@@ -56,7 +50,6 @@ public class User{
 
     public UserDto userToDto() {
         return new UserDto(
-                this.userName,
                 this.email,
                 this.userDetail);
     }
@@ -64,7 +57,6 @@ public class User{
     @Data
     @AllArgsConstructor
     public static class UserDto {
-        private String userName;
         private String email;
         private UserDetail userDetail;
     }

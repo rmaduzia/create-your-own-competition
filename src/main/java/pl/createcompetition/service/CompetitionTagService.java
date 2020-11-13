@@ -81,7 +81,7 @@ public class CompetitionTagService {
     }
 
     public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
+        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(() ->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 

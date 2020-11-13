@@ -11,14 +11,14 @@ import java.util.UUID;
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
 
-    Optional<User> findByUserName(String username);
-    List<User> findAllByUserNameContainingIgnoreCase(String login);
+    //Optional<User> findByUserName(String username);
+   // List<User> findAllByUserNameContainingIgnoreCase(String login);
 
   //  Optional<User> findByPrivateIdAndPassword(Long privateId, String password);
 
     Optional<User> findByIdAndPassword(Long privateId, String password);
 
-    boolean existsByIdAndUserName(Long id, String userName);
+    //boolean existsByIdAndUserName(Long id, String userName);
 
     Optional<User> findByIdAndEmail(Long id, String userName);
     Optional<User> findByEmail(String email);

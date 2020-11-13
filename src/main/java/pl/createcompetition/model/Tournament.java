@@ -45,6 +45,12 @@ public class Tournament {
             inverseJoinColumns = @JoinColumn(name = "team_id"))
     private Set<Team> teams = new HashSet<>();
 
+    public void addTeamToTournament(Team teams) {
+        this.teams.add(teams);
+        teams.getTournaments().add(this);
+    }
+
+
     public TournamentDto TournamentToDto(){
         return new TournamentDto(
                 this.tournamentOwner,
