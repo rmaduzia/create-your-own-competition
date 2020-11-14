@@ -20,12 +20,14 @@ public class TeamController {
     @PreAuthorize("hasRole('USER')")
     @PostMapping
     public ResponseEntity<?> addTeam(@RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
+
         return teamService.addTeam(team, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping
     public ResponseEntity<?> updateTeam(@RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
+
         return teamService.updateTeam(team, userPrincipal);
     }
 
@@ -36,4 +38,19 @@ public class TeamController {
     }
 
 
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("addRecruit")
+    public ResponseEntity<?> addRecruitToTeam(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String teamName) {
+
+        return teamService.addRecruitToTeam(teamName, recruitName,userPrincipal);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("joinTournament")
+    public ResponseEntity<?> joinTeamToTournament(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String teamName) {
+
+        return teamService.teamJoinTournament(teamName, recruitName,userPrincipal);
+    }
 }

@@ -11,6 +11,7 @@ import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryUserDetailService;
+import pl.createcompetition.service.query.temp.TempGetQueryAbstractService;
 import pl.createcompetition.service.query.temp.TempGetQueryUserDetailService;
 
 import java.util.List;
@@ -22,7 +23,9 @@ public class UserDetailService {
 
     private final UserDetailRepository userDetailRepository;
     private final UserRepository userRepository;
-    private final GetQueryUserDetailService quer;
+    private final TempGetQueryUserDetailService quer;
+    private final TempGetQueryAbstractService querAbstract;
+
     private UserDetail userDetail;
 
 
@@ -64,7 +67,8 @@ public class UserDetailService {
 
     public List<?> searchUser(String search) {
 
-        return quer.execute(search);
+        return quer.execute(UserDetail.class, search, UserDetail -> new UserDetail.UserDetailDto());
+
     }
 
 }

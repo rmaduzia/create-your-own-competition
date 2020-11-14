@@ -60,10 +60,9 @@ public class TournamentService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<?> teamJoinTournament(Team team, String tournamentName,UserPrincipal userPrincipal) {
-        return ResponseEntity.noContent().build();
 
-    }
+
+
     
     
 

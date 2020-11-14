@@ -56,10 +56,21 @@ public class Team {
         tournament.getTeams().add(this);
     }
 
+    public void deleteTeamFromTournament(Tournament tournament) {
+        this.tournaments.remove(tournament);
+        tournament.getTeams().remove(this);
+    }
+
     public void addRecruitToTeam(UserDetail userDetail) {
         this.userDetails.add(userDetail);
         userDetail.getTeams().add(this);
     }
+
+    public void deleteRecruitFromTeam(UserDetail userDetail) {
+        this.userDetails.remove(userDetail);
+        userDetail.getTeams().remove(this);
+    }
+
 
     public TeamDto TeamToDto() {
         return new TeamDto(
