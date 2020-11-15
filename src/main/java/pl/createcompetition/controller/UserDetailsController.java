@@ -22,7 +22,7 @@ public class UserDetailsController {
 
     @GetMapping
     @ResponseBody
-    public List<?> search(@RequestParam(value = "search") @NotBlank String search) throws NoSuchMethodException {
+    public List<?> searchUserDetail(@RequestParam(value = "search") @NotBlank String search) throws NoSuchMethodException {
 
         return userDetailService.searchUser(search);
 

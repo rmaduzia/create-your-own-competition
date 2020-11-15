@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import pl.createcompetition.service.query.temp.Intt;
+import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
 
@@ -22,7 +22,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDetail implements Intt<UserDetail.UserDetailDto> {
+public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -85,7 +85,7 @@ public class UserDetail implements Intt<UserDetail.UserDetailDto> {
 
     @Override
     public UserDetailDto map() {
-        return new UserDetailDto();
+        return new UserDetailDto(city,age,gender);
     }
 
     @Data

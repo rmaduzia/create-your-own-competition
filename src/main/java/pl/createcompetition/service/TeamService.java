@@ -7,15 +7,15 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
-import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
 
-import javax.xml.ws.Response;
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -26,6 +26,14 @@ public class TeamService {
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
+
+    private final GetQueryImplService quer;
+
+
+    public List<?> searchTeam(String search) {
+        return quer.execute(Team.class, search);
+    }
+
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
@@ -63,20 +71,7 @@ public class TeamService {
         return ResponseEntity.noContent().build();
 
     }
-/*
-    public ResponseEntity<?> addMemberToTeam_old(Team team, String userName,UserPrincipal userPrincipal) {
-        findUser(userPrincipal);
-        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
-        checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userName).orElseThrow(() ->
-                new ResourceNotFoundException("UserName not exists", "Name", userName)));
-
-        team.addRecruitToTeam(findRecruit.get());
-
-        return ResponseEntity.ok(teamRepository.save(team));
-    }
- */
     public ResponseEntity<?> addRecruitToTeam(String teamName, String userName, UserPrincipal userPrincipal) {
         findUser(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());

@@ -1,5 +1,6 @@
 package pl.createcompetition.email;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import pl.createcompetition.util.email.TemplateValues;
 
 import static org.mockito.Mockito.*;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 

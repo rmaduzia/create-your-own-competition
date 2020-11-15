@@ -10,12 +10,22 @@ import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.TeamService;
 
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
 @AllArgsConstructor
 @RestController
 @RequestMapping("team")
 public class TeamController {
 
     private final TeamService teamService;
+
+    @GetMapping
+    @ResponseBody
+    public List<?> searchTeam(@RequestParam(value = "search") @NotBlank String search) {
+
+        return teamService.searchTeam(search);
+    }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping

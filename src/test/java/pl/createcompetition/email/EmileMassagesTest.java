@@ -1,5 +1,6 @@
 package pl.createcompetition.email;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import pl.createcompetition.util.email.EmailMassageTemplate;
 
@@ -7,6 +8,7 @@ import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 class EmileMassagesTest {
 
     @Test

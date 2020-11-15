@@ -10,22 +10,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
-public abstract class GetQueryAbstractService<B, R> {
+import static java.util.stream.Collectors.toList;
+
+public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R> {
 
     @PersistenceContext
     protected EntityManager entityManager;
 
-    protected abstract Class<B> getClazz();
-
     protected abstract Predicate getPredicate(Predicate predicate, CriteriaBuilder builder, Root r, List<SearchCriteria> params);
 
-    protected abstract List<R> getDtos(CriteriaQuery<B> query);
-
-    public List<R> execute(String search) {
+    //public List<R> execute(Class<B> encja, String search, Function<B, R> mapper) {
+    public List<R> execute(Class<B> encja, String search) {
         final CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        final CriteriaQuery<B> query = builder.createQuery(getClazz());
-        final Root r = query.from(getClazz());
+        final CriteriaQuery<B> query = builder.createQuery(encja);
+        final Root r = query.from(encja);
+
 
         List<SearchCriteria> params = new ArrayList<>();
         if (search != null) {
@@ -40,6 +41,20 @@ public abstract class GetQueryAbstractService<B, R> {
         predicate = getPredicate(predicate, builder, r, params);
         query.where(predicate);
 
-        return getDtos(query);
+        var mapperFirst = new Mapper<B, R>();
+
+        return mapperFirst.map(entityManager
+                .createQuery(query)
+                .getResultStream()
+                .collect(Collectors.toList()));
     }
+
+    static class Mapper<A extends QueryDtoInterface<B>, B> {
+        public List<B> map(List<A> from) {
+            return from.stream()
+                    .map(QueryDtoInterface::map)
+                    .collect(toList());
+        }
+    }
+
 }
