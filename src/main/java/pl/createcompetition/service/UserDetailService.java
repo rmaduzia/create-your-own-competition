@@ -1,18 +1,21 @@
 package pl.createcompetition.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceNotFoundException;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.User;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
-import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -21,13 +24,11 @@ public class UserDetailService {
 
     private final UserDetailRepository userDetailRepository;
     private final UserRepository userRepository;
-    private final GetQueryImplService quer;
+    private final GetQueryImplService queryUserDetailService;
 
-    public List<?> searchUser(String search) {
+    public PagedResponseDto<?> searchUser(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        //return quer.execute(UserDetail.class, search, UserDetail -> new UserDetail.UserDetailDto());
-        return quer.execute(UserDetail.class, search);
-
+        return queryUserDetailService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
 

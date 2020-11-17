@@ -5,9 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserDetailRepository;
@@ -27,13 +29,12 @@ public class TeamService {
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
 
-    private final GetQueryImplService quer;
+    private final GetQueryImplService queryTeamService;
 
+    public PagedResponseDto<?> searchTeam(String search, PaginationInfoRequest paginationInfoRequest) {
 
-    public List<?> searchTeam(String search) {
-        return quer.execute(Team.class, search);
+        return queryTeamService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
-
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 

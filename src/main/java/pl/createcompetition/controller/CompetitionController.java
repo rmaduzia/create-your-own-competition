@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.Competition;
+import pl.createcompetition.model.PagedResponseDto;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.CompetitionService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @RestController
@@ -17,6 +20,13 @@ import javax.validation.Valid;
 public class CompetitionController {
 
     private final CompetitionService competitionService;
+
+    @GetMapping
+    @ResponseBody
+    public PagedResponseDto<?> searchUserDetail(@RequestParam(value = "search") @NotBlank String search,
+                                                @Valid PaginationInfoRequest paginationInfoRequest) {
+        return competitionService.searchCompetition(search, paginationInfoRequest);
+    }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()

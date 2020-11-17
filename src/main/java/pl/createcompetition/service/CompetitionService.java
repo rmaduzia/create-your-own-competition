@@ -7,11 +7,14 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 
@@ -22,6 +25,12 @@ public class CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
+    private final GetQueryImplService queryUserDetailService;
+
+    public PagedResponseDto<?> searchCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
+
+        return queryUserDetailService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+    }
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 

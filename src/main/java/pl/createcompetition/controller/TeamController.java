@@ -1,17 +1,18 @@
 package pl.createcompetition.controller;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Team;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.TeamService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -22,9 +23,10 @@ public class TeamController {
 
     @GetMapping
     @ResponseBody
-    public List<?> searchTeam(@RequestParam(value = "search") @NotBlank String search) {
+    public PagedResponseDto<?> searchTeam(@RequestParam(value = "search") @NotBlank String search,
+                                          @Valid PaginationInfoRequest paginationInfoRequest) {
+        return teamService.searchTeam(search, paginationInfoRequest);
 
-        return teamService.searchTeam(search);
     }
 
     @PreAuthorize("hasRole('USER')")

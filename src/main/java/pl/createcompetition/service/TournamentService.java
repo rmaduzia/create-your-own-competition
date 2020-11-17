@@ -5,11 +5,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.Team;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Tournament;
+import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 
@@ -19,11 +22,11 @@ public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final UserRepository userRepository;
+    private final GetQueryImplService queryUserDetailService;
 
-    public ResponseEntity<?> getTournament(Tournament tournament, UserPrincipal userPrincipal) {
+    public PagedResponseDto<?> searchTournament(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        return ResponseEntity.ok().build();
-
+        return queryUserDetailService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
@@ -37,7 +40,6 @@ public class TournamentService {
             throw new ResourceAlreadyExistException("Tournament", "Name", tournament.getTournamentName());
 
         }
-
     }
 
     public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
@@ -63,8 +65,6 @@ public class TournamentService {
 
 
 
-    
-    
 
     public void findUser(UserPrincipal userPrincipal) {
         userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->

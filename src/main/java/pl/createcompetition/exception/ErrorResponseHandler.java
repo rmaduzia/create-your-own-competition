@@ -7,7 +7,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
-import pl.createcompetition.responses.ErrorResponse;
+import pl.createcompetition.payload.responses.ErrorResponse;
 
 import java.util.Collections;
 

@@ -1,4 +1,4 @@
-package pl.createcompetition.responses;
+package pl.createcompetition.payload.responses;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

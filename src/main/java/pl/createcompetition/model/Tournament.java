@@ -2,6 +2,7 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -13,7 +14,7 @@ import java.util.Set;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Tournament {
+public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,6 +61,11 @@ public class Tournament {
                 this.street,
                 this.street_number,
                 this.tags);
+    }
+
+    @Override
+    public TournamentDto map() {
+        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags);
     }
 
     @Data

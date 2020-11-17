@@ -5,13 +5,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.UserDetailService;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
 @AllArgsConstructor
 @Controller
@@ -20,11 +22,12 @@ public class UserDetailsController {
 
     private final UserDetailService userDetailService;
 
+
     @GetMapping
     @ResponseBody
-    public List<?> searchUserDetail(@RequestParam(value = "search") @NotBlank String search) throws NoSuchMethodException {
-
-        return userDetailService.searchUser(search);
+    public PagedResponseDto<?> searchUserDetail(@RequestParam(value = "search") @NotBlank String search,
+                                               @Valid PaginationInfoRequest paginationInfoRequest) {
+        return userDetailService.searchUser(search, paginationInfoRequest);
 
     }
 
