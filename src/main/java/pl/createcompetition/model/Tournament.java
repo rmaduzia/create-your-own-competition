@@ -32,15 +32,17 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     private int street_number;
 
-    @JsonManagedReference
     @ManyToMany
+    @JsonManagedReference
+    @Builder.Default
     @JoinTable(name = "tournament_tags",
     joinColumns = @JoinColumn(name = "tournament_id"),
     inverseJoinColumns = @JoinColumn(name = "tag_id"))
     private Set<Tags> tags = new HashSet<>();
 
-    @JsonManagedReference
     @ManyToMany
+    @JsonManagedReference
+    @Builder.Default
     @JoinTable(name = "tournament_team",
             joinColumns = @JoinColumn(name = "tournament_id"),
             inverseJoinColumns = @JoinColumn(name = "team_id"))

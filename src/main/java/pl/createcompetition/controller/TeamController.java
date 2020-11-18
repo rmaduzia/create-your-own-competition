@@ -59,10 +59,28 @@ public class TeamController {
     }
 
     @PreAuthorize("hasRole('USER')")
+    @PostMapping("deleteRecruit")
+    public ResponseEntity<?> deleteMemberFromTeam(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String teamName) {
+
+        return teamService.deleteMemberFromTeam(teamName, recruitName,userPrincipal);
+    }
+
+
+    @PreAuthorize("hasRole('USER')")
     @PostMapping("joinTournament")
     public ResponseEntity<?> joinTeamToTournament(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String teamName) {
 
         return teamService.teamJoinTournament(teamName, recruitName,userPrincipal);
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("leaveTournament")
+    public ResponseEntity<?> teamLeaveTournament(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
+                                                  @PathVariable String teamName) {
+
+        return teamService.teamLeaveTournament(teamName, recruitName,userPrincipal);
+    }
+
 }

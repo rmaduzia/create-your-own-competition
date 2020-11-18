@@ -143,12 +143,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "swagger-ui.html#/",
             "/swagger-ui/**",
-            "/swagger-ui/*",
-            "/swagger-ui/index.html"
     };
 
     @Override
-    public void configure(WebSecurity web) throws Exception {
+    public void configure(WebSecurity web) {
         web.ignoring().antMatchers(AUTH_WHITELIST);
     }
 

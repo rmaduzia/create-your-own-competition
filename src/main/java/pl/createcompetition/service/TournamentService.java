@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
+import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.payload.PaginationInfoRequest;
@@ -13,8 +14,9 @@ import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.util.MatchTeamsInTournament;
 
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -22,11 +24,11 @@ public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final UserRepository userRepository;
-    private final GetQueryImplService queryUserDetailService;
+    private final GetQueryImplService<Tournament,?> queryUserDetailService;
 
     public PagedResponseDto<?> searchTournament(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        return queryUserDetailService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+        return queryUserDetailService.execute(Tournament.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
@@ -64,6 +66,24 @@ public class TournamentService {
 
 
 
+    public ResponseEntity<?> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
+
+        findUser(userPrincipal);
+        Optional<Tournament> foundTeam = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
+
+        List<String> listOfTeams = new ArrayList<>();
+
+        for (Team f : foundTeam.get().getTeams()) {
+            listOfTeams.add(f.getTeamName());
+        }
+
+        Map<String,String> matchedTeams = MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
+
+
+        return ResponseEntity.ok().build();
+
+    }
 
 
     public void findUser(UserPrincipal userPrincipal) {

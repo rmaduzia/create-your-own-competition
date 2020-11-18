@@ -28,7 +28,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
 
-
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2).select()
@@ -36,17 +35,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .build();
     }
 
-
-    /*
-    @Bean
-    public Docket produceApi() {
-        return new Docket(DocumentationType.SWAGGER_2).select()
-                .apis(RequestHandlerSelectors.basePackage("com.springboot.swagger.controller"))
-                .build();
-    }
-
-
-     */
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

@@ -25,11 +25,11 @@ public class CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
-    private final GetQueryImplService queryUserDetailService;
+    private final GetQueryImplService<Competition,?> queryUserDetailService;
 
     public PagedResponseDto<?> searchCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        return queryUserDetailService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+        return queryUserDetailService.execute(Competition.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {

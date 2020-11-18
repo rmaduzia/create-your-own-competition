@@ -3,6 +3,7 @@ package pl.createcompetition.service;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
@@ -29,11 +30,11 @@ public class TeamService {
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
 
-    private final GetQueryImplService queryTeamService;
+    private final GetQueryImplService<Team,?> queryTeamService;
 
     public PagedResponseDto<?> searchTeam(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        return queryTeamService.execute(UserDetail.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+        return queryTeamService.execute(Team.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
@@ -70,7 +71,6 @@ public class TeamService {
         teamRepository.deleteById(team.getId());
 
         return ResponseEntity.noContent().build();
-
     }
 
     public ResponseEntity<?> addRecruitToTeam(String teamName, String userName, UserPrincipal userPrincipal) {
@@ -95,11 +95,11 @@ public class TeamService {
         Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userName).orElseThrow(() ->
                 new ResourceNotFoundException("UserName not exists", "Name", userName)));
 
+        checkIfUserIsMemberOfTeam(foundTeam.get(), findRecruit.get());
+
         foundTeam.get().deleteRecruitFromTeam(findRecruit.get());
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
-
-
     }
 
     public ResponseEntity<?> teamJoinTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
@@ -108,33 +108,33 @@ public class TeamService {
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        Optional<Tournament> findTournament = Optional.ofNullable(tournamentRepository.findByTournamentName(tournamentName).orElseThrow(() ->
-                new ResourceNotFoundException("Tournament not exists", "Name", tournamentName)));
+        Optional<Tournament> findTournament = getTournament(tournamentName);
+
+        if (findTournament.get().getMaxAmountOfTeams() == findTournament.get().getTeams().size()) {
+            throw new BadRequestException("There is already the maximum number of teams");
+        }
 
         foundTeam.get().addTeamToTournament(findTournament.get());
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
-
     }
 
-    public ResponseEntity<?> deleteTeamFromTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
+
+    public ResponseEntity<?> teamLeaveTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        Optional<Tournament> findTournament = Optional.ofNullable(tournamentRepository.findByTournamentName(tournamentName).orElseThrow(() ->
-                new ResourceNotFoundException("Tournament not exists", "Name", tournamentName)));
+        Optional<Tournament> findTournament = getTournament(tournamentName);
 
         foundTeam.get().deleteTeamFromTournament(findTournament.get());
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
-
     }
 
 
-
-        public void findUser(UserPrincipal userPrincipal) {
+    public void findUser(UserPrincipal userPrincipal) {
         userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
@@ -150,7 +150,15 @@ public class TeamService {
                 new ResourceNotFoundException("Team not exists", "Name", competitionName)));
     }
 
-    public void checkIfTournamentExist(String tournamentName) {
-
+    public void checkIfUserIsMemberOfTeam(Team team, UserDetail userDetail) {
+        if(!team.getUserDetails().contains(userDetail)) {
+            throw new ResourceNotFoundException("User named: " + userDetail.getUserName(), "Team", team.getTeamName());
+        }
     }
+
+    private Optional<Tournament> getTournament(String tournamentName) {
+        return Optional.ofNullable(tournamentRepository.findByTournamentName(tournamentName).orElseThrow(() ->
+                new ResourceNotFoundException("Tournament not exists", "Name", tournamentName)));
+    }
+
 }

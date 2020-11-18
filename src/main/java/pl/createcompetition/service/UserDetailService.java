@@ -24,7 +24,7 @@ public class UserDetailService {
 
     private final UserDetailRepository userDetailRepository;
     private final UserRepository userRepository;
-    private final GetQueryImplService queryUserDetailService;
+    private final GetQueryImplService<UserDetail,?> queryUserDetailService;
 
     public PagedResponseDto<?> searchUser(String search, PaginationInfoRequest paginationInfoRequest) {
 
