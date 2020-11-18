@@ -1,7 +1,6 @@
 package pl.createcompetition.model;
 
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -41,8 +40,8 @@ public class PagedResponseDtoBuilder {
     public PagedResponseDto<?> build() {
         return new PagedResponseDto<>(
                 listDto,
-                entityPage.getNumber(),
-                entityPage.getSize(),
+                entityPage.getPageNumber(),
+                entityPage.getPageSize(),
                 entityPage.getTotalElements(),
                 entityPage.getTotalPages(),
                 entityPage.isLast());
