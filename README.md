@@ -36,6 +36,7 @@ _ _ _
 _ _ _
 API Docummencation: 
 http://localhost:8080/swagger-ui/index.html
+![](swagger.PNG)
 
 
 ###### Status
