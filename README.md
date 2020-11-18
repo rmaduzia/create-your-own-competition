@@ -17,6 +17,7 @@ Project is created with:
 * JUnit5
 * Mockito v.3.3.3
 * Thymeleaf v.3.0.11
+* Swagger2 v.3.0.0
 
 ### Features
 
@@ -32,7 +33,10 @@ _ _ _
 8. Most of data are public, so beginner athletes can boast about how they did before
 
 
-
+_ _ _
+API Docummencation: 
+http://localhost:8080/swagger-ui/index.html
+![](swagger.PNG)
 
 
 ###### Status
