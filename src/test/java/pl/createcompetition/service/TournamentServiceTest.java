@@ -90,10 +90,10 @@ public class TournamentServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-        tournamentService.deleteTournament(tournament, userPrincipal);
-        verify(tournamentRepository, times(1)).deleteById(tournament.getId());
+        tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal);
+        verify(tournamentRepository, times(1)).deleteByTournamentName(tournament.getTournamentName());
 
-        assertEquals(tournamentService.deleteTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test

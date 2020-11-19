@@ -65,7 +65,7 @@ public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R>
 
         TypedQuery typedQuery = entityManager.createQuery(query);
        // while (pageNumber < total_elements.intValue()) {
-            typedQuery.setFirstResult(pageNumber - 1);
+            typedQuery.setFirstResult(pageNumber);
             typedQuery.setMaxResults(pageSize);
             //pageNumber += pageSize;
       //  }

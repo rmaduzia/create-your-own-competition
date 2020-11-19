@@ -27,4 +27,21 @@ public class MatchTeamsInTournament {
 
         return matchedTeams;
     }
+
+    public static HashMap<Integer, String> matchTeamsWithEachOtherInTournament(List<String> teamsName) {
+         int index =0;
+        HashMap<Integer, String> matchedTeams = new HashMap<>();
+        for (int i=0; i<teamsName.size(); i++) {
+            if (teamsName.size() %2 ==0) {
+                matchedTeams.put(index, teamsName.get(i));
+                index += 1;
+                if (i == teamsName.size()-1) {
+                    teamsName.remove(i);
+                }
+            }
+        }
+        return matchedTeams;
+    }
+
+
 }

@@ -53,6 +53,11 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         teams.getTournaments().add(this);
     }
 
+    public void deleteTeamFromTournament(Team teams) {
+        this.teams.remove(teams);
+        teams.getTournaments().remove(this);
+    }
+
 
     public TournamentDto TournamentToDto(){
         return new TournamentDto(

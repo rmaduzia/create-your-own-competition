@@ -18,7 +18,6 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
-import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -40,6 +39,7 @@ public class TeamService {
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
+
         Optional<Team> findTeam = teamRepository.findByTeamName(team.getTeamName());
 
         if (findTeam.isEmpty()) {
@@ -74,6 +74,7 @@ public class TeamService {
     }
 
     public ResponseEntity<?> addRecruitToTeam(String teamName, String userName, UserPrincipal userPrincipal) {
+
         findUser(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
@@ -145,9 +146,9 @@ public class TeamService {
         }
     }
 
-    public Optional<Team> shouldFindTeam(String competitionName, String teamOwner) {
-        return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(competitionName, teamOwner).orElseThrow(() ->
-                new ResourceNotFoundException("Team not exists", "Name", competitionName)));
+    public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
+        return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
+                new ResourceNotFoundException("Team not exists", "Name", teamName)));
     }
 
     public void checkIfUserIsMemberOfTeam(Team team, UserDetail userDetail) {

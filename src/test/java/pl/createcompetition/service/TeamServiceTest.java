@@ -90,9 +90,6 @@ public class TeamServiceTest {
                 .id(1L)
                 .tournamentName("tournamentName")
                 .maxAmountOfTeams(10).build();
-
-
-
     }
 
     @Test
