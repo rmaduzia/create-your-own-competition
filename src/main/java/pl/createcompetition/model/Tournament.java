@@ -2,9 +2,14 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.checkerframework.checker.units.qual.min;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,16 +25,23 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Pick time end of competition")
     private String tournamentOwner;
 
+    @NotBlank(message = "Tournament name can't be empty")
     private String tournamentName;
 
+    @NotBlank(message = "Pick time end of competition")
+    @Size(min=1, max=30, message="Number of team have to be beetwen 2 and 30" )
     private int maxAmountOfTeams;
 
+    @NotBlank(message = "City can't be empty")
     private String city;
 
+    @NotBlank(message = "Street can't be empty")
     private String street;
 
+    @NotBlank(message = "Street number can't be empty")
     private int street_number;
 
     @ManyToMany

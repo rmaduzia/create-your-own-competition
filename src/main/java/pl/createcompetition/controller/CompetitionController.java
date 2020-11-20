@@ -42,8 +42,8 @@ public class CompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("")
-    public ResponseEntity<?> deleteCompetition(@Valid @RequestBody Competition Competition, @CurrentUser UserPrincipal userPrincipal) {
-        return competitionService.deleteCompetition(Competition, userPrincipal);
+    public ResponseEntity<?> deleteCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
+        return competitionService.deleteCompetition(competitionName, userPrincipal);
     }
 
     //TODO IMPLEMENT METHOD

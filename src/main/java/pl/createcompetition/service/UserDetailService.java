@@ -51,11 +51,11 @@ public class UserDetailService {
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
-    public ResponseEntity<?> deleteUserDetail(UserDetail userDetail, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteUserDetail(Long userDetailId, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
 
-        if (userDetail.getId().equals(userPrincipal.getId())) {
+        if (userDetailId.equals(userPrincipal.getId())) {
                 userDetailRepository.deleteById(userPrincipal.getId());
             return ResponseEntity.noContent().build();
             }

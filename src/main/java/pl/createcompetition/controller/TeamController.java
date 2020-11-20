@@ -31,22 +31,22 @@ public class TeamController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<?> addTeam(@RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addTeam(@Valid @RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
 
         return teamService.addTeam(team, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping
-    public ResponseEntity<?> updateTeam(@RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateTeam(@Valid @RequestBody Team team,@CurrentUser UserPrincipal userPrincipal) {
 
         return teamService.updateTeam(team, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping
-    public ResponseEntity<?> deleteTeam(@RequestBody Team team, @CurrentUser UserPrincipal userPrincipal) {
-        return teamService.deleteTeam(team, userPrincipal);
+    public ResponseEntity<?> deleteTeam(@RequestBody String teamName, @CurrentUser UserPrincipal userPrincipal) {
+        return teamService.deleteTeam(teamName, userPrincipal);
     }
 
 

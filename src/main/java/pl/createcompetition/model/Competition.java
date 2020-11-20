@@ -37,10 +37,12 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     private int maxAmountUsers;
 
     @Column(columnDefinition = "DATE")
+    @NotBlank(message = "Pick time start of competition")
     private java.sql.Date competitionStart;
 
     //java.sql.Date = "RRRR-MM-DD"
     @Column(columnDefinition = "DATE")
+    @NotBlank(message = "Pick time end of competition")
     private java.sql.Date competitionEnd;
 
     private Boolean isOpenRecruitment;

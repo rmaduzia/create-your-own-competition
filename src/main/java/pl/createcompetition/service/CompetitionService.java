@@ -57,10 +57,10 @@ public class CompetitionService {
         return ResponseEntity.ok(competitionRepository.save(competition));
     }
 
-    public ResponseEntity<?> deleteCompetition(Competition competition, UserPrincipal userPrincipal){
+    public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
         findUser(userPrincipal);
-        Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
+        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
         competitionRepository.deleteById(findCompetition.get().getId());

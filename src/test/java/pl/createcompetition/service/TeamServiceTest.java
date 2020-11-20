@@ -126,10 +126,10 @@ public class TeamServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
 
-        teamService.deleteTeam(team, userPrincipal);
+        teamService.deleteTeam(team.getTeamName(), userPrincipal);
         verify(teamRepository, times(1)).deleteById(team.getId());
 
-        assertEquals(teamService.deleteTeam(team, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(teamService.deleteTeam(team.getTeamName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test

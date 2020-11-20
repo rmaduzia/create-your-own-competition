@@ -108,10 +108,10 @@ public class CompetitionServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        competitionService.deleteCompetition(competition, userPrincipal);
+        competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
         verify(competitionRepository, times(1)).deleteById(competition.getId());
 
-        assertEquals(competitionService.deleteCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test

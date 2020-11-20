@@ -62,13 +62,13 @@ public class TeamService {
 
     }
 
-    public ResponseEntity<?> deleteTeam (Team team, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteTeam (String teamName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
-        Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
+        Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        teamRepository.deleteById(team.getId());
+        teamRepository.deleteById(foundTeam.get().getId());
 
         return ResponseEntity.noContent().build();
     }

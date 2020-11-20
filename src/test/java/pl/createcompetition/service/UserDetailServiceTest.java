@@ -98,9 +98,9 @@ public class UserDetailServiceTest {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
-        userDetailService.deleteUserDetail(userDetail, userPrincipal);
+        userDetailService.deleteUserDetail(userDetail.getId(), userPrincipal);
         verify(userDetailRepository, times(1)).deleteById(userDetail.getId());
 
-        assertEquals(userDetailService.deleteUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(userDetailService.deleteUserDetail(userDetail.getId(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }

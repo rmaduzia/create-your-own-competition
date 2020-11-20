@@ -31,14 +31,14 @@ public class TournamentController {
 
     @PostMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> addTournament(@RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.addTournament(tournament,userPrincipal);
 
     }
 
     @PutMapping
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<?> updateTournament(@RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.updateTournament(tournament,userPrincipal);
 
     }
