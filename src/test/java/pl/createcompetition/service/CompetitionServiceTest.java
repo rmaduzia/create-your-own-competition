@@ -64,7 +64,7 @@ public class CompetitionServiceTest {
                 .competitionStart(Date.valueOf("2020-01-01"))
                 .competitionEnd(Date.valueOf("2020-01-15"))
                 .city("Gdynia")
-                .maxAmountUsers(10)
+                .maxAmountOfTeams(10)
                 .build();
     }
 
@@ -92,13 +92,13 @@ public class CompetitionServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        competition.setMaxAmountUsers(15);
+        competition.setMaxAmountOfTeams(15);
 
         competitionService.updateCompetition(competition, userPrincipal);
         verify(competitionRepository, times(1)).save(competition);
 
         assertEquals(competitionService.updateCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(competition.getMaxAmountUsers(), 15);
+        assertEquals(competition.getMaxAmountOfTeams(), 15);
     }
 
     @Test

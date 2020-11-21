@@ -70,7 +70,7 @@ public class CompetitionTagServiceTest {
                 .competitionStart(Date.valueOf("2020-01-01"))
                 .competitionEnd(Date.valueOf("2020-01-15"))
                 .city("Gdynia")
-                .maxAmountUsers(10)
+                .maxAmountOfTeams(10)
                 .tags(Sets.newHashSet())
                 .build();
 

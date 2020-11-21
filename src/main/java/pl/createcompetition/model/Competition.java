@@ -2,11 +2,18 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.checkerframework.checker.units.qual.min;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.*;
+
+import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
+import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @EqualsAndHashCode(of = {"id", "competitionName"})
 @Entity
@@ -27,14 +34,14 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     private String city;
     @NotBlank(message = "Street can't be empty")
     private String street;
-    @NotBlank(message = "Street number can't be empty")
     private int street_number;
 
     @NotBlank(message = "Owner of competition can't be empty")
     private String owner;
 
-    @NotBlank(message = "Competition can't be empty")
-    private int maxAmountUsers;
+    @Min(value = 2, message = "Number of team have to be beetwen 2 and 30" )
+    @Max(value = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of team have to be beetwen 2 and 30"  )
+    private int maxAmountOfTeams;
 
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time start of competition")

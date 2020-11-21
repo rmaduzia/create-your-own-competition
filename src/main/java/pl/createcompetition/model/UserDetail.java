@@ -36,7 +36,7 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
     private String city;
 
     @Min(value = 15, message="you must be at least 15 years old")
-    @Max(value=100, message="you cannot be more than 100 years old")
+    @Max(value=110, message="older then 110 years are you even alive? ")
     @NotBlank(message="Age can't be empty")
     private int age;
 

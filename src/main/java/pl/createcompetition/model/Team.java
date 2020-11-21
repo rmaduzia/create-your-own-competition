@@ -6,8 +6,12 @@ import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
+
+import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_USERS_IN_TEAM;
 
 @EqualsAndHashCode(of="id")
 @Getter
@@ -22,12 +26,16 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Team name can't be empty")
     private String teamName;
 
+    @Max(value = MAX_AMOUNT_OF_USERS_IN_TEAM, message = "You can't have more members then: " + MAX_AMOUNT_OF_USERS_IN_TEAM)
     private int maxAmountMembers;
 
+    @NotBlank(message = "Team owner can't be empty")
     private String teamOwner;
 
+    @NotBlank(message = "City can't be empty")
     private String city;
 
     private Boolean isOpenRecruitment;
