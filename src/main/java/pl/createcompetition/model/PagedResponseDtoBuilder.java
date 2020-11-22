@@ -8,12 +8,8 @@ import java.util.List;
 public class PagedResponseDtoBuilder {
 
     private List<?> listDto;
-    //private Page<?> entityPage;
-
 
     private PageModel entityPage;
-
-
 
     public static PagedResponseDtoBuilder create() {
         return new PagedResponseDtoBuilder();
@@ -29,14 +25,6 @@ public class PagedResponseDtoBuilder {
         return this;
     }
 
-/*
-    public PagedResponseDtoBuilder entityPage(Page<?> entityPage) {
-        this.entityPage = entityPage;
-        return this;
-    }
-
-
- */
     public PagedResponseDto<?> build() {
         return new PagedResponseDto<>(
                 listDto,

@@ -76,13 +76,6 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
         team.getUserDetails().add(this);
     }
 
-    public UserDetailDto toUserDetailDto() {
-        return new UserDetailDto(
-                this.city,
-                this.age,
-                this.gender);
-    }
-
     @Override
     public UserDetailDto map() {
         return new UserDetailDto(city,age,gender);

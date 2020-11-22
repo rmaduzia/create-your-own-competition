@@ -46,14 +46,6 @@ public class User {
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;
 
-
-
-    public UserDto userToDto() {
-        return new UserDto(
-                this.email,
-                this.userDetail);
-    }
-
     @Data
     @AllArgsConstructor
     public static class UserDto {

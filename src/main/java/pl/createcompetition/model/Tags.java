@@ -36,17 +36,6 @@ public class Tags {
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
-
-
-    public TagsDto TagsToDto() {
-        return new TagsDto(
-                this.tag,
-                this.competitions,
-                this.tournaments,
-                this.teams
-        );
-    }
-
     @Data
     @AllArgsConstructor
     public static class TagsDto {

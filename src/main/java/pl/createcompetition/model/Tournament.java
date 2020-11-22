@@ -73,18 +73,6 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         teams.getTournaments().remove(this);
     }
 
-
-    public TournamentDto TournamentToDto(){
-        return new TournamentDto(
-                this.tournamentOwner,
-                this.tournamentName,
-                this.maxAmountOfTeams,
-                this.city,
-                this.street,
-                this.street_number,
-                this.tags);
-    }
-
     @Override
     public TournamentDto map() {
         return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags);

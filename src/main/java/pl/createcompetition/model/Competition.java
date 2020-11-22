@@ -87,19 +87,6 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         }
     }
 
-    public CompetitionDto toCompetition() {
-        return new CompetitionDto(
-                this.competitionName,
-                this.city,
-                this.street,
-                this.street_number,
-                this.competitionStart,
-                this.competitionEnd,
-                this.isOpenRecruitment,
-                this.teams,
-                this.tags);
-    }
-
     @Override
     public CompetitionDto map() {
         return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags);

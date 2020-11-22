@@ -86,15 +86,6 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
         return new TeamDto(teamName,maxAmountMembers,teamOwner, city, isOpenRecruitment);
     }
 
-    public TeamDto TeamToDto() {
-        return new TeamDto(
-                this.teamName,
-                this.maxAmountMembers,
-                this.teamOwner,
-                this.city,
-                this.isOpenRecruitment);
-        }
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
