@@ -1,21 +1,17 @@
 package pl.createcompetition.payload;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.createcompetition.payload.interfaces.InterfaceChangeRequest;
 
-import java.util.UUID;
+import javax.validation.constraints.*;
 
 @Getter
 @NoArgsConstructor
 public class ChangePasswordRequest implements InterfaceChangeRequest {
     @Email
     private String newPassword;
-    @NotBlank
+    @NotNull
     private Long UserId;
     @NotBlank
     private String Password;
