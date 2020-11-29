@@ -2,6 +2,7 @@ package pl.createcompetition.util;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class StringUtils {
 
@@ -11,4 +12,8 @@ public class StringUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(TIME_FORMATTER);
         return LocalDateTime.now().format(formatter);
     }
+
+
+
+
 }

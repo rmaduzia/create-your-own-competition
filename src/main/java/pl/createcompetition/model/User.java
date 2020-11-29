@@ -46,14 +46,6 @@ public class User {
     @OneToOne(mappedBy="user",cascade = CascadeType.ALL)
     private UserDetail userDetail;
 
-    @Data
-    @AllArgsConstructor
-    public static class UserDto {
-        private String email;
-        private UserDetail userDetail;
-    }
-
-
 }
 
 

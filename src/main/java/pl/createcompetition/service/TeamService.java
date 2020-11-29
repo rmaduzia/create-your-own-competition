@@ -2,6 +2,7 @@ package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -10,6 +11,7 @@ import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.model.websockets.SendNotificationPayload;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
@@ -17,7 +19,10 @@ import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.util.StringUtils;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -28,6 +33,7 @@ public class TeamService {
     private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
     private final GetQueryImplService<Team,?> queryTeamService;
 
@@ -73,19 +79,39 @@ public class TeamService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<?> addRecruitToTeam(String teamName, String userName, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addRecruitToTeam(String teamName, String recruitName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userName).orElseThrow(() ->
-                new ResourceNotFoundException("UserName not exists", "Name", userName)));
+        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(recruitName).orElseThrow(() ->
+                new ResourceNotFoundException("UserName not exists", "Name", recruitName)));
 
         foundTeam.get().addRecruitToTeam(findRecruit.get());
+        teamRepository.save(foundTeam.get());
+       // notificationMessageToUser(findRecruit.get().getUser().getEmail(),);
 
-        return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
+        return ResponseEntity.ok().build();
     }
+
+/*
+    //TODO FINISH FUNCTION
+    public void notificationMessageToUser(String userName, String content) {
+
+
+        SendNotificationPayload sendNotificationPayload = SendNotificationPayload.builder().timestamp(SimpleDateFormat.getDateInstance().parse(StringUtils.getCurrentTimeStamp()))
+
+
+        simpMessagingTemplate.convertAndSendToUser(userName, "/queue/notifications", content);
+    }
+
+
+    public String inviteUser(String inviter, String event) {
+
+    }
+
+ */
 
     public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userName, UserPrincipal userPrincipal) {
 
@@ -133,6 +159,7 @@ public class TeamService {
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
+
 
 
     public void findUser(UserPrincipal userPrincipal) {
