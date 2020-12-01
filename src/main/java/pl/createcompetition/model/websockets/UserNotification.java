@@ -2,7 +2,9 @@ package pl.createcompetition.model.websockets;
 
 
 import lombok.*;
+import net.minidev.json.annotate.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,12 +13,14 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity
-public class SendNotificationPayload {
+@Document(collection = "usernotification")
+public class UserNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Long id;
+    private String recipient;
     private String content;
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

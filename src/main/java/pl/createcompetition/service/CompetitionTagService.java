@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -15,12 +14,16 @@ import pl.createcompetition.security.UserPrincipal;
 import java.util.List;
 import java.util.Set;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
-public class CompetitionTagService {
+public class CompetitionTagService extends VerifyMethodsForServices {
 
     private final CompetitionRepository competitionRepository;
-    private final UserRepository userRepository;
+
+    public CompetitionTagService(CompetitionRepository competitionRepository, UserRepository userRepository) {
+        super(userRepository,null);
+        this.competitionRepository = competitionRepository;
+    }
 
     public ResponseEntity<?> getCompetitionTag(List<String> competitionTag) {
         return ResponseEntity.noContent().build();
@@ -28,7 +31,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> addCompetitionTag(Set<Tags> competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
@@ -43,7 +46,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> updateCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
 
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
@@ -56,7 +59,7 @@ public class CompetitionTagService {
 
     public ResponseEntity<?> deleteCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
@@ -79,11 +82,4 @@ public class CompetitionTagService {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }
-
-    public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
-    }
-
-
 }

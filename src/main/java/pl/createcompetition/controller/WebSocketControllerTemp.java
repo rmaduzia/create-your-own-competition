@@ -9,7 +9,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
-import pl.createcompetition.model.websockets.SendNotificationPayload;
+import pl.createcompetition.model.websockets.UserNotification;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 
@@ -47,8 +47,8 @@ public class WebSocketControllerTemp {
 
     @MessageMapping("/notification")
     @SendToUser("/queue/notification")
-    public SendNotificationPayload send(@Payload SendNotificationPayload sendNotificationPayload, @CurrentUser UserPrincipal userPrincipal) {
-        return sendNotificationPayload;
+    public UserNotification send(@Payload UserNotification userNotification, @CurrentUser UserPrincipal userPrincipal) {
+        return userNotification;
     }
 
 

@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -11,31 +10,36 @@ import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.model.websockets.SendNotificationPayload;
+import pl.createcompetition.model.websockets.UserNotification;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.TeamRepository;
-import pl.createcompetition.repository.TournamentRepository;
-import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.repository.*;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
-import pl.createcompetition.util.StringUtils;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Optional;
 
-@AllArgsConstructor
+//@AllArgsConstructor
 @Service
-public class TeamService {
+public class TeamService extends VerifyMethodsForServices {
 
     private final TeamRepository teamRepository;
-    private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final NotificationRepository notificationRepository;
 
     private final GetQueryImplService<Team,?> queryTeamService;
+
+    public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, TournamentRepository tournamentRepository,
+                       SimpMessagingTemplate simpMessagingTemplate, NotificationRepository notificationRepository, GetQueryImplService<Team, ?> queryTeamService) {
+        super(userRepository, teamRepository);
+        this.teamRepository = teamRepository;
+        this.userDetailRepository = userDetailRepository;
+        this.tournamentRepository = tournamentRepository;
+        this.simpMessagingTemplate = simpMessagingTemplate;
+        this.notificationRepository = notificationRepository;
+        this.queryTeamService = queryTeamService;
+    }
 
     public PagedResponseDto<?> searchTeam(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -44,7 +48,7 @@ public class TeamService {
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
 
         Optional<Team> findTeam = teamRepository.findByTeamName(team.getTeamName());
 
@@ -60,7 +64,7 @@ public class TeamService {
 
     public ResponseEntity<?> updateTeam (Team team, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -70,7 +74,7 @@ public class TeamService {
 
     public ResponseEntity<?> deleteTeam (String teamName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -81,7 +85,7 @@ public class TeamService {
 
     public ResponseEntity<?> addRecruitToTeam(String teamName, String recruitName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -90,48 +94,35 @@ public class TeamService {
 
         foundTeam.get().addRecruitToTeam(findRecruit.get());
         teamRepository.save(foundTeam.get());
-       // notificationMessageToUser(findRecruit.get().getUser().getEmail(),);
+
+        //notificationMessageToUser(recruitName, "Team","invite", foundTeam.get().getTeamName());
 
         return ResponseEntity.ok().build();
     }
 
-/*
-    //TODO FINISH FUNCTION
-    public void notificationMessageToUser(String userName, String content) {
 
+    public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userNameToDelete, UserPrincipal userPrincipal) {
 
-        SendNotificationPayload sendNotificationPayload = SendNotificationPayload.builder().timestamp(SimpleDateFormat.getDateInstance().parse(StringUtils.getCurrentTimeStamp()))
-
-
-        simpMessagingTemplate.convertAndSendToUser(userName, "/queue/notifications", content);
-    }
-
-
-    public String inviteUser(String inviter, String event) {
-
-    }
-
- */
-
-    public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userName, UserPrincipal userPrincipal) {
-
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
-        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userName).orElseThrow(() ->
-                new ResourceNotFoundException("UserName not exists", "Name", userName)));
+        Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(userNameToDelete).orElseThrow(() ->
+                new ResourceNotFoundException("UserName not exists", "Name", userNameToDelete)));
 
         checkIfUserIsMemberOfTeam(foundTeam.get(), findRecruit.get());
 
         foundTeam.get().deleteRecruitFromTeam(findRecruit.get());
 
-        return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
+        teamRepository.save(foundTeam.get());
+        //notificationMessageToUser(userNameToDelete, "Team","delete", foundTeam.get().getTeamName());
+
+        return ResponseEntity.ok().build();
     }
 
     public ResponseEntity<?> teamJoinTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -143,35 +134,48 @@ public class TeamService {
 
         foundTeam.get().addTeamToTournament(findTournament.get());
 
+
+        //TODO NOTIFICAITON TO ALL MEMBERS
+
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
 
 
     public ResponseEntity<?> teamLeaveTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam.get(), userPrincipal);
 
         Optional<Tournament> findTournament = getTournament(tournamentName);
 
         foundTeam.get().deleteTeamFromTournament(findTournament.get());
+        //TODO NOTIFICAITON TO ALL MEMBERS
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
 
 
+    public void notificationMessageToUser(String recipientUserName, String subject, String action, String event) {
 
-    public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
-                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
+        String content = notificationBuilderContent(subject, action, event);
+
+        UserNotification userNotification = UserNotification.builder().recipient(recipientUserName).content(content).build();
+        notificationRepository.save(userNotification);
+
+        simpMessagingTemplate.convertAndSendToUser(recipientUserName, "/queue/notifications", userNotification);
+    }
+
+    public String notificationBuilderContent(String Subject,String action,  String event) {
+        return Subject +" "+ action + " "+ event;
+
     }
 
     public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
-        if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
-            throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
+            if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
+                throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
+            }
         }
-    }
 
     public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
         return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->

@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -8,7 +7,6 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.model.Tournament;
-import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
@@ -19,14 +17,20 @@ import pl.createcompetition.util.MatchTeamsInTournament;
 
 import java.util.*;
 
-@RequiredArgsConstructor
+//@RequiredArgsConstructor
 @Service
-public class TournamentService {
+public class TournamentService extends VerifyMethodsForServices {
 
     private final TournamentRepository tournamentRepository;
-    private final UserRepository userRepository;
     private final GetQueryImplService<Tournament,?> queryUserDetailService;
     private final TeamRepository teamRepository;
+
+    public TournamentService(TournamentRepository tournamentRepository, UserRepository userRepository, GetQueryImplService<Tournament, ?> queryUserDetailService, TeamRepository teamRepository) {
+        super(userRepository, teamRepository);
+        this.tournamentRepository = tournamentRepository;
+        this.queryUserDetailService = queryUserDetailService;
+        this.teamRepository = teamRepository;
+    }
 
     public PagedResponseDto<?> searchTournament(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -34,7 +38,8 @@ public class TournamentService {
     }
 
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
-        findUser(userPrincipal);
+
+        verifyUserExists(userPrincipal);
         Optional<Tournament> findTeam = tournamentRepository.findByTournamentName(tournament.getTournamentName());
 
         if (findTeam.isEmpty()) {
@@ -48,7 +53,7 @@ public class TournamentService {
 
     public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -57,7 +62,7 @@ public class TournamentService {
 
     public ResponseEntity<?> deleteTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
 
@@ -68,7 +73,7 @@ public class TournamentService {
 
     public ResponseEntity<?> removeTeamFromTournament(String tournamentName, String teamName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
 
@@ -84,7 +89,7 @@ public class TournamentService {
 
     public ResponseEntity<?> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Tournament> foundTeam = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -103,7 +108,7 @@ public class TournamentService {
 
     public ResponseEntity<?> matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Tournament> foundTeam = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
 
@@ -120,18 +125,9 @@ public class TournamentService {
 
     }
 
-
-
-
     public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
         return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
                 new ResourceNotFoundException("Team not exists", "Name", teamName)));
-    }
-
-
-    public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
-                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
     public void checkIfTournamentBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {

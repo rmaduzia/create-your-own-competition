@@ -1,7 +1,5 @@
 package pl.createcompetition.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Example;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -18,14 +16,21 @@ import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 
-@RequiredArgsConstructor
+
 @Service
-public class CompetitionService {
+public class CompetitionService extends VerifyMethodsForServices {
 
     private final CompetitionRepository competitionRepository;
-    private final UserRepository userRepository;
     private final UserDetailRepository userDetailRepository;
     private final GetQueryImplService<Competition,?> queryUserDetailService;
+
+        public CompetitionService(CompetitionRepository competitionRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, GetQueryImplService<Competition, ?> queryUserDetailService) {
+            super(userRepository, null);
+            this.competitionRepository = competitionRepository;
+            this.userDetailRepository = userDetailRepository;
+            this.queryUserDetailService = queryUserDetailService;
+        }
+
 
     public PagedResponseDto<?> searchCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -34,7 +39,7 @@ public class CompetitionService {
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
 
         Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
 
@@ -50,7 +55,7 @@ public class CompetitionService {
 
     public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
@@ -59,7 +64,7 @@ public class CompetitionService {
 
     public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
-        findUser(userPrincipal);
+        verifyUserExists(userPrincipal);
         Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
         checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
 
@@ -86,11 +91,6 @@ public class CompetitionService {
 
     }
 
-    public void findUser(UserPrincipal userPrincipal) {
-        userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
-    }
-
     public Optional<Competition> shouldFindCompetition(String competitionName) {
         return Optional.ofNullable(competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName)));
@@ -101,5 +101,6 @@ public class CompetitionService {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }
+
 
 }
