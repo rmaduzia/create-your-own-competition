@@ -8,7 +8,6 @@ import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Optional;
 
-
 public class VerifyMethodsForServices {
 
     private final UserRepository userRepository;
@@ -19,7 +18,6 @@ public class VerifyMethodsForServices {
         this.teamRepository = teamRepository;
     }
 
-
     public void verifyUserExists(UserPrincipal userPrincipal) {
         userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail()).orElseThrow(()->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
@@ -29,8 +27,5 @@ public class VerifyMethodsForServices {
         return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
                 new ResourceNotFoundException("Team not exists", "Name", teamName)));
     }
-
-
-
 
 }

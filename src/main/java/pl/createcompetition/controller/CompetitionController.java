@@ -45,25 +45,4 @@ public class CompetitionController {
     public ResponseEntity<?> deleteCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
         return competitionService.deleteCompetition(competitionName, userPrincipal);
     }
-
-    //TODO IMPLEMENT METHOD
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping("/join")
-    public ResponseEntity<?> joinCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
-        return competitionService.joinCompetition(competitionName, userPrincipal);
-
-    }
-
-    //TODO IMPLEMENT METHOD
-    @PreAuthorize("hasRole('USER')")
-    @PostMapping("/rejection")
-    public ResponseEntity<?> rejectionCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
-        return competitionService.rejectionCompetition(competitionName, userPrincipal);
-    }
-
-
-
-
-
-
 }

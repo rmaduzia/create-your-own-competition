@@ -51,7 +51,7 @@ public class TeamController {
 
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("addRecruit")
+    @PostMapping("{teamName}/addRecruit")
     public ResponseEntity<?> addRecruitToTeam(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String teamName) {
 
@@ -59,7 +59,7 @@ public class TeamController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("deleteRecruit")
+    @PostMapping("{teamName}/deleteRecruit")
     public ResponseEntity<?> deleteMemberFromTeam(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String teamName) {
 
@@ -68,7 +68,7 @@ public class TeamController {
 
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("joinTournament")
+    @PostMapping("{teamName}/joinTournament")
     public ResponseEntity<?> joinTeamToTournament(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String teamName) {
 
@@ -76,11 +76,30 @@ public class TeamController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("leaveTournament")
+    @PostMapping("{teamName}leaveTournament")
     public ResponseEntity<?> teamLeaveTournament(@RequestBody String recruitName, @CurrentUser UserPrincipal userPrincipal,
                                                   @PathVariable String teamName) {
 
         return teamService.teamLeaveTournament(teamName, recruitName,userPrincipal);
     }
+
+
+    //TODO IMPLEMENT METHOD
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("{teamName}/joinCompetition")
+    public ResponseEntity<?> joinCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal,
+                                             @PathVariable String teamName) {
+        return teamService.teamJoinCompetition(teamName, competitionName, userPrincipal);
+
+    }
+
+    //TODO IMPLEMENT METHOD
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("{teamName}/leaveCompetition")
+    public ResponseEntity<?> rejectionCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal,
+                                                  @PathVariable String teamName) {
+        return teamService.teamLeaveCompetition(teamName, competitionName, userPrincipal);
+    }
+
 
 }

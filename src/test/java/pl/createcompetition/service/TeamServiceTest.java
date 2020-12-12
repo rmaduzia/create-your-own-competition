@@ -5,20 +5,19 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.repository.TeamRepository;
-import pl.createcompetition.repository.TournamentRepository;
-import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.model.websockets.UserNotification;
+import pl.createcompetition.repository.*;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -34,8 +33,14 @@ public class TeamServiceTest {
     UserDetailRepository userDetailRepository;
     @Spy
     TournamentRepository tournamentRepository;
+    @Spy
+    CompetitionRepository competitionRepository;
+    @Spy
+    NotificationRepository notificationRepository;
+    @Spy
     @InjectMocks
     TeamService teamService;
+
 
     User user;
     User userTeamMember;
@@ -44,9 +49,12 @@ public class TeamServiceTest {
     UserPrincipal userPrincipal;
     Team team;
     Tournament tournament;
+    Competition competition;
+    SimpMessagingTemplate simpMessagingTemplate;
 
     @BeforeEach
     public void setUp() {
+
         MockitoAnnotations.initMocks(this);
 
         user = User.builder()
@@ -89,6 +97,11 @@ public class TeamServiceTest {
         tournament = Tournament.builder()
                 .id(1L)
                 .tournamentName("tournamentName")
+                .maxAmountOfTeams(10).build();
+
+        competition = Competition.builder()
+                .id(1L)
+                .competitionName("tournamentName")
                 .maxAmountOfTeams(10).build();
     }
 
@@ -189,9 +202,10 @@ public class TeamServiceTest {
     @Test
     public void shouldAddRecruitToTeam() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
-        Mockito.when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
+        doNothing().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
@@ -208,6 +222,7 @@ public class TeamServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         Mockito.when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
+        doNothing().when(teamService).notificationMessageToUser(ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
@@ -222,7 +237,6 @@ public class TeamServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         Mockito.when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
-
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
@@ -240,20 +254,67 @@ public class TeamServiceTest {
         Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         Mockito.when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
-
-        verify(teamRepository, times(1)).save(team);
 
         assertEquals(teamService.teamLeaveTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
         verify(teamRepository, times(2)).save(team);
 
 
+    }
+
+    @Test
+    public void shouldJoinCompetition() {
+
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        Mockito.when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
+
+        teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+
+        verify(teamRepository, times(1)).save(team);
+
+        assertEquals(teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
+
+    }
+
+    @Test
+    public void shouldLeaveCompetition() {
+
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        Mockito.when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
+
+        teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+
+        assertEquals(teamService.teamLeaveCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
+
+        verify(teamRepository, times(2)).save(team);
 
 
     }
 
 
+/*
+    @Test
+    public void shouldSendNotification() {
+
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
+
+        doCallRealMethod().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
+
+       // teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
+
+
+        teamService.notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
+
+        verify(notificationRepository, times(1)).save(ArgumentMatchers.any(UserNotification.class));
+    }
+
+
+
+ */
 
 
 

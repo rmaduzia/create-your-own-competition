@@ -72,24 +72,6 @@ public class CompetitionService extends VerifyMethodsForServices {
         return ResponseEntity.noContent().build();
     }
 
-    //TODO IMPLEMENT FUNCTION
-    public ResponseEntity<?> joinCompetition(String competitionName, UserPrincipal userPrincipal) {
-
-        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
-
-        return ResponseEntity.noContent().build();
-
-
-
-    }
-    //TODO IMPLEMENTS FUNCTION
-    public ResponseEntity<?> rejectionCompetition(String competitionName, UserPrincipal userPrincipal) {
-
-        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
-
-        return ResponseEntity.noContent().build();
-
-    }
 
     public Optional<Competition> shouldFindCompetition(String competitionName) {
         return Optional.ofNullable(competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->

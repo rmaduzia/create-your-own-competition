@@ -18,7 +18,7 @@ public class UserNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
+    //@JsonIgnore
     private Long id;
     private String recipient;
     private String content;
@@ -26,5 +26,8 @@ public class UserNotification {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-
+    @PrePersist
+    protected void onCreate() {
+        timestamp = new Date();
+    }
 }

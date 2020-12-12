@@ -70,6 +70,16 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
         tournament.getTeams().remove(this);
     }
 
+    public void addTeamToCompetition(Competition competition) {
+        this.competitions.add(competition);
+        competition.getTeams().add(this);
+    }
+
+    public void deleteTeamFromCompetition(Competition competition) {
+        this.competitions.remove(competition);
+        competition.getTeams().remove(this);
+    }
+
     public void addRecruitToTeam(UserDetail userDetail) {
         this.userDetails.add(userDetail);
         userDetail.getTeams().add(this);
