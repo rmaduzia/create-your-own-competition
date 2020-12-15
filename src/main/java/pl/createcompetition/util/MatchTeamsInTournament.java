@@ -1,9 +1,6 @@
 package pl.createcompetition.util;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class MatchTeamsInTournament {
 
@@ -15,6 +12,10 @@ public class MatchTeamsInTournament {
         String team2;
         int charIndex = 0;
 
+       // List<String> list = new LinkedList<String>(Arrays.asList(teamsName));
+
+        System.out.println(Arrays.toString(teamsName.toArray()));
+
         do {
             Collections.shuffle(teamsName);
             team1 = teamsName.get(0);
@@ -24,7 +25,7 @@ public class MatchTeamsInTournament {
             teamsName.remove(0);
             matchedTeams.put(String.valueOf(alphabetChars[charIndex]), team1 + "&&" + team2);
             charIndex += 1;
-        } while(teamsName.size()!=0);
+        } while(teamsName.size()>1);
 
         return matchedTeams;
     }
