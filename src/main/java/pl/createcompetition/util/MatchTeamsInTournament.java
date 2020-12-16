@@ -12,10 +12,6 @@ public class MatchTeamsInTournament {
         String team2;
         int charIndex = 0;
 
-       // List<String> list = new LinkedList<String>(Arrays.asList(teamsName));
-
-        System.out.println(Arrays.toString(teamsName.toArray()));
-
         do {
             Collections.shuffle(teamsName);
             team1 = teamsName.get(0);
@@ -23,7 +19,8 @@ public class MatchTeamsInTournament {
             Collections.shuffle(teamsName);
             team2 = teamsName.get(0);
             teamsName.remove(0);
-            matchedTeams.put(String.valueOf(alphabetChars[charIndex]), team1 + "&&" + team2);
+            System.out.println("team1: " + team1 +"  team2: " + team2);
+            matchedTeams.put(String.valueOf(alphabetChars[charIndex]), team1 + " VS " + team2);
             charIndex += 1;
         } while(teamsName.size()>1);
 
