@@ -50,6 +50,11 @@ public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R>
 
         int total_elements = Math.toIntExact(entityManager.createQuery(countQuery).getSingleResult());
         int totalPages = (int) Math.ceil(total_elements / (double) pageSize);
+        boolean isLast = false;
+
+        if (pageNumber == totalPages) {
+            isLast = true;
+        }
 
 
         TypedQuery typedQuery = entityManager.createQuery(query);
@@ -57,13 +62,13 @@ public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R>
         typedQuery.setMaxResults(pageSize);
 
         List<B> typeQueryList = typedQuery.getResultList();
-        List<R> rsm = mapperFirst.map(typeQueryList);
+        List<R> dtoResultList = mapperFirst.map(typeQueryList);
 
-        PageModel tms = new PageModel(pageNumber,pageSize,total_elements,totalPages,true);
+        PageModel pageModel = new PageModel(pageNumber,pageSize,total_elements,totalPages,isLast);
 
         return PagedResponseDtoBuilder.create()
-                .listDto(rsm)
-                .entityPage(tms)
+                .listDto(dtoResultList)
+                .entityPage(pageModel)
                 .build();
     }
 

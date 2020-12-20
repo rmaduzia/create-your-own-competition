@@ -1,21 +1,18 @@
 package pl.createcompetition.service;
 
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.AuthProvider;
-import pl.createcompetition.model.Gender;
-import pl.createcompetition.model.User;
-import pl.createcompetition.model.UserDetail;
+import pl.createcompetition.model.*;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -36,8 +33,16 @@ public class UserDetailServiceTest {
 
     User user;
     UserDetail userDetail;
+    UserDetail.UserDetailDto userDetailDto;
     UserPrincipal userPrincipal;
 
+
+    List<UserDetail.UserDetailDto> userDetailDtoList;
+
+    @BeforeEach
+    public void initializeNewList() {
+        userDetailDtoList = new ArrayList<>();
+    }
     @BeforeAll
     public void setUp() {
         MockitoAnnotations.initMocks(this);
@@ -55,7 +60,30 @@ public class UserDetailServiceTest {
                 .age(15)
                 .city("Gdynia")
                 .gender(Gender.FEMALE).build();
+
+
+        userDetailDto = UserDetail.UserDetailDto.builder().city("Gdynia").build();
+
+
     }
+
+    @Disabled
+    @Test
+    public void shouldReturnUsersDetails() {
+        PaginationInfoRequest paginationInfoRequest = new PaginationInfoRequest(0,10);
+        PageModel pageModel = new PageModel(0,10,1,1, true);
+
+        userDetailDtoList.add(userDetailDto);
+
+        PagedResponseDto pagedResponseDto = PagedResponseDtoBuilder.create().listDto(userDetailDtoList).entityPage(pageModel).build();
+
+        Mockito.when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
+
+        assertEquals(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest), pagedResponseDto);
+
+
+    }
+
 
     @Test
     public void shouldAddUserDetail() {
