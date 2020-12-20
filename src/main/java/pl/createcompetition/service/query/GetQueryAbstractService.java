@@ -45,8 +45,6 @@ public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R>
 
         var mapperFirst = new Mapper<B, R>();
 
-        //TODO HAVE TO REFACTOR PAGINATION CODE
-
         CriteriaQuery<Long> countQuery = builder.createQuery(Long.class);
         countQuery.select(builder.count(countQuery.from(encja)));
 
