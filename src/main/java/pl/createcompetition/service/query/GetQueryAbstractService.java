@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static java.util.stream.Collectors.toList;
 
-//TODO HAVE TO REFACTOR PAGINATION CODE
 public abstract class GetQueryAbstractService<B extends QueryDtoInterface<R>, R> {
 
     @PersistenceContext
