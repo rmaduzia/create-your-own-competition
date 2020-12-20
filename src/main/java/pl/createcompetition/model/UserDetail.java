@@ -84,6 +84,7 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
+    @Builder
     public static class UserDetailDto {
         private String city;
         private int age;

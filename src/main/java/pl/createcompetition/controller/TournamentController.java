@@ -51,11 +51,24 @@ public class TournamentController {
     }
 
 
-    @DeleteMapping("/team")
+    @DeleteMapping("/{tournamentName}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
                                                       @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.removeTeamFromTournament(tournamentName,teamName, userPrincipal);
     }
+
+    @PostMapping("/draw_teams")
+    @PreAuthorize("hasROle('USER')")
+    public ResponseEntity<?> drawTeamsInTournament(@RequestBody String teamName,
+                                                   @RequestParam Boolean matchWithEachOther,
+                                                   @CurrentUser UserPrincipal userPrincipal) {
+
+        return tournamentService.drawTeamOptions(matchWithEachOther, teamName, userPrincipal);
+
+    }
+
+
+
 }
