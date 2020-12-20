@@ -85,6 +85,14 @@ public class TournamentService extends VerifyMethodsForServices {
 
     }
 
+    public ResponseEntity<?> drawTeamOptions(Boolean isWithEachOther, String tournamentName,UserPrincipal userPrincipal){
+
+        if (isWithEachOther) {
+            return matchTeamsWithEachOtherInTournament(tournamentName, userPrincipal);
+        }
+        else
+            return matchTeamsInTournament(tournamentName, userPrincipal);
+    }
 
 
     public ResponseEntity<?> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
