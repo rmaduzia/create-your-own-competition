@@ -1,5 +1,6 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
@@ -18,6 +19,9 @@ public class MatchesInTournamentHistory implements QueryDtoInterface<MatchesInTo
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Tournament tournament;
 
     private String firstTeamName;
 

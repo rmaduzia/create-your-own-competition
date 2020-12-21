@@ -85,53 +85,66 @@ public class TournamentService extends VerifyMethodsForServices {
 
     }
 
+    public ResponseEntity<?> startTournament(String tournamentName, UserPrincipal userPrincipal) {
+
+        verifyUserExists(userPrincipal);
+        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+
+        foundTournament.get().setIsStarted(true);
+        return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
+
+    }
+
     public ResponseEntity<?> drawTeamOptions(Boolean isWithEachOther, String tournamentName,UserPrincipal userPrincipal){
 
+        verifyUserExists(userPrincipal);
+        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+
+        Map<String,String> matchedTeams;
+
         if (isWithEachOther) {
-            return matchTeamsWithEachOtherInTournament(tournamentName, userPrincipal);
+            matchedTeams = matchTeamsWithEachOtherInTournament(tournamentName, userPrincipal);
+            foundTournament.get().setDrawedTeams(matchedTeams);
+            tournamentRepository.save(foundTournament.get());
+            return ResponseEntity.ok().body(matchedTeams);
         }
         else
-            return matchTeamsInTournament(tournamentName, userPrincipal);
+            matchedTeams = matchTeamsInTournament(tournamentName, userPrincipal);
+            foundTournament.get().setDrawedTeams(matchedTeams);
+            tournamentRepository.save(foundTournament.get());
+            return ResponseEntity.ok().body(matchedTeams);
     }
 
 
-    public ResponseEntity<?> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
+    public Map<String,String> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTeam = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
+        List<String> listOfTeams = shouldFindTeamsInUserTournament(tournamentName, userPrincipal);
+
+        return MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
+    }
+
+    public Map<String,String>  matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
+
+        List<String> listOfTeams = shouldFindTeamsInUserTournament(tournamentName, userPrincipal);
+
+        return MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
+    }
+
+    private List<String> shouldFindTeamsInUserTournament(String tournamentName, UserPrincipal userPrincipal) {
+
+        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
 
         List<String> listOfTeams = new ArrayList<>();
 
-        for (Team f : foundTeam.get().getTeams()) {
+        for (Team f : foundTournament.get().getTeams()) {
             listOfTeams.add(f.getTeamName());
         }
-
-        Map<String,String> matchedTeams = MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
-
-
-        return ResponseEntity.ok().build();
-
+        return listOfTeams;
     }
 
-    public ResponseEntity<?> matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
-
-        verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTeam = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
-
-        List<String> listOfTeams = new ArrayList<>();
-
-        for (Team f : foundTeam.get().getTeams()) {
-            listOfTeams.add(f.getTeamName());
-        }
-
-        Map<Integer,String> matchedTeams = MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
-
-
-        return ResponseEntity.ok().build();
-
-    }
 
     public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
         return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->

@@ -32,12 +32,12 @@ public class MatchTeamsInTournamentTest {
         listOfTeams.add("Team2");
         listOfTeams.add("Team3");
 
-        Map<Integer,String> exceptedMatchedTeams = new TreeMap<>();
-        exceptedMatchedTeams.put(0, "Team1 VS Team2");
-        exceptedMatchedTeams.put(1, "Team1 VS Team3");
-        exceptedMatchedTeams.put(2, "Team2 VS Team3");
+        Map<String,String> exceptedMatchedTeams = new TreeMap<>();
+        exceptedMatchedTeams.put("0", "Team1 VS Team2");
+        exceptedMatchedTeams.put("1", "Team1 VS Team3");
+        exceptedMatchedTeams.put("2", "Team2 VS Team3");
 
-        Map<Integer,String> matchedTeams = MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
+        Map<String,String> matchedTeams = MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
 
         Assert.assertEquals(matchedTeams, exceptedMatchedTeams);
     }

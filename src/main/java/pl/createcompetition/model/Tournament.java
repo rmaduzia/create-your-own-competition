@@ -1,5 +1,6 @@
 package pl.createcompetition.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
@@ -9,8 +10,7 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
@@ -46,6 +46,25 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @NotBlank(message = "Street number can't be empty")
     private int street_number;
+
+    @Column(columnDefinition = "DATE")
+    @NotBlank(message = "Pick time start of tournament")
+    private java.sql.Date tournamentStart;
+
+
+    private Boolean isStarted;
+    private Boolean isFinished;
+
+
+    @ElementCollection
+    private Map<String, String> drawedTeams = new TreeMap<>();
+
+    @OneToMany(
+            mappedBy = "tournament",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private List<MatchesInTournamentHistory> matchesInTournamentHistories = new ArrayList<>();
+
 
     @ManyToMany
     @JsonManagedReference

@@ -28,14 +28,14 @@ public class MatchTeamsInTournament {
     }
 
 
-    public static HashMap<Integer, String> matchTeamsWithEachOtherInTournament(List<String> teamsName) {
+    public static HashMap<String, String> matchTeamsWithEachOtherInTournament(List<String> teamsName) {
         int index =0;
-        HashMap<Integer, String> matchedTeams = new HashMap<>();
+        HashMap<String, String> matchedTeams = new HashMap<>();
         for (Iterator<String> iterator = teamsName.iterator(); iterator.hasNext();) {
             String teamName = iterator.next();
             for (String oponentTeamname : teamsName) {
                 if (!teamName.equals(oponentTeamname)) {
-                    matchedTeams.put(index, teamName + " VS " + oponentTeamname);
+                    matchedTeams.put(String.valueOf(index), teamName + " VS " + oponentTeamname);
                     index += 1;
                 }
             }

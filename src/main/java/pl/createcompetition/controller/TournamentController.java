@@ -59,6 +59,14 @@ public class TournamentController {
         return tournamentService.removeTeamFromTournament(tournamentName,teamName, userPrincipal);
     }
 
+    @PostMapping("{tournamentName}/start")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<?> startTournament(@PathVariable String tournamentName,
+                                             @CurrentUser UserPrincipal userPrincipal) {
+
+        return tournamentService.startTournament(tournamentName, userPrincipal);
+    }
+
     @PostMapping("/draw_teams")
     @PreAuthorize("hasROle('USER')")
     public ResponseEntity<?> drawTeamsInTournament(@RequestBody String teamName,
@@ -66,7 +74,6 @@ public class TournamentController {
                                                    @CurrentUser UserPrincipal userPrincipal) {
 
         return tournamentService.drawTeamOptions(matchWithEachOther, teamName, userPrincipal);
-
     }
 
 
