@@ -2,6 +2,7 @@ package pl.createcompetition.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
@@ -91,6 +92,10 @@ public class TournamentService extends VerifyMethodsForServices {
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
 
+        if (foundTournament.get().getDrawedTeams().isEmpty()){
+            throw new BadRequestException("You have to draw teams before start competition");
+        }
+
         foundTournament.get().setIsStarted(true);
         return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
 
@@ -101,6 +106,10 @@ public class TournamentService extends VerifyMethodsForServices {
         verifyUserExists(userPrincipal);
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+
+        if (!foundTournament.get().getIsStarted()) {
+            throw new BadRequestException("You can't draw team if competition already started");
+        }
 
         Map<String,String> matchedTeams;
 

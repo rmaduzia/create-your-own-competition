@@ -59,10 +59,12 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @ElementCollection
     private Map<String, String> drawedTeams = new TreeMap<>();
 
+    @ElementCollection
+    private Map<String, String> timesOfTeamMeetings = new TreeMap<>();
+
     @OneToMany(
             mappedBy = "tournament",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true)
+            cascade = CascadeType.ALL)
     private List<MatchesInTournamentHistory> matchesInTournamentHistories = new ArrayList<>();
 
 
