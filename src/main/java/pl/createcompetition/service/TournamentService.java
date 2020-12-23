@@ -81,9 +81,9 @@ public class TournamentService extends VerifyMethodsForServices {
         Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
 
         foundTournament.get().deleteTeamFromTournament(foundTeam.get());
+        tournamentRepository.save(foundTournament.get());
 
-        return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
-
+        return ResponseEntity.noContent().build();
     }
 
     public ResponseEntity<?> startTournament(String tournamentName, UserPrincipal userPrincipal) {
@@ -126,22 +126,46 @@ public class TournamentService extends VerifyMethodsForServices {
             return ResponseEntity.ok().body(matchedTeams);
     }
 
+    public ResponseEntity<?> setTheDatesOfTheTeamsMatches(String tournamentName, Map<String, Date> dateMatch, UserPrincipal userPrincipal) {
+
+        verifyUserExists(userPrincipal);
+        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+
+
+        foundTournament.get().setTimesOfTeamMeetings(dateMatch);
+
+        return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
+    }
+
+    public ResponseEntity<?> deleteDateOfTheTeamsMatches(String tournamentName, String idDateMatch, UserPrincipal userPrincipal) {
+
+        verifyUserExists(userPrincipal);
+        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+
+        foundTournament.get().getTimesOfTeamMeetings().remove(idDateMatch);
+        tournamentRepository.save(foundTournament.get());
+
+        return ResponseEntity.noContent().build();
+    }
+
 
     public Map<String,String> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        List<String> listOfTeams = shouldFindTeamsInUserTournament(tournamentName, userPrincipal);
+        List<String> listOfTeams = shouldFindTeamInUserTournament(tournamentName, userPrincipal);
 
         return MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
     }
 
     public Map<String,String>  matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        List<String> listOfTeams = shouldFindTeamsInUserTournament(tournamentName, userPrincipal);
+        List<String> listOfTeams = shouldFindTeamInUserTournament(tournamentName, userPrincipal);
 
         return MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
     }
 
-    private List<String> shouldFindTeamsInUserTournament(String tournamentName, UserPrincipal userPrincipal) {
+    private List<String> shouldFindTeamInUserTournament(String tournamentName, UserPrincipal userPrincipal) {
 
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);

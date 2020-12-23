@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/tournament")
+@RequestMapping("tournament")
 public class TournamentController {
 
     private final TournamentService tournamentService;
@@ -51,7 +51,7 @@ public class TournamentController {
     }
 
 
-    @DeleteMapping("/{tournamentName}")
+    @DeleteMapping("{tournamentName}")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
@@ -67,7 +67,7 @@ public class TournamentController {
         return tournamentService.startTournament(tournamentName, userPrincipal);
     }
 
-    @PostMapping("/draw_teams")
+    @PostMapping("draw_teams")
     @PreAuthorize("hasROle('USER')")
     public ResponseEntity<?> drawTeamsInTournament(@RequestBody String teamName,
                                                    @RequestParam Boolean matchWithEachOther,

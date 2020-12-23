@@ -60,7 +60,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     private Map<String, String> drawedTeams = new TreeMap<>();
 
     @ElementCollection
-    private Map<String, String> timesOfTeamMeetings = new TreeMap<>();
+    private Map<String, Date> timesOfTeamMeetings = new TreeMap<>();
 
     @OneToMany(
             mappedBy = "tournament",
