@@ -24,7 +24,6 @@ import static org.mockito.Mockito.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TeamServiceTest {
 
-
     @Spy
     TeamRepository teamRepository;
     @Spy
@@ -40,6 +39,10 @@ public class TeamServiceTest {
     @Spy
     @InjectMocks
     TeamService teamService;
+    //@Spy
+    //@InjectMocks
+    @Mock
+    NotificationMessagesToUsersService notificationMessagesToUsersService;
 
 
     User user;
@@ -50,7 +53,6 @@ public class TeamServiceTest {
     Team team;
     Tournament tournament;
     Competition competition;
-    SimpMessagingTemplate simpMessagingTemplate;
 
     @BeforeEach
     public void setUp() {
@@ -205,15 +207,13 @@ public class TeamServiceTest {
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
-        doNothing().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
+        //doNothing().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
+        //doNothing().when(notificationMessagesToUsersService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
-
         verify(teamRepository, times(1)).save(team);
 
         assertEquals(teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-
-
     }
 
     @Test
@@ -222,7 +222,7 @@ public class TeamServiceTest {
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         Mockito.when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
-        doNothing().when(teamService).notificationMessageToUser(ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString());
+       // doNothing().when(teamService).notificationMessageToUser(ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
@@ -239,12 +239,9 @@ public class TeamServiceTest {
         Mockito.when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
-
         verify(teamRepository, times(1)).save(team);
 
         assertEquals(teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-
-
     }
 
     @Test
@@ -290,7 +287,6 @@ public class TeamServiceTest {
 
         verify(teamRepository, times(2)).save(team);
 
-
     }
 
 
@@ -311,9 +307,6 @@ public class TeamServiceTest {
 
         verify(notificationRepository, times(1)).save(ArgumentMatchers.any(UserNotification.class));
     }
-
-
-
  */
 
 

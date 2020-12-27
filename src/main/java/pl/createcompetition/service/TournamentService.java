@@ -132,7 +132,6 @@ public class TournamentService extends VerifyMethodsForServices {
         Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
 
-
         foundTournament.get().setTimesOfTeamMeetings(dateMatch);
 
         return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));

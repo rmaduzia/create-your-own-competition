@@ -1,7 +1,6 @@
 package pl.createcompetition.service;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -15,7 +14,6 @@ import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
-import java.util.Set;
 
 //@AllArgsConstructor
 @Service
@@ -24,21 +22,18 @@ public class TeamService extends VerifyMethodsForServices {
     private final TeamRepository teamRepository;
     private final UserDetailRepository userDetailRepository;
     private final TournamentRepository tournamentRepository;
-    private final SimpMessagingTemplate simpMessagingTemplate;
-    private final NotificationRepository notificationRepository;
     private final CompetitionRepository competitionRepository;
-
+    private final NotificationMessagesToUsersService notificationMessagesToUsersService;
     private final GetQueryImplService<Team,?> queryTeamService;
 
     public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, TournamentRepository tournamentRepository,
-                       SimpMessagingTemplate simpMessagingTemplate, NotificationRepository notificationRepository, CompetitionRepository competitionRepository, GetQueryImplService<Team, ?> queryTeamService) {
+                       CompetitionRepository competitionRepository, NotificationMessagesToUsersService notificationMessagesToUsersService, GetQueryImplService<Team, ?> queryTeamService) {
         super(userRepository, teamRepository);
         this.teamRepository = teamRepository;
         this.userDetailRepository = userDetailRepository;
         this.tournamentRepository = tournamentRepository;
-        this.simpMessagingTemplate = simpMessagingTemplate;
-        this.notificationRepository = notificationRepository;
         this.competitionRepository = competitionRepository;
+        this.notificationMessagesToUsersService = notificationMessagesToUsersService;
         this.queryTeamService = queryTeamService;
     }
 
@@ -96,7 +91,7 @@ public class TeamService extends VerifyMethodsForServices {
         foundTeam.get().addRecruitToTeam(findRecruit.get());
         teamRepository.save(foundTeam.get());
 
-        notificationMessageToUser(recruitName, "Team","invite", foundTeam.get().getTeamName());
+        notificationMessagesToUsersService.notificationMessageToUser(recruitName, "Team","invite", foundTeam.get().getTeamName());
 
         return ResponseEntity.ok().build();
     }
@@ -115,7 +110,7 @@ public class TeamService extends VerifyMethodsForServices {
         foundTeam.get().deleteRecruitFromTeam(findRecruit.get());
 
         teamRepository.save(foundTeam.get());
-        notificationMessageToUser(userNameToDelete, "Have been","deleted", foundTeam.get().getTeamName());
+        notificationMessagesToUsersService.notificationMessageToUser(userNameToDelete, "Have been","deleted", foundTeam.get().getTeamName());
 
         return ResponseEntity.ok().build();
     }
@@ -137,7 +132,7 @@ public class TeamService extends VerifyMethodsForServices {
 
         // Send notification to Team Members
         for (UserDetail userDetail: foundTeam.get().getUserDetails()) {
-            notificationMessageToUser(userDetail.getUserName(), "Team","joined tournament: ", tournamentName);
+            notificationMessagesToUsersService.notificationMessageToUser(userDetail.getUserName(), "Team","joined tournament: ", tournamentName);
         }
 
 
@@ -157,7 +152,7 @@ public class TeamService extends VerifyMethodsForServices {
 
         // Send notification to Team Members
         for (UserDetail userDetail: foundTeam.get().getUserDetails()) {
-            notificationMessageToUser(userDetail.getUserName(), "Team","left tournament: ", tournamentName);
+            notificationMessagesToUsersService.notificationMessageToUser(userDetail.getUserName(), "Team","left tournament: ", tournamentName);
         }
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
@@ -179,7 +174,7 @@ public class TeamService extends VerifyMethodsForServices {
 
         // Send notification to Team Members
         for (UserDetail userDetail: foundTeam.get().getUserDetails()) {
-            notificationMessageToUser(userDetail.getUserName(), "Team","joined competition: ", competitionName);
+            notificationMessagesToUsersService.notificationMessageToUser(userDetail.getUserName(), "Team","joined competition: ", competitionName);
         }
 
 
@@ -199,13 +194,13 @@ public class TeamService extends VerifyMethodsForServices {
 
         // Send notification to Team Members
         for (UserDetail userDetail: foundTeam.get().getUserDetails()) {
-            notificationMessageToUser(userDetail.getUserName(), "Team","left tournament: ", competitionName);
+            notificationMessagesToUsersService.notificationMessageToUser(userDetail.getUserName(), "Team","left tournament: ", competitionName);
         }
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
 
-
+/*
     public void notificationMessageToUser(String recipientUserName, String subject, String action, String event) {
 
         String content = notificationBuilderContent(subject, action, event);
@@ -219,7 +214,7 @@ public class TeamService extends VerifyMethodsForServices {
     public String notificationBuilderContent(String Subject,String action,  String event) {
         return Subject +" "+ action + " "+ event;
     }
-
+ */
 
     public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
             if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {

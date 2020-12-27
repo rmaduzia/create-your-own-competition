@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -12,6 +13,10 @@ import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
@@ -34,7 +39,7 @@ public class TournamentServiceTest {
     UserPrincipal userPrincipal;
     Tournament tournament;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
@@ -54,7 +59,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(1)
     public void shouldAddTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -68,7 +72,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(2)
     public void shouldUpdateTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -84,7 +87,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(3)
     public void shouldDeleteTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -97,7 +99,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(4)
     public void shouldThrowExceptionWhenUserNotFound() {
 
         Exception exception = assertThrows(
@@ -108,7 +109,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(5)
     public void shouldThrowExceptionTeamNotExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -122,7 +122,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(6)
     public void shouldThrowExceptionTeamAlreadyExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -137,7 +136,6 @@ public class TournamentServiceTest {
     }
 
     @Test
-    @Order(7)
     public void shouldThrowExceptionTeamNotBelongToUser() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -151,6 +149,41 @@ public class TournamentServiceTest {
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Tournament named: "+ tournament.getTournamentName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
+    }
+
+    @Test
+    public void shouldSetTheDatesOfTheTeamsMatches() {
+
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+
+        Date date = new Date();
+        Map<String, Date> dateMatch = new HashMap<>();
+
+        dateMatch.put("1", date);
+
+        tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
+        verify(tournamentRepository, times(1)).save(tournament);
+
+        assertEquals(tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal).getStatusCode(), HttpStatus.OK);
+
+    }
+
+    @Test
+    public void shouldDeleteTheDateOfTheTeamsMatches() {
+
+        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        Mockito.when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+
+        Date date = new Date();
+
+        Map<String, Date> dateMatch = new HashMap<>();
+        dateMatch.put("1", date);
+
+        tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
+        verify(tournamentRepository, times(1)).save(tournament);
+
+        assertEquals(tournamentService.deleteDateOfTheTeamsMatches(tournament.getTournamentName(), "1", userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
     
 }
