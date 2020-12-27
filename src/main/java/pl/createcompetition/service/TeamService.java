@@ -199,23 +199,7 @@ public class TeamService extends VerifyMethodsForServices {
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
-
-/*
-    public void notificationMessageToUser(String recipientUserName, String subject, String action, String event) {
-
-        String content = notificationBuilderContent(subject, action, event);
-
-        UserNotification userNotification = UserNotification.builder().recipient(recipientUserName).content(content).build();
-        notificationRepository.save(userNotification);
-
-        simpMessagingTemplate.convertAndSendToUser(recipientUserName, "/queue/notifications", userNotification);
-    }
-
-    public String notificationBuilderContent(String Subject,String action,  String event) {
-        return Subject +" "+ action + " "+ event;
-    }
- */
-
+    
     public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
             if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
                 throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
