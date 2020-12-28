@@ -1,6 +1,5 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
@@ -9,11 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.*;
 
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
-import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @Entity
 @Getter
@@ -65,7 +62,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @OneToMany(
             mappedBy = "tournament",
             cascade = CascadeType.ALL)
-    private List<MatchesInTournamentHistory> matchesInTournamentHistories = new ArrayList<>();
+    private List<MatchesInTournament> matchesInTournamentHistories = new ArrayList<>();
 
 
     @ManyToMany

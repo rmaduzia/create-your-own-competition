@@ -1,6 +1,5 @@
 package pl.createcompetition.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
@@ -13,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class MatchesInTournamentHistory implements QueryDtoInterface<MatchesInTournamentHistory.MatchInTournamentHistoryDto> {
+public class MatchesInTournament implements QueryDtoInterface<MatchesInTournament.MatchInTournamentDto> {
 
 
     @Id
@@ -37,15 +36,15 @@ public class MatchesInTournamentHistory implements QueryDtoInterface<MatchesInTo
     private Boolean isWinnerConfirmed;
 
     @Override
-    public MatchInTournamentHistoryDto map() {
-        return new MatchInTournamentHistoryDto(firstTeamName, secondTeamName, matchDate, winnerTeam, confirmingWinnerCounter, isWinnerConfirmed);
+    public MatchInTournamentDto map() {
+        return new MatchInTournamentDto(firstTeamName, secondTeamName, matchDate, winnerTeam, confirmingWinnerCounter, isWinnerConfirmed);
     }
 
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MatchInTournamentHistoryDto {
+    public static class MatchInTournamentDto {
         private String firstTeamName;
         private String secondTeamName;
         private java.sql.Date matchDate;

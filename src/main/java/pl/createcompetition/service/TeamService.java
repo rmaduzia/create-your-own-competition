@@ -199,7 +199,7 @@ public class TeamService extends VerifyMethodsForServices {
 
         return ResponseEntity.ok(teamRepository.save(foundTeam.get()));
     }
-    
+
     public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
             if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
                 throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
