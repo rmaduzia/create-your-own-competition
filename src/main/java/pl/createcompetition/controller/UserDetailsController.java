@@ -49,4 +49,15 @@ public class UserDetailsController {
     public ResponseEntity<?> deleteUserDetail(@RequestBody Long userDetailId, @CurrentUser UserPrincipal userPrincipal) {
         return userDetailService.deleteUserDetail(userDetailId, userPrincipal);
     }
+/*
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("addOpinion")
+    public ResponseEntity<?> addOpinionAboutUser(@RequestBody String opinionDetails, @CurrentUser UserPrincipal userPrincipal) {
+
+
+
+    }
+
+ */
+
 }

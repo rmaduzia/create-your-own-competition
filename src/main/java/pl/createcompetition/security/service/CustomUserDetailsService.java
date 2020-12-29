@@ -1,4 +1,4 @@
-package pl.createcompetition.security;
+package pl.createcompetition.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.User;
 import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.security.UserPrincipal;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

@@ -10,7 +10,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
 
-import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
+import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @Entity
 @Getter
@@ -32,7 +32,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @NotBlank(message = "Pick time end of competition")
     @Min(value = 2, message = "Number of teams have to be beetwen 2 and 30" )
-    @Max(value = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of teams have to be beetwen 2 and 30"  )
+    @Max(value = MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT, message = "Number of teams have to be beetwen 2 and 30"  )
     private int maxAmountOfTeams;
 
     @NotBlank(message = "City can't be empty")

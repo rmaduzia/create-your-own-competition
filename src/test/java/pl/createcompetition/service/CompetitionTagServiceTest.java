@@ -44,7 +44,7 @@ public class CompetitionTagServiceTest {
     Competition competition;
     Tags competitionTag;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
@@ -78,7 +78,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(1)
     public void shouldAddTags() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -93,7 +92,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(2)
     public void shouldUpdateTag() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -107,7 +105,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(3)
     public void shouldThrowExceptionCompetitionNotExistsWhenAddTag() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -122,7 +119,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(4)
     public void shouldThrowExceptionWhenUserNotFound() {
 
         Set<Tags> tags = Set.of(competitionTag);
@@ -135,7 +131,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(5)
     public void shouldThrowExceptionTagAlreadyExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -153,7 +148,6 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(6)
     public void shouldThrowExceptionWhenCompetitionNotBelongToUser() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -172,11 +166,13 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    @Order(7)
     public void shouldDeleteTag() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+
+        Set<Tags> tags = Set.of(competitionTag);
+        competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 

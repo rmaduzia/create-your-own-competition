@@ -61,10 +61,15 @@ public class UserDetailService {
             }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
+/*
+    public ResponseEntity<?> addOpinionAboutUser
 
+ */
     public Optional<User> findUser(UserPrincipal userPrincipal) {
         return Optional.ofNullable(userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername())));
     }
+
+
 
 }

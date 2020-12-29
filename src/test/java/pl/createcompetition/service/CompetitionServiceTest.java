@@ -39,7 +39,7 @@ public class CompetitionServiceTest {
     UserPrincipal userPrincipal;
     Competition competition;
 
-    @BeforeAll
+    @BeforeEach
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
@@ -69,7 +69,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(1)
     public void shouldAddCompetition() {
 
         Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
@@ -86,7 +85,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(2)
     public void shouldUpdateCompetition() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -102,7 +100,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(3)
     public void shouldDeleteCompetition() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -115,7 +112,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(4)
     public void shouldThrowExceptionWhenUserNotFound() {
 
         Exception exception = assertThrows(
@@ -126,7 +122,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(5)
     public void shouldThrowExceptionCompetitionNotExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -140,7 +135,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(6)
     public void shouldThrowExceptionCompetitionAlreadyExists() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
@@ -156,7 +150,6 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    @Order(7)
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));

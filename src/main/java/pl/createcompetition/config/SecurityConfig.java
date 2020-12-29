@@ -1,6 +1,7 @@
 package pl.createcompetition.config;
 
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pl.createcompetition.security.CustomUserDetailsService;
+import pl.createcompetition.security.service.CustomUserDetailsService;
 import pl.createcompetition.security.RestAuthenticationEntryPoint;
 import pl.createcompetition.security.TokenAuthenticationFilter;
 import pl.createcompetition.security.oauth2.CustomOAuth2UserService;
@@ -25,6 +26,7 @@ import pl.createcompetition.security.oauth2.OAuth2AuthenticationFailureHandler;
 import pl.createcompetition.security.oauth2.OAuth2AuthenticationSuccessHandler;
 
 @Configuration
+@AllArgsConstructor
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
         securedEnabled = true,
@@ -33,20 +35,10 @@ import pl.createcompetition.security.oauth2.OAuth2AuthenticationSuccessHandler;
 )
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private CustomUserDetailsService customUserDetailsService;
-
-    @Autowired
-    private CustomOAuth2UserService customOAuth2UserService;
-
-    @Autowired
-    private OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
-
-    @Autowired
-    private OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
-
-    @Autowired
-    private HttpCookieOAuth2AuthorizationRequestRepository httpCookieOAuth2AuthorizationRequestRepository;
+    private final CustomUserDetailsService customUserDetailsService;
+    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
 
     @Bean
     public TokenAuthenticationFilter tokenAuthenticationFilter() {

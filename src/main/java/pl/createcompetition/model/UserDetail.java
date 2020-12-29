@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.validator.constraints.UniqueElements;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
@@ -11,8 +12,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @EqualsAndHashCode(of = {"id", "user"})
 @Getter
@@ -65,6 +65,8 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
+    @ElementCollection
+    private Map<String,String> opinionAboutUser = new TreeMap<>();
 
     public void addUserToCompetition(Competition competition) {
         this.competitions.add(competition);
