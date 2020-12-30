@@ -37,12 +37,12 @@ public class UserServiceTest {
     private MailService mailService;
     @InjectMocks
     private UserService userService;
+
     private User user;
     private User mockUser;
     private UserPrincipal userPrincipal;
     private ChangePasswordRequest passwordRequest;
     private ChangeMailRequest mailRequest;
-
 
     @BeforeEach
     void setUp() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {

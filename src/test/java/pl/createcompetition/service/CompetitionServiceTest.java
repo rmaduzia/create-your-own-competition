@@ -21,8 +21,6 @@ import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class CompetitionServiceTest {
 
     @Spy
@@ -41,7 +39,6 @@ public class CompetitionServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
 
         user = User.builder()
                 .password("Password%123")
@@ -71,7 +68,6 @@ public class CompetitionServiceTest {
     @Test
     public void shouldAddCompetition() {
 
-        Mockito.when(userRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(user));
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Mockito.when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
 

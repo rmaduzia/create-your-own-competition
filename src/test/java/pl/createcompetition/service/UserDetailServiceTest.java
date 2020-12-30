@@ -21,7 +21,6 @@ import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserDetailServiceTest {
 
     @Spy
@@ -39,13 +38,9 @@ public class UserDetailServiceTest {
 
     List<UserDetail.UserDetailDto> userDetailDtoList;
 
+
     @BeforeEach
-    public void initializeNewList() {
-        userDetailDtoList = new ArrayList<>();
-    }
-    @BeforeAll
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
 
         user = User.builder()
                 .password("Password%123")
@@ -64,7 +59,7 @@ public class UserDetailServiceTest {
 
         userDetailDto = UserDetail.UserDetailDto.builder().city("Gdynia").build();
 
-
+        userDetailDtoList = new ArrayList<>();
     }
 
     @Disabled
@@ -83,7 +78,6 @@ public class UserDetailServiceTest {
 
 
     }
-
 
     @Test
     public void shouldAddUserDetail() {

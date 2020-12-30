@@ -13,7 +13,6 @@ import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,8 +23,6 @@ import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TournamentServiceTest {
 
     @Spy
@@ -41,7 +38,6 @@ public class TournamentServiceTest {
 
     @BeforeEach
     public void setUp() {
-        MockitoAnnotations.initMocks(this);
 
         user = User.builder()
                 .password("Password%123")
@@ -62,7 +58,6 @@ public class TournamentServiceTest {
     public void shouldAddTeam() {
 
         Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-
         Mockito.when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.empty());
 
         tournamentService.addTournament(tournament, userPrincipal);

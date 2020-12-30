@@ -20,8 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class TeamServiceTest {
 
     @Spy
@@ -39,8 +37,6 @@ public class TeamServiceTest {
     @Spy
     @InjectMocks
     TeamService teamService;
-    //@Spy
-    //@InjectMocks
     @Mock
     NotificationMessagesToUsersService notificationMessagesToUsersService;
 
@@ -56,8 +52,6 @@ public class TeamServiceTest {
 
     @BeforeEach
     public void setUp() {
-
-        MockitoAnnotations.initMocks(this);
 
         user = User.builder()
                 .password("Password%123")
