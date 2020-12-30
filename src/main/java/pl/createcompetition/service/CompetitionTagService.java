@@ -76,7 +76,6 @@ public class CompetitionTagService extends VerifyMethodsForServices {
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
 
-
     public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
         if(!competition.getOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());

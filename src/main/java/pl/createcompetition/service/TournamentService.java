@@ -41,9 +41,9 @@ public class TournamentService extends VerifyMethodsForServices {
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> findTeam = tournamentRepository.findByTournamentName(tournament.getTournamentName());
+        Optional<Tournament> findTournament = tournamentRepository.findByTournamentName(tournament.getTournamentName());
 
-        if (findTeam.isEmpty()) {
+        if (findTournament.isEmpty()) {
             tournament.setTournamentOwner(userPrincipal.getUsername());
             return ResponseEntity.ok(tournamentRepository.save(tournament));
         } else {
@@ -55,8 +55,8 @@ public class TournamentService extends VerifyMethodsForServices {
     public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTeam.get(), userPrincipal);
+        Tournament foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTeam, userPrincipal);
 
         return ResponseEntity.ok(tournamentRepository.save(tournament));
     }
@@ -64,8 +64,8 @@ public class TournamentService extends VerifyMethodsForServices {
     public ResponseEntity<?> deleteTournament(String tournamentName, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
         tournamentRepository.deleteByTournamentName(tournamentName);
 
@@ -75,13 +75,13 @@ public class TournamentService extends VerifyMethodsForServices {
     public ResponseEntity<?> removeTeamFromTournament(String tournamentName, String teamName, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        Optional<Team> foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
 
-        foundTournament.get().deleteTeamFromTournament(foundTeam.get());
-        tournamentRepository.save(foundTournament.get());
+        foundTournament.deleteTeamFromTournament(foundTeam);
+        tournamentRepository.save(foundTournament);
 
         return ResponseEntity.noContent().build();
     }
@@ -89,25 +89,25 @@ public class TournamentService extends VerifyMethodsForServices {
     public ResponseEntity<?> startTournament(String tournamentName, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        if (foundTournament.get().getDrawedTeams().isEmpty()){
+        if (foundTournament.getDrawedTeams().isEmpty()){
             throw new BadRequestException("You have to draw teams before start competition");
         }
 
-        foundTournament.get().setIsStarted(true);
-        return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
+        foundTournament.setIsStarted(true);
+        return ResponseEntity.ok(tournamentRepository.save(foundTournament));
 
     }
 
     public ResponseEntity<?> drawTeamOptions(Boolean isWithEachOther, String tournamentName,UserPrincipal userPrincipal){
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        if (!foundTournament.get().getIsStarted()) {
+        if (!foundTournament.getIsStarted()) {
             throw new BadRequestException("You can't draw team if competition already started");
         }
 
@@ -115,36 +115,36 @@ public class TournamentService extends VerifyMethodsForServices {
 
         if (isWithEachOther) {
             matchedTeams = matchTeamsWithEachOtherInTournament(tournamentName, userPrincipal);
-            foundTournament.get().setDrawedTeams(matchedTeams);
-            tournamentRepository.save(foundTournament.get());
+            foundTournament.setDrawedTeams(matchedTeams);
+            tournamentRepository.save(foundTournament);
             return ResponseEntity.ok().body(matchedTeams);
         }
         else
             matchedTeams = matchTeamsInTournament(tournamentName, userPrincipal);
-            foundTournament.get().setDrawedTeams(matchedTeams);
-            tournamentRepository.save(foundTournament.get());
+            foundTournament.setDrawedTeams(matchedTeams);
+            tournamentRepository.save(foundTournament);
             return ResponseEntity.ok().body(matchedTeams);
     }
 
     public ResponseEntity<?> setTheDatesOfTheTeamsMatches(String tournamentName, Map<String, Date> dateMatch, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        foundTournament.get().setTimesOfTeamMeetings(dateMatch);
+        foundTournament.setTimesOfTeamMeetings(dateMatch);
 
-        return ResponseEntity.ok(tournamentRepository.save(foundTournament.get()));
+        return ResponseEntity.ok(tournamentRepository.save(foundTournament));
     }
 
     public ResponseEntity<?> deleteDateOfTheTeamsMatches(String tournamentName, String idDateMatch, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        foundTournament.get().getTimesOfTeamMeetings().remove(idDateMatch);
-        tournamentRepository.save(foundTournament.get());
+        foundTournament.getTimesOfTeamMeetings().remove(idDateMatch);
+        tournamentRepository.save(foundTournament);
 
         return ResponseEntity.noContent().build();
     }
@@ -166,21 +166,15 @@ public class TournamentService extends VerifyMethodsForServices {
 
     private List<String> shouldFindTeamInUserTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        Optional<Tournament> foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTournament.get(), userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
         List<String> listOfTeams = new ArrayList<>();
 
-        for (Team f : foundTournament.get().getTeams()) {
+        for (Team f : foundTournament.getTeams()) {
             listOfTeams.add(f.getTeamName());
         }
         return listOfTeams;
-    }
-
-
-    public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
-        return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
-                new ResourceNotFoundException("Team not exists", "Name", teamName)));
     }
 
     public void checkIfTournamentBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {
@@ -189,9 +183,8 @@ public class TournamentService extends VerifyMethodsForServices {
         }
     }
 
-    public Optional<Tournament> shouldFindTournament(String tournamentName, String tournamentOwner) {
-        return Optional.ofNullable(tournamentRepository.findByTournamentNameAndTournamentOwner(tournamentName, tournamentOwner).orElseThrow(() ->
-                new ResourceNotFoundException("Tournament not exists", "Name", tournamentName)));
+    public Tournament shouldFindTournament(String tournamentName, String tournamentOwner) {
+        return tournamentRepository.findByTournamentNameAndTournamentOwner(tournamentName, tournamentOwner).orElseThrow(() ->
+                new ResourceNotFoundException("Tournament not exists", "Name", tournamentName));
     }
-
 }

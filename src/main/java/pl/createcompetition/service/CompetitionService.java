@@ -16,7 +16,6 @@ import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 
-
 @Service
 public class CompetitionService extends VerifyMethodsForServices {
 
@@ -56,8 +55,8 @@ public class CompetitionService extends VerifyMethodsForServices {
     public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
 
         verifyUserExists(userPrincipal);
-        Optional<Competition> findCompetition = shouldFindCompetition(competition.getCompetitionName());
-        checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
+        Competition findCompetition = shouldFindCompetition(competition.getCompetitionName());
+        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
         return ResponseEntity.ok(competitionRepository.save(competition));
     }
@@ -65,17 +64,16 @@ public class CompetitionService extends VerifyMethodsForServices {
     public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
         verifyUserExists(userPrincipal);
-        Optional<Competition> findCompetition = shouldFindCompetition(competitionName);
-        checkIfCompetitionBelongToUser(findCompetition.get(), userPrincipal);
+        Competition findCompetition = shouldFindCompetition(competitionName);
+        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
-        competitionRepository.deleteById(findCompetition.get().getId());
+        competitionRepository.deleteById(findCompetition.getId());
         return ResponseEntity.noContent().build();
     }
 
-
-    public Optional<Competition> shouldFindCompetition(String competitionName) {
-        return Optional.ofNullable(competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
-                new ResourceNotFoundException("Competition not exists", "Name", competitionName)));
+    public Competition shouldFindCompetition(String competitionName) {
+        return competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
+                new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
 
     public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
@@ -83,6 +81,4 @@ public class CompetitionService extends VerifyMethodsForServices {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }
-
-
 }

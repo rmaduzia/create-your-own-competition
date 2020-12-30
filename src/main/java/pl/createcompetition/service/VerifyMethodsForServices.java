@@ -23,9 +23,9 @@ public class VerifyMethodsForServices {
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
-    public Optional<Team> shouldFindTeam(String teamName, String teamOwner) {
-        return Optional.ofNullable(teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
-                new ResourceNotFoundException("Team not exists", "Name", teamName)));
+    public Team shouldFindTeam(String teamName, String teamOwner) {
+        return teamRepository.findByTeamNameAndTeamOwner(teamName, teamOwner).orElseThrow(() ->
+                new ResourceNotFoundException("Team not exists", "Name", teamName));
     }
 
 }
