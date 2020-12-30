@@ -20,6 +20,7 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
@@ -78,7 +79,7 @@ public class UserServiceTest {
         ResponseEntity<ApiResponse> isChanged = userService.changeEmail(mailRequest);
         User user = userRepository.findByIdAndPassword(this.user.getId(), "Password").get();
 
-        assertTrue(isChanged.getBody().isSuccess());
+        assertTrue(Objects.requireNonNull(isChanged.getBody()).isSuccess());
         assertEquals("testChangeEmail Success", "test2@test.com", user.getEmail());
         verify(userRepository, times(1)).save(this.user);
         verify(mailService, times(1)).send(any(Mail.class));
@@ -101,7 +102,7 @@ public class UserServiceTest {
 
         ResponseEntity<ApiResponse> isChanged = userService.changePassword(passwordRequest);
 
-        assertTrue(isChanged.getBody().isSuccess());
+        assertTrue(Objects.requireNonNull(isChanged.getBody()).isSuccess());
         verify(userRepository, times(1)).save(this.user);
         verify(mailService, times(1)).send(any(Mail.class));
     }
