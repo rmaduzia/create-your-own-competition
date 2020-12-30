@@ -29,9 +29,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class CompetitionTagServiceTest {
 
-    @Spy
+    @Mock
     UserRepository userRepository;
-    @Spy
+    @Mock
     CompetitionRepository competitionRepository;
     @InjectMocks
     CompetitionTagService competitionTagService;

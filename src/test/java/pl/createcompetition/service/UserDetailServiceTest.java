@@ -23,9 +23,9 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class UserDetailServiceTest {
 
-    @Spy
+    @Mock
     UserRepository userRepository;
-    @Spy
+    @Mock
     UserDetailRepository userDetailRepository;
     @InjectMocks
     UserDetailService userDetailService;

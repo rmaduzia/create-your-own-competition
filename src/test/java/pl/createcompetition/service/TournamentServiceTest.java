@@ -25,9 +25,9 @@ import static org.junit.Assert.assertEquals;
 @ExtendWith(MockitoExtension.class)
 public class TournamentServiceTest {
 
-    @Spy
+    @Mock
     TournamentRepository tournamentRepository;
-    @Spy
+    @Mock
     UserRepository userRepository;
     @InjectMocks
     TournamentService tournamentService;

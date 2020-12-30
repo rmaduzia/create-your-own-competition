@@ -22,19 +22,18 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class TeamServiceTest {
 
-    @Spy
+    @Mock
     TeamRepository teamRepository;
-    @Spy
+    @Mock
     UserRepository userRepository;
-    @Spy
+    @Mock
     UserDetailRepository userDetailRepository;
-    @Spy
+    @Mock
     TournamentRepository tournamentRepository;
-    @Spy
+    @Mock
     CompetitionRepository competitionRepository;
-    @Spy
+    @Mock
     NotificationRepository notificationRepository;
-    @Spy
     @InjectMocks
     TeamService teamService;
     @Mock

@@ -23,11 +23,11 @@ import static org.junit.Assert.assertEquals;
 @ExtendWith(MockitoExtension.class)
 public class CompetitionServiceTest {
 
-    @Spy
+    @Mock
     CompetitionRepository competitionRepository;
-    @Spy
+    @Mock
     UserRepository userRepository;
-    @Spy
+    @Mock
     UserDetailRepository userDetailRepository;
     @InjectMocks
     CompetitionService competitionService;
