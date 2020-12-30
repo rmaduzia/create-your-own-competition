@@ -18,6 +18,8 @@ import java.util.Optional;
 import static org.junit.Assert.assertEquals;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
+
 
 
 @ExtendWith(MockitoExtension.class)
@@ -72,18 +74,16 @@ public class UserDetailServiceTest {
 
         PagedResponseDto pagedResponseDto = PagedResponseDtoBuilder.create().listDto(userDetailDtoList).entityPage(pageModel).build();
 
-        Mockito.when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
+        when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
 
         assertEquals(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest), pagedResponseDto);
-
-
     }
 
     @Test
     public void shouldAddUserDetail() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.addUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
@@ -105,8 +105,8 @@ public class UserDetailServiceTest {
     @Test
     public void shouldUpdateUserDetail() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.updateUserDetail(userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
@@ -118,7 +118,7 @@ public class UserDetailServiceTest {
     @Test
     public void shouldDeleteUserDetail() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         userDetailService.deleteUserDetail(userDetail.getId(), userPrincipal);
         verify(userDetailRepository, times(1)).deleteById(userDetail.getId());

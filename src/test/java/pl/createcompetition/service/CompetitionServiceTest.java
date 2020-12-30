@@ -19,7 +19,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
-
+import static org.mockito.
+Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class CompetitionServiceTest {
 
@@ -68,11 +69,11 @@ public class CompetitionServiceTest {
     @Test
     public void shouldAddCompetition() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
 
 
-        Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
+        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
 
         competitionService.addCompetition(competition, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
@@ -83,8 +84,8 @@ public class CompetitionServiceTest {
     @Test
     public void shouldUpdateCompetition() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setMaxAmountOfTeams(15);
 
@@ -98,8 +99,8 @@ public class CompetitionServiceTest {
     @Test
     public void shouldDeleteCompetition() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
         verify(competitionRepository, times(1)).deleteById(competition.getId());
@@ -120,7 +121,7 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotExists() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -133,8 +134,8 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionAlreadyExists() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
 
         Exception exception = assertThrows(
@@ -148,8 +149,8 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
-        Mockito.when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Mockito.when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setOwner("OtherOwner");
 

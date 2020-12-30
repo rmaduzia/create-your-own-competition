@@ -22,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Optional;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
@@ -51,8 +52,8 @@ public class AuthenticationServiceTest {
     @Test
     public void should_RegisterNewUser() {
 
-        Mockito.when(userRepository.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
-        Mockito.when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
+        when(userRepository.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
+        when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
         Assert.assertEquals(authenticationService.registerUser(signUpRequest).getStatusCode(), HttpStatus.CREATED);
     }
@@ -60,8 +61,8 @@ public class AuthenticationServiceTest {
     @Test
     public void should_AuthenticateUser() {
 
-        Mockito.when(tokenProvider.createToken(ArgumentMatchers.any(Authentication.class))).thenReturn("Token");
-        Mockito.when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(authentication);
+        when(tokenProvider.createToken(ArgumentMatchers.any(Authentication.class))).thenReturn("Token");
+        when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(authentication);
 
         Assert.assertEquals(authenticationService.authenticationUser(loginRequest).getStatusCode(), HttpStatus.OK);
 
