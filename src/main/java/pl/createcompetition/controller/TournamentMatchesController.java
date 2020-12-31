@@ -18,9 +18,9 @@ public class TournamentMatchesController {
 
     private final TournamentService tournamentService;
 
+    @PreAuthorize("hasRole('USER')")
     @PostMapping
     @PutMapping
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<?> setTheDatesOfTheTeamsMatches(@PathVariable String tournamentName,
                                                           @RequestBody Map<String, Date> dateMatch,
                                                           @CurrentUser UserPrincipal userPrincipal) {
@@ -29,8 +29,8 @@ public class TournamentMatchesController {
 
     }
 
-    @DeleteMapping
     @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("{tournamentName}")
     public ResponseEntity<?> deleteDateOfTheTeamsMatches(@PathVariable String tournamentName,
                                                          @RequestBody String idMatch,
                                                          @CurrentUser UserPrincipal userPrincipal) {

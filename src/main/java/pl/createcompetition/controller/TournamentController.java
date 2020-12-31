@@ -37,15 +37,17 @@ public class TournamentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping
-    public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
+    @PutMapping("{tournamentName}")
+    public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String tournamentName) {
         return tournamentService.updateTournament(tournament,userPrincipal);
 
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping
-    public ResponseEntity<?> deleteTournament(@RequestBody String tournamentName, @CurrentUser UserPrincipal userPrincipal) {
+    @DeleteMapping("{tournamentName}")
+    public ResponseEntity<?> deleteTournament(@RequestBody String tournamentName, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String tournamentNamee) {
         return tournamentService.deleteTournament(tournamentName,userPrincipal);
 
     }

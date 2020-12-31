@@ -39,16 +39,19 @@ public class UserDetailsController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping()
-    public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
+    @PutMapping("{userName}")
+    public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String userName) {
         return userDetailService.updateUserDetail(userDetail, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping()
-    public ResponseEntity<?> deleteUserDetail(@RequestBody Long userDetailId, @CurrentUser UserPrincipal userPrincipal) {
+    @DeleteMapping("{userName}")
+    public ResponseEntity<?> deleteUserDetail(@RequestBody Long userDetailId, @CurrentUser UserPrincipal userPrincipal,
+                                              @PathVariable String userName) {
         return userDetailService.deleteUserDetail(userDetailId, userPrincipal);
     }
+
 /*
     @PreAuthorize("hasRole('USER')")
     @PostMapping("addOpinion")

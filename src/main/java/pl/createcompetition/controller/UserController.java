@@ -18,20 +18,20 @@ public class UserController {
 
     final private UserService userService;
 
-    @GetMapping("/user/me")
     @PreAuthorize("hasRole('USER')")
+    @GetMapping("/user/me")
     public User getCurrentUser(@CurrentUser UserPrincipal userPrincipal) {
         return userService.getCurrentUser(userPrincipal);
     }
 
-    @PostMapping("changeMail")
     @PreAuthorize("hasRole('USER')")
+    @PostMapping("changeMail")
     public ResponseEntity<?> changeEmail(@RequestBody @Valid ChangeMailRequest changeMail){
         return userService.changeEmail(changeMail);
     }
 
-    @PostMapping("changePassword")
     @PreAuthorize("hasRole('USER')")
+    @PostMapping("changePassword")
     public ResponseEntity<?> changePassword(@RequestBody @Valid ChangePasswordRequest changePassword){
         return userService.changePassword(changePassword);
     }
