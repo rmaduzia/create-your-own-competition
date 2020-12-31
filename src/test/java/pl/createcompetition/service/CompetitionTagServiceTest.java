@@ -13,7 +13,6 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.model.Tags;
 import pl.createcompetition.repository.CompetitionRepository;
-import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Date;
 import java.util.*;
@@ -29,8 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @ExtendWith(MockitoExtension.class)
 public class CompetitionTagServiceTest {
 
-    @Mock
-    UserRepository userRepository;
     @Mock
     CompetitionRepository competitionRepository;
     @InjectMocks
@@ -77,7 +74,6 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldAddTags() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
 
         Set<Tags> tags = Set.of(competitionTag);
@@ -91,7 +87,6 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldUpdateTag() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionTag.setTag("updatedTag");
@@ -104,7 +99,6 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotExistsWhenAddTag() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         Set<Tags> tags = Set.of(competitionTag);
 
         Exception exception = assertThrows(
@@ -116,21 +110,8 @@ public class CompetitionTagServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserNotFound() {
-
-        Set<Tags> tags = Set.of(competitionTag);
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
-                "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
-    }
-
-    @Test
     public void shouldThrowExceptionTagAlreadyExists() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
         Set<Tags> tags = Set.of(competitionTag);
 
@@ -147,7 +128,6 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldThrowExceptionWhenCompetitionNotBelongToUser() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
         Set<Tags> tags = Set.of(competitionTag);
 
@@ -165,7 +145,6 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldDeleteTag() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         Set<Tags> tags = Set.of(competitionTag);

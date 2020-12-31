@@ -28,7 +28,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, TournamentRepository tournamentRepository,
                        CompetitionRepository competitionRepository, NotificationMessagesToUsersService notificationMessagesToUsersService, GetQueryImplService<Team, ?> queryTeamService) {
-        super(userRepository, teamRepository);
+        super(teamRepository);
         this.teamRepository = teamRepository;
         this.userDetailRepository = userDetailRepository;
         this.tournamentRepository = tournamentRepository;
@@ -44,8 +44,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
-
         Optional<Team> findTeam = teamRepository.findByTeamName(team.getTeamName());
 
         if (findTeam.isEmpty()) {
@@ -60,7 +58,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> updateTeam (Team team, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -70,7 +67,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteTeam (String teamName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -81,7 +77,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addRecruitToTeam(String teamName, String recruitName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -98,7 +93,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userNameToDelete, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -117,7 +111,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamJoinTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -142,7 +135,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamLeaveTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -160,7 +152,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamJoinCompetition(String teamName, String competitionName,UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
@@ -184,7 +175,6 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamLeaveCompetition(String teamName, String competitionName,UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 

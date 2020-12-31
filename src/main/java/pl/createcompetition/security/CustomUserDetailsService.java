@@ -1,4 +1,4 @@
-package pl.createcompetition.security.service;
+package pl.createcompetition.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

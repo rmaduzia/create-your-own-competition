@@ -25,8 +25,6 @@ public class TeamServiceTest {
     @Mock
     TeamRepository teamRepository;
     @Mock
-    UserRepository userRepository;
-    @Mock
     UserDetailRepository userDetailRepository;
     @Mock
     TournamentRepository tournamentRepository;
@@ -103,7 +101,7 @@ public class TeamServiceTest {
     @Test
     public void shouldAddTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
         when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.empty());
 
@@ -116,7 +114,7 @@ public class TeamServiceTest {
     @Test
     public void shouldUpdateTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
 
         team.setMaxAmountMembers(15);
@@ -131,7 +129,7 @@ public class TeamServiceTest {
     @Test
     public void shouldDeleteTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
 
         teamService.deleteTeam(team.getTeamName(), userPrincipal);
@@ -141,19 +139,7 @@ public class TeamServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserNotFound() {
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> teamService.addTeam(team, userPrincipal),
-                "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
-    }
-
-    @Test
     public void shouldThrowExceptionTeamNotExists() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -166,7 +152,7 @@ public class TeamServiceTest {
     @Test
     public void shouldThrowExceptionTeamAlreadyExists() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.of(team));
 
         Exception exception = assertThrows(
@@ -180,7 +166,7 @@ public class TeamServiceTest {
     @Test
     public void shouldThrowExceptionTeamNotBelongToUser() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
 
         team.setTeamOwner("OtherOwner");
@@ -197,7 +183,7 @@ public class TeamServiceTest {
     @Test
     public void shouldAddRecruitToTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
         //doNothing().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
@@ -212,7 +198,7 @@ public class TeamServiceTest {
     @Test
     public void shouldDeleteMemberFromTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
        // doNothing().when(teamService).notificationMessageToUser(ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString());
@@ -227,7 +213,7 @@ public class TeamServiceTest {
     @Test
     public void shouldJoinTournament() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
@@ -240,7 +226,7 @@ public class TeamServiceTest {
     @Test
     public void shouldLeaveTournament() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
@@ -255,7 +241,7 @@ public class TeamServiceTest {
     @Test
     public void shouldJoinCompetition() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
 
@@ -270,7 +256,7 @@ public class TeamServiceTest {
     @Test
     public void shouldLeaveCompetition() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
 
@@ -287,7 +273,7 @@ public class TeamServiceTest {
     @Test
     public void shouldSendNotification() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
 

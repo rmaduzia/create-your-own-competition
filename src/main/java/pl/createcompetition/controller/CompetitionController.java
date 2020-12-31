@@ -35,14 +35,15 @@ public class CompetitionController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping()
-    public ResponseEntity<?> updateCompetition(@Valid @RequestBody Competition competition, @CurrentUser UserPrincipal userPrincipal) {
+    @PutMapping("{competitionName}")
+    public ResponseEntity<?> updateCompetition(@Valid @RequestBody Competition competition, @CurrentUser UserPrincipal userPrincipal,
+                                               @PathVariable String competitionName) {
         return competitionService.updateCompetition(competition, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("")
-    public ResponseEntity<?> deleteCompetition(@RequestBody String competitionName, @CurrentUser UserPrincipal userPrincipal) {
+    @DeleteMapping("{competitionName}")
+    public ResponseEntity<?> deleteCompetition(@PathVariable String competitionName, @CurrentUser UserPrincipal userPrincipal) {
         return competitionService.deleteCompetition(competitionName, userPrincipal);
     }
 }

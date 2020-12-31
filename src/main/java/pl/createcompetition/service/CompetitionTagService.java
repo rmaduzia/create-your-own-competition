@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,16 +15,11 @@ import pl.createcompetition.security.UserPrincipal;
 import java.util.List;
 import java.util.Set;
 
-//@RequiredArgsConstructor
+@AllArgsConstructor
 @Service
-public class CompetitionTagService extends VerifyMethodsForServices {
+public class CompetitionTagService {
 
     private final CompetitionRepository competitionRepository;
-
-    public CompetitionTagService(CompetitionRepository competitionRepository, UserRepository userRepository) {
-        super(userRepository,null);
-        this.competitionRepository = competitionRepository;
-    }
 
     public ResponseEntity<?> getCompetitionTag(List<String> competitionTag) {
         return ResponseEntity.noContent().build();
@@ -31,7 +27,6 @@ public class CompetitionTagService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addCompetitionTag(Set<Tags> competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
@@ -46,8 +41,6 @@ public class CompetitionTagService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> updateCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
-
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
@@ -59,7 +52,6 @@ public class CompetitionTagService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 

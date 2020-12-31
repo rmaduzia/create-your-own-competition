@@ -29,46 +29,45 @@ public class TournamentController {
 
     }
 
-    @PostMapping
     @PreAuthorize("hasRole('USER')")
+    @PostMapping
     public ResponseEntity<?> addTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.addTournament(tournament,userPrincipal);
 
     }
 
-    @PutMapping
     @PreAuthorize("hasRole('USER')")
+    @PutMapping
     public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.updateTournament(tournament,userPrincipal);
 
     }
 
-    @DeleteMapping
     @PreAuthorize("hasRole('USER')")
+    @DeleteMapping
     public ResponseEntity<?> deleteTournament(@RequestBody String tournamentName, @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.deleteTournament(tournamentName,userPrincipal);
 
     }
 
-
-    @DeleteMapping("{tournamentName}")
     @PreAuthorize("hasRole('USER')")
+    @DeleteMapping("{tournamentName}")
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
                                                       @CurrentUser UserPrincipal userPrincipal) {
         return tournamentService.removeTeamFromTournament(tournamentName,teamName, userPrincipal);
     }
 
-    @PostMapping("{tournamentName}/start")
     @PreAuthorize("hasRole('USER')")
+    @PostMapping("{tournamentName}/start")
     public ResponseEntity<?> startTournament(@PathVariable String tournamentName,
                                              @CurrentUser UserPrincipal userPrincipal) {
 
         return tournamentService.startTournament(tournamentName, userPrincipal);
     }
 
-    @PostMapping("draw_teams")
     @PreAuthorize("hasROle('USER')")
+    @PostMapping("draw_teams")
     public ResponseEntity<?> drawTeamsInTournament(@RequestBody String teamName,
                                                    @RequestParam Boolean matchWithEachOther,
                                                    @CurrentUser UserPrincipal userPrincipal) {

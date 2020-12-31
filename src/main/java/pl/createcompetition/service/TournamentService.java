@@ -27,7 +27,7 @@ public class TournamentService extends VerifyMethodsForServices {
     private final TeamRepository teamRepository;
 
     public TournamentService(TournamentRepository tournamentRepository, UserRepository userRepository, GetQueryImplService<Tournament, ?> queryUserDetailService, TeamRepository teamRepository) {
-        super(userRepository, teamRepository);
+        super(teamRepository);
         this.tournamentRepository = tournamentRepository;
         this.queryUserDetailService = queryUserDetailService;
         this.teamRepository = teamRepository;
@@ -40,7 +40,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Optional<Tournament> findTournament = tournamentRepository.findByTournamentName(tournament.getTournamentName());
 
         if (findTournament.isEmpty()) {
@@ -54,7 +53,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTeam, userPrincipal);
 
@@ -63,7 +61,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
@@ -74,7 +71,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> removeTeamFromTournament(String tournamentName, String teamName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
@@ -88,7 +84,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> startTournament(String tournamentName, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
@@ -103,7 +98,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> drawTeamOptions(Boolean isWithEachOther, String tournamentName,UserPrincipal userPrincipal){
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
@@ -128,7 +122,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> setTheDatesOfTheTeamsMatches(String tournamentName, Map<String, Date> dateMatch, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
@@ -139,7 +132,6 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteDateOfTheTeamsMatches(String tournamentName, String idDateMatch, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 

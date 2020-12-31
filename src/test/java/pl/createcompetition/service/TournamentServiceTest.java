@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -10,7 +9,6 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.TournamentRepository;
-import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Date;
@@ -28,8 +26,6 @@ public class TournamentServiceTest {
 
     @Mock
     TournamentRepository tournamentRepository;
-    @Mock
-    UserRepository userRepository;
     @InjectMocks
     TournamentService tournamentService;
 
@@ -58,7 +54,6 @@ public class TournamentServiceTest {
     @Test
     public void shouldAddTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.empty());
 
         tournamentService.addTournament(tournament, userPrincipal);
@@ -70,7 +65,6 @@ public class TournamentServiceTest {
     @Test
     public void shouldUpdateTeam() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         tournament.setMaxAmountOfTeams(15);
@@ -84,8 +78,7 @@ public class TournamentServiceTest {
 
     @Test
     public void shouldDeleteTeam() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal);
@@ -95,19 +88,7 @@ public class TournamentServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserNotFound() {
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> tournamentService.addTournament(tournament, userPrincipal),
-                "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
-    }
-
-    @Test
     public void shouldThrowExceptionTeamNotExists() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -120,7 +101,6 @@ public class TournamentServiceTest {
     @Test
     public void shouldThrowExceptionTeamAlreadyExists() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.of(tournament));
 
         Exception exception = assertThrows(
@@ -133,8 +113,7 @@ public class TournamentServiceTest {
 
     @Test
     public void shouldThrowExceptionTeamNotBelongToUser() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         tournament.setTournamentOwner("OtherOwner");
@@ -150,7 +129,6 @@ public class TournamentServiceTest {
     @Test
     public void shouldSetTheDatesOfTheTeamsMatches() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         Date date = new Date();
@@ -168,11 +146,9 @@ public class TournamentServiceTest {
     @Test
     public void shouldDeleteTheDateOfTheTeamsMatches() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         Date date = new Date();
-
         Map<String, Date> dateMatch = new HashMap<>();
         dateMatch.put("1", date);
 
@@ -181,5 +157,4 @@ public class TournamentServiceTest {
 
         assertEquals(tournamentService.deleteDateOfTheTeamsMatches(tournament.getTournamentName(), "1", userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
-    
 }

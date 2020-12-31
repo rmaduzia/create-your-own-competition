@@ -44,8 +44,8 @@ public class TeamController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping
-    public ResponseEntity<?> deleteTeam(@RequestBody String teamName, @CurrentUser UserPrincipal userPrincipal) {
+    @DeleteMapping("{teamName}")
+    public ResponseEntity<?> deleteTeam(@PathVariable String teamName, @CurrentUser UserPrincipal userPrincipal) {
         return teamService.deleteTeam(teamName, userPrincipal);
     }
 

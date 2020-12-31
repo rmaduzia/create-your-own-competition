@@ -27,8 +27,6 @@ public class CompetitionServiceTest {
     @Mock
     CompetitionRepository competitionRepository;
     @Mock
-    UserRepository userRepository;
-    @Mock
     UserDetailRepository userDetailRepository;
     @InjectMocks
     CompetitionService competitionService;
@@ -69,10 +67,7 @@ public class CompetitionServiceTest {
     @Test
     public void shouldAddCompetition() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
-
-
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
 
         competitionService.addCompetition(competition, userPrincipal);
@@ -83,8 +78,7 @@ public class CompetitionServiceTest {
 
     @Test
     public void shouldUpdateCompetition() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
+        
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setMaxAmountOfTeams(15);
@@ -99,7 +93,6 @@ public class CompetitionServiceTest {
     @Test
     public void shouldDeleteCompetition() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
@@ -109,19 +102,7 @@ public class CompetitionServiceTest {
     }
 
     @Test
-    public void shouldThrowExceptionWhenUserNotFound() {
-
-        Exception exception = assertThrows(
-                ResourceNotFoundException.class,
-                () -> competitionService.addCompetition(competition, userPrincipal),
-                "Expected doThing() to throw, but it didn't");
-        assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
-    }
-
-    @Test
     public void shouldThrowExceptionCompetitionNotExists() {
-
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -134,9 +115,7 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionAlreadyExists() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
-
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,
@@ -149,7 +128,6 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
-        when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competition.setOwner("OtherOwner");

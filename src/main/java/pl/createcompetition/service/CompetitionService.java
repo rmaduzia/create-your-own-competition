@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -17,19 +18,12 @@ import pl.createcompetition.service.query.GetQueryImplService;
 import java.util.Optional;
 
 @Service
-public class CompetitionService extends VerifyMethodsForServices {
+@AllArgsConstructor
+public class CompetitionService {
 
     private final CompetitionRepository competitionRepository;
     private final UserDetailRepository userDetailRepository;
     private final GetQueryImplService<Competition,?> queryUserDetailService;
-
-        public CompetitionService(CompetitionRepository competitionRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, GetQueryImplService<Competition, ?> queryUserDetailService) {
-            super(userRepository, null);
-            this.competitionRepository = competitionRepository;
-            this.userDetailRepository = userDetailRepository;
-            this.queryUserDetailService = queryUserDetailService;
-        }
-
 
     public PagedResponseDto<?> searchCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -37,8 +31,6 @@ public class CompetitionService extends VerifyMethodsForServices {
     }
 
     public ResponseEntity<?> addCompetition(Competition competition, UserPrincipal userPrincipal) {
-
-        verifyUserExists(userPrincipal);
 
         Optional<Competition> findCompetition = competitionRepository.findByCompetitionName(competition.getCompetitionName());
 
@@ -54,7 +46,6 @@ public class CompetitionService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
 
-        verifyUserExists(userPrincipal);
         Competition findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
@@ -63,7 +54,6 @@ public class CompetitionService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
-        verifyUserExists(userPrincipal);
         Competition findCompetition = shouldFindCompetition(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
