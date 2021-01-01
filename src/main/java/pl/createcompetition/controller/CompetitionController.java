@@ -38,7 +38,7 @@ public class CompetitionController {
     @PutMapping("{competitionName}")
     public ResponseEntity<?> updateCompetition(@Valid @RequestBody Competition competition, @CurrentUser UserPrincipal userPrincipal,
                                                @PathVariable String competitionName) {
-        return competitionService.updateCompetition(competition, userPrincipal);
+        return competitionService.updateCompetition(competitionName, competition, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")

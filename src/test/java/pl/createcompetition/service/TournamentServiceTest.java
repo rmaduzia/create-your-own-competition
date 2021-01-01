@@ -69,10 +69,10 @@ public class TournamentServiceTest {
 
         tournament.setMaxAmountOfTeams(15);
 
-        tournamentService.updateTournament(tournament, userPrincipal);
+        tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal);
         verify(tournamentRepository, times(1)).save(tournament);
 
-        assertEquals(tournamentService.updateTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(tournament.getMaxAmountOfTeams(), 15);
     }
 
@@ -92,7 +92,7 @@ public class TournamentServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> tournamentService.updateTournament(tournament, userPrincipal),
+                () -> tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Tournament not exists not found with Name : '"+ tournament.getTournamentName()+ "'", exception.getMessage());
@@ -120,7 +120,7 @@ public class TournamentServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> tournamentService.updateTournament(tournament, userPrincipal),
+                () -> tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Tournament named: "+ tournament.getTournamentName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());

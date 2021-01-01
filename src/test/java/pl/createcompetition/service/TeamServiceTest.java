@@ -119,10 +119,10 @@ public class TeamServiceTest {
 
         team.setMaxAmountMembers(15);
 
-        teamService.updateTeam(team, userPrincipal);
+        teamService.updateTeam(team.getTeamName(),team, userPrincipal);
         verify(teamRepository, times(1)).save(team);
 
-        assertEquals(teamService.updateTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(teamService.updateTeam(team.getTeamName(),team, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(team.getMaxAmountMembers(), 15);
     }
 
@@ -143,7 +143,7 @@ public class TeamServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> teamService.updateTeam(team, userPrincipal),
+                () -> teamService.updateTeam(team.getTeamName(),team, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Team not exists not found with Name : '"+ team.getTeamName()+ "'", exception.getMessage());
@@ -173,7 +173,7 @@ public class TeamServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> teamService.updateTeam(team, userPrincipal),
+                () -> teamService.updateTeam(team.getTeamName(),team, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Team named: "+ team.getTeamName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());

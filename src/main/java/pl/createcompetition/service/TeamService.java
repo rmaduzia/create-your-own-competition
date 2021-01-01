@@ -56,7 +56,11 @@ public class TeamService extends VerifyMethodsForServices {
         }
     }
 
-    public ResponseEntity<?> updateTeam (Team team, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateTeam (String teamName, Team team, UserPrincipal userPrincipal) {
+
+        if (!team.getTeamName().equals(teamName)) {
+            throw new BadRequestException("Tean Name doesn't match with Team object");
+        }
 
         Team foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);

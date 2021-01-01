@@ -41,7 +41,7 @@ public class TeamController {
     public ResponseEntity<?> updateTeam(@Valid @RequestBody Team team,@CurrentUser UserPrincipal userPrincipal,
                                         @PathVariable String teamName) {
 
-        return teamService.updateTeam(team, userPrincipal);
+        return teamService.updateTeam(teamName, team, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")

@@ -40,15 +40,14 @@ public class TournamentController {
     @PutMapping("{tournamentName}")
     public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String tournamentName) {
-        return tournamentService.updateTournament(tournament,userPrincipal);
+        return tournamentService.updateTournament(tournamentName, tournament, userPrincipal);
 
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{tournamentName}")
-    public ResponseEntity<?> deleteTournament(@RequestBody String tournamentName, @CurrentUser UserPrincipal userPrincipal,
-                                              @PathVariable String tournamentNamee) {
-        return tournamentService.deleteTournament(tournamentName,userPrincipal);
+    public ResponseEntity<?> deleteTournament(@PathVariable String tournamentName, @CurrentUser UserPrincipal userPrincipal) {
+        return tournamentService.deleteTournament(tournamentName, userPrincipal);
 
     }
 
@@ -57,7 +56,7 @@ public class TournamentController {
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
                                                       @CurrentUser UserPrincipal userPrincipal) {
-        return tournamentService.removeTeamFromTournament(tournamentName,teamName, userPrincipal);
+        return tournamentService.removeTeamFromTournament(tournamentName, teamName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")

@@ -3,6 +3,7 @@ package pl.createcompetition.service;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
@@ -44,8 +45,11 @@ public class CompetitionService {
         }
     }
 
-    public ResponseEntity<?> updateCompetition(Competition competition, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateCompetition(String competitionName, Competition competition, UserPrincipal userPrincipal) {
 
+        if (!competition.getCompetitionName().equals(competitionName)) {
+            throw new BadRequestException("Competition Name doesn't match with Competition object");
+        }
         Competition findCompetition = shouldFindCompetition(competition.getCompetitionName());
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 

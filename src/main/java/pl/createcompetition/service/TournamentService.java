@@ -51,7 +51,11 @@ public class TournamentService extends VerifyMethodsForServices {
         }
     }
 
-    public ResponseEntity<?> updateTournament(Tournament tournament, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateTournament(String tournamentName, Tournament tournament, UserPrincipal userPrincipal) {
+
+        if (!tournament.getTournamentName().equals(tournamentName)) {
+            throw new BadRequestException("Tean Name doesn't match with Team object");
+        }
 
         Tournament foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTeam, userPrincipal);

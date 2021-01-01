@@ -83,10 +83,10 @@ public class CompetitionServiceTest {
 
         competition.setMaxAmountOfTeams(15);
 
-        competitionService.updateCompetition(competition, userPrincipal);
+        competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal);
         verify(competitionRepository, times(1)).save(competition);
 
-        assertEquals(competitionService.updateCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(competition.getMaxAmountOfTeams(), 15);
     }
 
@@ -106,7 +106,7 @@ public class CompetitionServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> competitionService.updateCompetition(competition, userPrincipal),
+                () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Competition not exists not found with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
@@ -134,7 +134,7 @@ public class CompetitionServiceTest {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
-                () -> competitionService.updateCompetition(competition, userPrincipal),
+                () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
