@@ -103,7 +103,7 @@ public class TeamServiceTest {
 
         
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
-        when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.empty());
+        when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(false);
 
         teamService.addTeam(team, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
@@ -152,8 +152,8 @@ public class TeamServiceTest {
     @Test
     public void shouldThrowExceptionTeamAlreadyExists() {
 
-        
-        when(teamRepository.findByTeamName(team.getTeamName())).thenReturn(Optional.of(team));
+
+        when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(true);
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,

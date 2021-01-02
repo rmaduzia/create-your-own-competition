@@ -8,4 +8,5 @@ import java.util.Optional;
 public interface TeamRepository extends JpaRepository<Team, Long> {
     Optional<Team> findByTeamName(String teamName);
     Optional<Team> findByTeamNameAndTeamOwner(String teamName, String teamOwner);
+    boolean existsTeamByTeamNameIgnoreCase(String teamName);
 }

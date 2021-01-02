@@ -68,11 +68,12 @@ public class CompetitionServiceTest {
     public void shouldAddCompetition() {
 
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
-        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
+      //when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
 
         competitionService.addCompetition(competition, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
-
+        System.out.println(competitionService.addCompetition(competition, userPrincipal).getBody());
+        //assertEquals(competitionService.addCompetition(competition, userPrincipal).getBody(), competition);
         assertEquals(competitionService.addCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -115,7 +116,7 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionAlreadyExists() {
 
-        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(competitionRepository.existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName())).thenReturn(true);
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,

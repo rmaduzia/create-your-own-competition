@@ -54,7 +54,7 @@ public class TournamentServiceTest {
     @Test
     public void shouldAddTeam() {
 
-        when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.empty());
+        when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(false);
 
         tournamentService.addTournament(tournament, userPrincipal);
         verify(tournamentRepository, times(1)).save(tournament);
@@ -101,7 +101,7 @@ public class TournamentServiceTest {
     @Test
     public void shouldThrowExceptionTeamAlreadyExists() {
 
-        when(tournamentRepository.findByTournamentName(tournament.getTournamentName())).thenReturn(Optional.of(tournament));
+        when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(true);
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,

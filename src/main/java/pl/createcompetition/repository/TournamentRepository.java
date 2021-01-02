@@ -10,5 +10,7 @@ public interface TournamentRepository extends JpaRepository<Tournament, Long> {
     Optional<Tournament> findByTournamentNameAndTournamentOwner(String tournamentName, String tournamentOwner);
     void deleteByTournamentName(String tournamentName);
 
+    boolean existsTournamentByTournamentNameIgnoreCase(String tournamentName);
+
 
 }

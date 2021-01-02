@@ -14,6 +14,7 @@ public interface CompetitionRepository extends JpaRepository<Competition, Long>{
 
     //@Query(value = "SELECT competition_name from competition  WHERE competition_name=?1", nativeQuery =true)
     Optional<Competition> findByCompetitionName(String competitionName);
+    boolean existsCompetitionByCompetitionNameIgnoreCase(String competitionName);
 
 
 

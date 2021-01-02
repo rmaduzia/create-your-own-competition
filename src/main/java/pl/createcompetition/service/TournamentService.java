@@ -40,9 +40,7 @@ public class TournamentService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
-        Optional<Tournament> findTournament = tournamentRepository.findByTournamentName(tournament.getTournamentName());
-
-        if (findTournament.isEmpty()) {
+        if (!tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())) {
             tournament.setTournamentOwner(userPrincipal.getUsername());
             return ResponseEntity.ok(tournamentRepository.save(tournament));
         } else {

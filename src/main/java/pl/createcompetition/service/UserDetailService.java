@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.User;
@@ -43,7 +44,11 @@ public class UserDetailService {
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
-    public ResponseEntity<?> updateUserDetail(UserDetail userDetail, UserPrincipal userPrincipal){
+    public ResponseEntity<?> updateUserDetail(String userName, UserDetail userDetail, UserPrincipal userPrincipal){
+
+        if (!userDetail.getUserName().equals(userName)) {
+            throw new BadRequestException("User Name doesn't match with UserDetail object");
+        }
 
         findUser(userPrincipal);
         userDetail.setId(userPrincipal.getId());
@@ -51,11 +56,11 @@ public class UserDetailService {
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
-    public ResponseEntity<?> deleteUserDetail(Long userDetailId, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteUserDetail(String userName, UserPrincipal userPrincipal) {
 
         findUser(userPrincipal);
 
-        if (userDetailId.equals(userPrincipal.getId())) {
+        if (userPrincipal.getUsername().equals(userName)) {
                 userDetailRepository.deleteById(userPrincipal.getId());
             return ResponseEntity.noContent().build();
             }

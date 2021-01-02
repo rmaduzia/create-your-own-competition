@@ -44,9 +44,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addTeam (Team team, UserPrincipal userPrincipal) {
 
-        Optional<Team> findTeam = teamRepository.findByTeamName(team.getTeamName());
-
-        if (findTeam.isEmpty()) {
+        if (!teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())) {
             Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
             team.setTeamOwner(userPrincipal.getUsername());
             userDetail.get().addUserToTeam(team);

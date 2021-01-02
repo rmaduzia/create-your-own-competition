@@ -42,22 +42,19 @@ public class UserDetailsController {
     @PutMapping("{userName}")
     public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String userName) {
-        return userDetailService.updateUserDetail(userDetail, userPrincipal);
+        return userDetailService.updateUserDetail(userName, userDetail, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{userName}")
-    public ResponseEntity<?> deleteUserDetail(@RequestBody Long userDetailId, @CurrentUser UserPrincipal userPrincipal,
-                                              @PathVariable String userName) {
-        return userDetailService.deleteUserDetail(userDetailId, userPrincipal);
+    public ResponseEntity<?> deleteUserDetail(@PathVariable String userName, @CurrentUser UserPrincipal userPrincipal) {
+        return userDetailService.deleteUserDetail(userName, userPrincipal);
     }
 
 /*
     @PreAuthorize("hasRole('USER')")
     @PostMapping("addOpinion")
     public ResponseEntity<?> addOpinionAboutUser(@RequestBody String opinionDetails, @CurrentUser UserPrincipal userPrincipal) {
-
-
 
     }
 
