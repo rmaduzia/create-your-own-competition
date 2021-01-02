@@ -54,6 +54,7 @@ public class UserDetailServiceTest {
         userDetail = UserDetail.builder()
                 .id(1L)
                 .user(user)
+                .userName("test@mail.com")
                 .age(15)
                 .city("Gdynia")
                 .gender(Gender.FEMALE).build();
@@ -108,10 +109,10 @@ public class UserDetailServiceTest {
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
-        userDetailService.updateUserDetail(userDetail, userPrincipal);
+        userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);
 
-        assertEquals(userDetailService.updateUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
 
     }
 
@@ -120,9 +121,9 @@ public class UserDetailServiceTest {
 
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
-        userDetailService.deleteUserDetail(userDetail.getId(), userPrincipal);
-        verify(userDetailRepository, times(1)).deleteById(userDetail.getId());
+        userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal);
+        verify(userDetailRepository, times(1)).deleteById(userPrincipal.getId());
 
-        assertEquals(userDetailService.deleteUserDetail(userDetail.getId(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }
