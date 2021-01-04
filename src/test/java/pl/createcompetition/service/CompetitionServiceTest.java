@@ -69,6 +69,7 @@ public class CompetitionServiceTest {
 
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
       //when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
+        when(userDetailRepository.save(userDetail)).thenReturn(userDetail);
 
         competitionService.addCompetition(competition, userPrincipal);
         verify(userDetailRepository, times(1)).save(userDetail);

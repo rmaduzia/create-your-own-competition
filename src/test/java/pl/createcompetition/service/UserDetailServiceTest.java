@@ -11,6 +11,8 @@ import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,8 @@ public class UserDetailServiceTest {
     UserDetailRepository userDetailRepository;
     @InjectMocks
     UserDetailService userDetailService;
+    @Mock
+    GetQueryImplService getQueryImplService;
 
     User user;
     UserDetail userDetail;
@@ -65,7 +69,7 @@ public class UserDetailServiceTest {
         userDetailDtoList = new ArrayList<>();
     }
 
-    @Disabled
+    //@Disabled
     @Test
     public void shouldReturnUsersDetails() {
         PaginationInfoRequest paginationInfoRequest = new PaginationInfoRequest(0,10);
@@ -75,8 +79,11 @@ public class UserDetailServiceTest {
 
         PagedResponseDto pagedResponseDto = PagedResponseDtoBuilder.create().listDto(userDetailDtoList).entityPage(pageModel).build();
 
-        when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
+        when(getQueryImplService.execute(UserDetail.class,"search=city:Gdynia",paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize())).thenReturn(pagedResponseDto);
 
+
+        //when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
+        System.out.println(pagedResponseDto);
         assertEquals(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest), pagedResponseDto);
     }
 
