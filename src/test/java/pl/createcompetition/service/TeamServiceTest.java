@@ -2,7 +2,9 @@ package pl.createcompetition.service;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
 import org.mockito.*;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -19,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 
+
 @ExtendWith(MockitoExtension.class)
 public class TeamServiceTest {
 
@@ -34,6 +37,8 @@ public class TeamServiceTest {
     NotificationRepository notificationRepository;
     @InjectMocks
     TeamService teamService;
+    @Mock
+    VerifyMethodsForServices verifyMethodsForServices;
     @Mock
     NotificationMessagesToUsersService notificationMessagesToUsersService;
 
@@ -101,7 +106,6 @@ public class TeamServiceTest {
     @Test
     public void shouldAddTeam() {
 
-        
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(false);
 
@@ -114,8 +118,7 @@ public class TeamServiceTest {
     @Test
     public void shouldUpdateTeam() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
 
         team.setMaxAmountMembers(15);
 
@@ -129,8 +132,7 @@ public class TeamServiceTest {
     @Test
     public void shouldDeleteTeam() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
 
         teamService.deleteTeam(team.getTeamName(), userPrincipal);
         verify(teamRepository, times(1)).deleteById(team.getId());
@@ -140,6 +142,8 @@ public class TeamServiceTest {
 
     @Test
     public void shouldThrowExceptionTeamNotExists() {
+
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenThrow(new ResourceNotFoundException("Team not exists", "Name", team.getTeamName()));
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -151,7 +155,6 @@ public class TeamServiceTest {
 
     @Test
     public void shouldThrowExceptionTeamAlreadyExists() {
-
 
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(true);
 
@@ -166,8 +169,7 @@ public class TeamServiceTest {
     @Test
     public void shouldThrowExceptionTeamNotBelongToUser() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
 
         team.setTeamOwner("OtherOwner");
 
@@ -183,11 +185,8 @@ public class TeamServiceTest {
     @Test
     public void shouldAddRecruitToTeam() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
-        //doNothing().when(teamService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
-        //doNothing().when(notificationMessagesToUsersService).notificationMessageToUser(userDetailTeamMember.getUserName(),"Team","invite",team.getTeamName());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
         verify(teamRepository, times(1)).save(team);
@@ -198,10 +197,8 @@ public class TeamServiceTest {
     @Test
     public void shouldDeleteMemberFromTeam() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
-       // doNothing().when(teamService).notificationMessageToUser(ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString(),ArgumentMatchers.anyString());
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
@@ -213,8 +210,7 @@ public class TeamServiceTest {
     @Test
     public void shouldJoinTournament() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
@@ -226,8 +222,7 @@ public class TeamServiceTest {
     @Test
     public void shouldLeaveTournament() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
@@ -241,8 +236,7 @@ public class TeamServiceTest {
     @Test
     public void shouldJoinCompetition() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
 
         teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
@@ -256,8 +250,7 @@ public class TeamServiceTest {
     @Test
     public void shouldLeaveCompetition() {
 
-        
-        when(teamRepository.findByTeamNameAndTeamOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(team));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
 
         teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);

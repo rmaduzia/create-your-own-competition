@@ -1,14 +1,12 @@
 package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Team;
 import pl.createcompetition.repository.TeamRepository;
-import pl.createcompetition.repository.UserRepository;
-import pl.createcompetition.security.UserPrincipal;
 
-import java.util.Optional;
-
+@Service
 @AllArgsConstructor
 public class VerifyMethodsForServices {
 

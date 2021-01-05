@@ -1,13 +1,12 @@
 package pl.createcompetition.service;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.model.websockets.UserNotification;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.*;
 import pl.createcompetition.security.UserPrincipal;
@@ -15,9 +14,9 @@ import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 
-//@AllArgsConstructor
+@AllArgsConstructor
 @Service
-public class TeamService extends VerifyMethodsForServices {
+public class TeamService {
 
     private final TeamRepository teamRepository;
     private final UserDetailRepository userDetailRepository;
@@ -25,7 +24,9 @@ public class TeamService extends VerifyMethodsForServices {
     private final CompetitionRepository competitionRepository;
     private final NotificationMessagesToUsersService notificationMessagesToUsersService;
     private final GetQueryImplService<Team,?> queryTeamService;
+    private final VerifyMethodsForServices verifyMethodsForServices;
 
+/*
     public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, TournamentRepository tournamentRepository,
                        CompetitionRepository competitionRepository, NotificationMessagesToUsersService notificationMessagesToUsersService, GetQueryImplService<Team, ?> queryTeamService) {
         super(teamRepository);
@@ -37,6 +38,8 @@ public class TeamService extends VerifyMethodsForServices {
         this.queryTeamService = queryTeamService;
     }
 
+
+ */
     public PagedResponseDto<?> searchTeam(String search, PaginationInfoRequest paginationInfoRequest) {
 
         return queryTeamService.execute(Team.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
@@ -60,7 +63,7 @@ public class TeamService extends VerifyMethodsForServices {
             throw new BadRequestException("Tean Name doesn't match with Team object");
         }
 
-        Team foundTeam = shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(team.getTeamName(), userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         return ResponseEntity.ok(teamRepository.save(team));
@@ -69,7 +72,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteTeam (String teamName, UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         teamRepository.deleteById(foundTeam.getId());
@@ -79,7 +82,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> addRecruitToTeam(String teamName, String recruitName, UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         Optional<UserDetail> findRecruit = Optional.ofNullable(userDetailRepository.findByUserName(recruitName).orElseThrow(() ->
@@ -95,7 +98,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userNameToDelete, UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         UserDetail findRecruit = userDetailRepository.findByUserName(userNameToDelete).orElseThrow(() ->
@@ -113,7 +116,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamJoinTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         Tournament findTournament = getTournament(tournamentName);
@@ -137,7 +140,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamLeaveTournament(String teamName, String tournamentName,UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         Tournament findTournament = getTournament(tournamentName);
@@ -154,7 +157,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamJoinCompetition(String teamName, String competitionName,UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         Competition findCompetition = getCompetition(competitionName);
@@ -177,7 +180,7 @@ public class TeamService extends VerifyMethodsForServices {
 
     public ResponseEntity<?> teamLeaveCompetition(String teamName, String competitionName,UserPrincipal userPrincipal) {
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
         checkIfTeamBelongToUser(foundTeam, userPrincipal);
 
         Competition findCompetition = getCompetition(competitionName);

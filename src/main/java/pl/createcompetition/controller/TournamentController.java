@@ -52,7 +52,7 @@ public class TournamentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("{tournamentName}")
+    @DeleteMapping("{tournamentName}/teams")
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
                                                       @CurrentUser UserPrincipal userPrincipal) {

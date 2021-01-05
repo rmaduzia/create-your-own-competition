@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -18,14 +19,16 @@ import pl.createcompetition.util.MatchTeamsInTournament;
 
 import java.util.*;
 
-//@RequiredArgsConstructor
+@RequiredArgsConstructor
 @Service
-public class TournamentService extends VerifyMethodsForServices {
+public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final GetQueryImplService<Tournament,?> queryUserDetailService;
     private final TeamRepository teamRepository;
+    private final VerifyMethodsForServices verifyMethodsForServices;
 
+/*
     public TournamentService(TournamentRepository tournamentRepository, UserRepository userRepository, GetQueryImplService<Tournament, ?> queryUserDetailService, TeamRepository teamRepository) {
         super(teamRepository);
         this.tournamentRepository = tournamentRepository;
@@ -33,6 +36,8 @@ public class TournamentService extends VerifyMethodsForServices {
         this.teamRepository = teamRepository;
     }
 
+
+ */
     public PagedResponseDto<?> searchTournament(String search, PaginationInfoRequest paginationInfoRequest) {
 
         return queryUserDetailService.execute(Tournament.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
@@ -76,7 +81,7 @@ public class TournamentService extends VerifyMethodsForServices {
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        Team foundTeam = shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
 
         foundTournament.deleteTeamFromTournament(foundTeam);
         tournamentRepository.save(foundTournament);
