@@ -15,32 +15,21 @@ public class TournamentMatchesService {
 
     private final MatchesInTournamentRepository matchesInTournamentRepository;
 
-
     public void createMatch(Tournament tournament, String firstTeamName, String secondTeamName, Date matchDate){
-
-
         MatchesInTournament matchInTournament = MatchesInTournament.builder()
                 .tournament(tournament)
                 .firstTeamName(firstTeamName)
                 .secondTeamName(secondTeamName)
                 .matchDate(matchDate).build();
 
-
         matchesInTournamentRepository.save(matchInTournament);
 
     }
-
 
     public void updateMatch(MatchesInTournament matchInTournament) {
 
 
 
     }
-
-
-
-
-
-
 
 }

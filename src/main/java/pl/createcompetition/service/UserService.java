@@ -12,7 +12,7 @@ import pl.createcompetition.model.User;
 import pl.createcompetition.payload.ApiResponse;
 import pl.createcompetition.payload.ChangeMailRequest;
 import pl.createcompetition.payload.ChangePasswordRequest;
-import pl.createcompetition.payload.interfaces.InterfaceChangeRequest;
+import pl.createcompetition.payload.interfaces.ChangeRequest;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
@@ -51,7 +51,7 @@ public class UserService {
         return userDao.save(user);
     }
 
-    private User getUserForChange(InterfaceChangeRequest changeRequest){
+    private User getUserForChange(ChangeRequest changeRequest){
         return userDao.findByIdAndPassword(changeRequest.getUserId(), changeRequest.getPassword())
                 .orElseThrow(() -> new ResourceNotFoundException("User", "id", changeRequest.getUserId()));
     }

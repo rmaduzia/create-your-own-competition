@@ -22,8 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.when;
 
-
-
 @ExtendWith(MockitoExtension.class)
 public class UserDetailServiceTest {
 
@@ -41,9 +39,7 @@ public class UserDetailServiceTest {
     UserDetail.UserDetailDto userDetailDto;
     UserPrincipal userPrincipal;
 
-
     List<UserDetail.UserDetailDto> userDetailDtoList;
-
 
     @BeforeEach
     public void setUp() {
@@ -69,7 +65,6 @@ public class UserDetailServiceTest {
         userDetailDtoList = new ArrayList<>();
     }
 
-    //@Disabled
     @Test
     public void shouldReturnUsersDetails() {
         PaginationInfoRequest paginationInfoRequest = new PaginationInfoRequest(0,10);
@@ -81,9 +76,6 @@ public class UserDetailServiceTest {
 
         when(getQueryImplService.execute(UserDetail.class,"search=city:Gdynia",paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize())).thenReturn(pagedResponseDto);
 
-
-        //when(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest)).thenReturn(pagedResponseDto);
-        System.out.println(pagedResponseDto);
         assertEquals(userDetailService.searchUser("search=city:Gdynia",paginationInfoRequest), pagedResponseDto);
     }
 

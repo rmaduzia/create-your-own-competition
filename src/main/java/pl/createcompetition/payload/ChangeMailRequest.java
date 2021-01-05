@@ -2,7 +2,7 @@ package pl.createcompetition.payload;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.createcompetition.payload.interfaces.InterfaceChangeRequest;
+import pl.createcompetition.payload.interfaces.ChangeRequest;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
-public class ChangeMailRequest implements InterfaceChangeRequest {
+public class ChangeMailRequest implements ChangeRequest {
     @Email
     private String email;
     @NotNull

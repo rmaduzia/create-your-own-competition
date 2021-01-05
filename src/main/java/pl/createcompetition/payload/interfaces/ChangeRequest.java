@@ -1,6 +1,6 @@
 package pl.createcompetition.payload.interfaces;
 
-public interface InterfaceChangeRequest {
+public interface ChangeRequest {
     Long getUserId();
     String getPassword();
 }

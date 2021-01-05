@@ -2,14 +2,14 @@ package pl.createcompetition.payload;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.createcompetition.payload.interfaces.InterfaceChangeRequest;
+import pl.createcompetition.payload.interfaces.ChangeRequest;
 
 import javax.validation.constraints.*;
 
 
 @Getter
 @NoArgsConstructor
-public class ChangePasswordRequest implements InterfaceChangeRequest {
+public class ChangePasswordRequest implements ChangeRequest {
     private String newPassword;
     private Long UserId;
     private String Password;

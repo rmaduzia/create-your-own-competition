@@ -1,8 +1,6 @@
 package pl.createcompetition.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,12 +33,11 @@ public class UserDetailService {
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
-        Optional<User> foundUser = findUser(userPrincipal);
+        User foundUser = findUser(userPrincipal);
 
-        if(foundUser.isPresent()){
-            userDetail.setUser(foundUser.get());
-            userDetail.setId(foundUser.get().getId());
-        }
+        userDetail.setUser(foundUser);
+        userDetail.setId(foundUser.getId());
+
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
     }
 
@@ -70,11 +67,10 @@ public class UserDetailService {
     public ResponseEntity<?> addOpinionAboutUser
 
  */
-    public Optional<User> findUser(UserPrincipal userPrincipal) {
-        return Optional.ofNullable(userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
-                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername())));
+    public User findUser(UserPrincipal userPrincipal) {
+        return userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
+                new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
-
 
 
 }
