@@ -10,14 +10,12 @@ import pl.createcompetition.service.AuthenticationService;
 
 import javax.validation.Valid;
 
-
 @AllArgsConstructor
 @RestController
 @RequestMapping("/auth")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
-
 
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
@@ -28,5 +26,4 @@ public class AuthenticationController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
         return authenticationService.registerUser(signUpRequest);
     }
-
 }
