@@ -57,8 +57,9 @@ public class TournamentServiceTest {
         when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(false);
 
         tournamentService.addTournament(tournament, userPrincipal);
-        verify(tournamentRepository, times(1)).save(tournament);
 
+        verify(tournamentRepository, times(1)).save(tournament);
+        verify(tournamentRepository, times(1)).existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName());
         assertEquals(tournamentService.addTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -70,8 +71,9 @@ public class TournamentServiceTest {
         tournament.setMaxAmountOfTeams(15);
 
         tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal);
-        verify(tournamentRepository, times(1)).save(tournament);
 
+        verify(tournamentRepository, times(1)).save(tournament);
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals(tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(tournament.getMaxAmountOfTeams(), 15);
     }
@@ -82,24 +84,26 @@ public class TournamentServiceTest {
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal);
-        verify(tournamentRepository, times(1)).deleteByTournamentName(tournament.getTournamentName());
 
+        verify(tournamentRepository, times(1)).deleteByTournamentName(tournament.getTournamentName());
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals(tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test
-    public void shouldThrowExceptionTeamNotExists() {
+    public void shouldThrowExceptionTournamentNotExists() {
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals("Tournament not exists not found with Name : '"+ tournament.getTournamentName()+ "'", exception.getMessage());
     }
 
     @Test
-    public void shouldThrowExceptionTeamAlreadyExists() {
+    public void shouldThrowExceptionTournamentAlreadyExists() {
 
         when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(true);
 
@@ -108,11 +112,12 @@ public class TournamentServiceTest {
                 () -> tournamentService.addTournament(tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(tournamentRepository, times(1)).existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName());
         assertEquals("Tournament already exists with Name : '"+ tournament.getTournamentName()+ "'", exception.getMessage());
     }
 
     @Test
-    public void shouldThrowExceptionTeamNotBelongToUser() {
+    public void shouldThrowExceptionTournamentNotBelongToUser() {
         
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
@@ -123,6 +128,7 @@ public class TournamentServiceTest {
                 () -> tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals("Tournament named: "+ tournament.getTournamentName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
     }
 
@@ -137,8 +143,9 @@ public class TournamentServiceTest {
         dateMatch.put("1", date);
 
         tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
-        verify(tournamentRepository, times(1)).save(tournament);
 
+        verify(tournamentRepository, times(1)).save(tournament);
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals(tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal).getStatusCode(), HttpStatus.OK);
 
     }
@@ -153,8 +160,9 @@ public class TournamentServiceTest {
         dateMatch.put("1", date);
 
         tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
-        verify(tournamentRepository, times(1)).save(tournament);
 
+        verify(tournamentRepository, times(1)).save(tournament);
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals(tournamentService.deleteDateOfTheTeamsMatches(tournament.getTournamentName(), "1", userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }

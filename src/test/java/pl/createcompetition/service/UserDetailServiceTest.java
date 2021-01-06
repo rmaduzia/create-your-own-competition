@@ -86,19 +86,22 @@ public class UserDetailServiceTest {
         when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.addUserDetail(userDetail, userPrincipal);
-        verify(userDetailRepository, times(1)).save(userDetail);
 
+        verify(userDetailRepository, times(1)).save(userDetail);
+        verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
     @Test
     public void shouldThrowExceptionWhenUserNotFound() {
 
+
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> userDetailService.addUserDetail(userDetail, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals("UserProfile not found with ID : '"+ userPrincipal.getUsername()+"'", exception.getMessage());
     }
 
@@ -109,8 +112,9 @@ public class UserDetailServiceTest {
         when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
         userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal);
-        verify(userDetailRepository, times(1)).save(userDetail);
 
+        verify(userDetailRepository, times(1)).save(userDetail);
+        verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals(userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
 
     }
@@ -121,8 +125,9 @@ public class UserDetailServiceTest {
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
         userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal);
-        verify(userDetailRepository, times(1)).deleteById(userPrincipal.getId());
 
+        verify(userDetailRepository, times(1)).deleteById(userPrincipal.getId());
+        verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals(userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }

@@ -60,8 +60,8 @@ public class TournamentService {
             throw new BadRequestException("Tean Name doesn't match with Team object");
         }
 
-        Tournament foundTeam = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
-        checkIfTournamentBelongToUser(foundTeam, userPrincipal);
+        Tournament foundTournament = shouldFindTournament(tournament.getTournamentName(), userPrincipal.getUsername());
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
         return ResponseEntity.ok(tournamentRepository.save(tournament));
     }
