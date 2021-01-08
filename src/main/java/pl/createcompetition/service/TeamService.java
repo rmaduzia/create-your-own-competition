@@ -26,20 +26,6 @@ public class TeamService {
     private final GetQueryImplService<Team,?> queryTeamService;
     private final VerifyMethodsForServices verifyMethodsForServices;
 
-/*
-    public TeamService(TeamRepository teamRepository, UserRepository userRepository, UserDetailRepository userDetailRepository, TournamentRepository tournamentRepository,
-                       CompetitionRepository competitionRepository, NotificationMessagesToUsersService notificationMessagesToUsersService, GetQueryImplService<Team, ?> queryTeamService) {
-        super(teamRepository);
-        this.teamRepository = teamRepository;
-        this.userDetailRepository = userDetailRepository;
-        this.tournamentRepository = tournamentRepository;
-        this.competitionRepository = competitionRepository;
-        this.notificationMessagesToUsersService = notificationMessagesToUsersService;
-        this.queryTeamService = queryTeamService;
-    }
-
-
- */
     public PagedResponseDto<?> searchTeam(String search, PaginationInfoRequest paginationInfoRequest) {
 
         return queryTeamService.execute(Team.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
