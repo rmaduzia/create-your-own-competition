@@ -25,19 +25,8 @@ public class TournamentService {
 
     private final TournamentRepository tournamentRepository;
     private final GetQueryImplService<Tournament,?> queryUserDetailService;
-    private final TeamRepository teamRepository;
     private final VerifyMethodsForServices verifyMethodsForServices;
 
-/*
-    public TournamentService(TournamentRepository tournamentRepository, UserRepository userRepository, GetQueryImplService<Tournament, ?> queryUserDetailService, TeamRepository teamRepository) {
-        super(teamRepository);
-        this.tournamentRepository = tournamentRepository;
-        this.queryUserDetailService = queryUserDetailService;
-        this.teamRepository = teamRepository;
-    }
-
-
- */
     public PagedResponseDto<?> searchTournament(String search, PaginationInfoRequest paginationInfoRequest) {
 
         return queryUserDetailService.execute(Tournament.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
