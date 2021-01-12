@@ -80,7 +80,7 @@ public class CompetitionTagServiceTest {
         ResponseEntity<?> status = competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
-
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
@@ -93,6 +93,7 @@ public class CompetitionTagServiceTest {
         ResponseEntity<?> status = competitionTagService.updateCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
@@ -106,6 +107,7 @@ public class CompetitionTagServiceTest {
                 () ->  competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Competition not exists not found with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
     }
 
@@ -122,6 +124,7 @@ public class CompetitionTagServiceTest {
                 () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        //verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Tag already exists with CompetitionTag : '" + competitionTag.getTag() + "'", exception.getMessage());
     }
 
@@ -138,8 +141,8 @@ public class CompetitionTagServiceTest {
                 () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
-        competition.setOwner("test@mail.com");  // RollBack Values, have to change it
     }
 
     @Test
@@ -152,6 +155,7 @@ public class CompetitionTagServiceTest {
 
         ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
+       // verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
         verify(competitionRepository, times(1)).deleteById(competitionTag.getId());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }

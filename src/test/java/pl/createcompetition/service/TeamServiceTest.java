@@ -110,8 +110,9 @@ public class TeamServiceTest {
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(false);
 
         teamService.addTeam(team, userPrincipal);
-        verify(userDetailRepository, times(1)).save(userDetail);
 
+        verify(teamRepository, times(1)).existsTeamByTeamNameIgnoreCase(team.getTeamName());
+        verify(userDetailRepository, times(1)).save(userDetail);
         assertEquals(teamService.addTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -123,8 +124,9 @@ public class TeamServiceTest {
         team.setMaxAmountMembers(15);
 
         teamService.updateTeam(team.getTeamName(),team, userPrincipal);
-        verify(teamRepository, times(1)).save(team);
 
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
+        verify(teamRepository, times(1)).save(team);
         assertEquals(teamService.updateTeam(team.getTeamName(),team, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(team.getMaxAmountMembers(), 15);
     }
@@ -135,8 +137,9 @@ public class TeamServiceTest {
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
 
         teamService.deleteTeam(team.getTeamName(), userPrincipal);
-        verify(teamRepository, times(1)).deleteById(team.getId());
 
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
+        verify(teamRepository, times(1)).deleteById(team.getId());
         assertEquals(teamService.deleteTeam(team.getTeamName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
@@ -150,6 +153,7 @@ public class TeamServiceTest {
                 () -> teamService.updateTeam(team.getTeamName(),team, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         assertEquals("Team not exists not found with Name : '"+ team.getTeamName()+ "'", exception.getMessage());
     }
 
@@ -158,11 +162,13 @@ public class TeamServiceTest {
 
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(true);
 
+
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,
                 () -> teamService.addTeam(team, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(teamRepository, times(1)).existsTeamByTeamNameIgnoreCase(team.getTeamName());
         assertEquals("Team already exists with Name : '"+ team.getTeamName()+ "'", exception.getMessage());
     }
 
@@ -189,8 +195,9 @@ public class TeamServiceTest {
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
-        verify(teamRepository, times(1)).save(team);
 
+        verify(teamRepository, times(1)).save(team);
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         assertEquals(teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -202,6 +209,7 @@ public class TeamServiceTest {
 
         teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         assertEquals(teamService.deleteMemberFromTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal).getStatusCode(), HttpStatus.OK);
         verify(teamRepository, times(2)).save(team);
 
@@ -214,8 +222,9 @@ public class TeamServiceTest {
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
-        verify(teamRepository, times(1)).save(team);
 
+        verify(teamRepository, times(1)).save(team);
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         assertEquals(teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -227,9 +236,9 @@ public class TeamServiceTest {
 
         teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
+        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         assertEquals(teamService.teamLeaveTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
         verify(teamRepository, times(2)).save(team);
-
 
     }
 
@@ -242,7 +251,7 @@ public class TeamServiceTest {
         teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
         verify(teamRepository, times(1)).save(team);
-
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         assertEquals(teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
 
     }
@@ -255,8 +264,9 @@ public class TeamServiceTest {
 
         teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
+        verify(teamRepository, times(1)).save(team);
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         assertEquals(teamService.teamLeaveCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-
         verify(teamRepository, times(2)).save(team);
 
     }
