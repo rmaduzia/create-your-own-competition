@@ -124,7 +124,7 @@ public class CompetitionTagServiceTest {
                 () -> competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        //verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
+        verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Tag already exists with CompetitionTag : '" + competitionTag.getTag() + "'", exception.getMessage());
     }
 
@@ -155,7 +155,7 @@ public class CompetitionTagServiceTest {
 
         ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
-       // verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
+        verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
         verify(competitionRepository, times(1)).deleteById(competitionTag.getId());
         assertThat(status.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
     }

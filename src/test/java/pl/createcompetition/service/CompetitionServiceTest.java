@@ -10,7 +10,6 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Date;
 import java.util.Optional;
@@ -68,13 +67,15 @@ public class CompetitionServiceTest {
     public void shouldAddCompetition() {
 
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
-      //when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.empty());
+        when(competitionRepository.existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName())).thenReturn(false);
         when(userDetailRepository.save(userDetail)).thenReturn(userDetail);
 
         competitionService.addCompetition(competition, userPrincipal);
+
         verify(userDetailRepository, times(1)).save(userDetail);
-        System.out.println(competitionService.addCompetition(competition, userPrincipal).getBody());
-        //assertEquals(competitionService.addCompetition(competition, userPrincipal).getBody(), competition);
+        verify(userDetailRepository, times(1)).findById(ArgumentMatchers.anyLong());
+        verify(competitionRepository, times(1)).existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName());
+        assertEquals(competitionService.addCompetition(competition, userPrincipal).getBody(), userDetail);
         assertEquals(competitionService.addCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
     }
 
@@ -86,8 +87,10 @@ public class CompetitionServiceTest {
         competition.setMaxAmountOfTeams(15);
 
         competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal);
-        verify(competitionRepository, times(1)).save(competition);
 
+
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(competitionRepository, times(1)).save(competition);
         assertEquals(competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal).getStatusCode(), HttpStatus.OK);
         assertEquals(competition.getMaxAmountOfTeams(), 15);
     }
@@ -98,8 +101,9 @@ public class CompetitionServiceTest {
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
         competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
-        verify(competitionRepository, times(1)).deleteById(competition.getId());
 
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(competitionRepository, times(1)).deleteById(competition.getId());
         assertEquals(competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
@@ -111,6 +115,7 @@ public class CompetitionServiceTest {
                 () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Competition not exists not found with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
     }
 
@@ -124,6 +129,7 @@ public class CompetitionServiceTest {
                 () -> competitionService.addCompetition(competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(competitionRepository, times(1)).existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName());
         assertEquals("Competition already exists with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
     }
 
@@ -139,6 +145,7 @@ public class CompetitionServiceTest {
                 () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
+        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
     }
 }
