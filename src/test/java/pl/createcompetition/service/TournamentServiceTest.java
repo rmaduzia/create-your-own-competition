@@ -52,7 +52,7 @@ public class TournamentServiceTest {
     }
 
     @Test
-    public void shouldAddTeam() {
+    public void shouldAddTournament() {
 
         when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(false);
 
@@ -64,12 +64,11 @@ public class TournamentServiceTest {
     }
 
     @Test
-    public void shouldUpdateTeam() {
+    public void shouldUpdateTournament() {
 
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
         tournament.setMaxAmountOfTeams(15);
-
         tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal);
 
         verify(tournamentRepository, times(1)).save(tournament);
@@ -79,7 +78,7 @@ public class TournamentServiceTest {
     }
 
     @Test
-    public void shouldDeleteTeam() {
+    public void shouldDeleteTournament() {
         
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 

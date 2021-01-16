@@ -90,6 +90,8 @@ public class UserDetailServiceTest {
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getBody(), userDetail);
+
     }
 
     @Test
@@ -116,7 +118,7 @@ public class UserDetailServiceTest {
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
         assertEquals(userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
-
+        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getBody(), userDetail);
     }
 
     @Test
