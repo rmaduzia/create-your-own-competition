@@ -19,7 +19,6 @@ public class MatchTeamsInTournament {
             Collections.shuffle(teamsName);
             team2 = teamsName.get(0);
             teamsName.remove(0);
-            System.out.println("team1: " + team1 +"  team2: " + team2);
             matchedTeams.put(String.valueOf(alphabetChars[charIndex]), team1 + " VS " + team2);
             charIndex += 1;
         } while(teamsName.size()>1);
