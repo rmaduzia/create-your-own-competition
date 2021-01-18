@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
@@ -55,26 +56,29 @@ public class TournamentServiceTest {
     public void shouldAddTournament() {
 
         when(tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())).thenReturn(false);
+        when(tournamentRepository.save(tournament)).thenReturn(tournament);
 
-        tournamentService.addTournament(tournament, userPrincipal);
+        ResponseEntity<?> response = tournamentService.addTournament(tournament, userPrincipal);
 
         verify(tournamentRepository, times(1)).save(tournament);
         verify(tournamentRepository, times(1)).existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName());
-        assertEquals(tournamentService.addTournament(tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), tournament);
     }
 
     @Test
     public void shouldUpdateTournament() {
 
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(tournamentRepository.save(tournament)).thenReturn(tournament);
 
         tournament.setMaxAmountOfTeams(15);
-        tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal);
+        ResponseEntity<?> response = tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal);
 
         verify(tournamentRepository, times(1)).save(tournament);
         verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
-        assertEquals(tournamentService.updateTournament(tournament.getTournamentName(), tournament, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(tournament.getMaxAmountOfTeams(), 15);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), tournament);
     }
 
     @Test
@@ -82,11 +86,11 @@ public class TournamentServiceTest {
         
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
 
-        tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal);
+        ResponseEntity<?> response = tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal);
 
         verify(tournamentRepository, times(1)).deleteByTournamentName(tournament.getTournamentName());
         verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
-        assertEquals(tournamentService.deleteTournament(tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -119,7 +123,6 @@ public class TournamentServiceTest {
     public void shouldThrowExceptionTournamentNotBelongToUser() {
         
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
-
         tournament.setTournamentOwner("OtherOwner");
 
         Exception exception = assertThrows(
@@ -135,17 +138,19 @@ public class TournamentServiceTest {
     public void shouldSetTheDatesOfTheTeamsMatches() {
 
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(tournamentRepository.save(tournament)).thenReturn(tournament);
 
         Date date = new Date();
         Map<String, Date> dateMatch = new HashMap<>();
 
         dateMatch.put("1", date);
 
-        tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
+        ResponseEntity<?> response = tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
 
         verify(tournamentRepository, times(1)).save(tournament);
         verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
-        assertEquals(tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), tournament);
 
     }
 
@@ -159,9 +164,10 @@ public class TournamentServiceTest {
         dateMatch.put("1", date);
 
         tournamentService.setTheDatesOfTheTeamsMatches(tournament.getTournamentName(), dateMatch, userPrincipal);
+        ResponseEntity<?> response = tournamentService.deleteDateOfTheTeamsMatches(tournament.getTournamentName(), "1", userPrincipal);
 
-        verify(tournamentRepository, times(1)).save(tournament);
-        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
-        assertEquals(tournamentService.deleteDateOfTheTeamsMatches(tournament.getTournamentName(), "1", userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        verify(tournamentRepository, times(2)).save(tournament);
+        verify(tournamentRepository, times(2)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }

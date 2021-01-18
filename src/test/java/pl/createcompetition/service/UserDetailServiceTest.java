@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
@@ -85,12 +86,12 @@ public class UserDetailServiceTest {
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
-        userDetailService.addUserDetail(userDetail, userPrincipal);
+        ResponseEntity<?> response = userDetailService.addUserDetail(userDetail, userPrincipal);
 
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
-        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getBody(), userDetail);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), userDetail);
 
     }
 
@@ -113,12 +114,12 @@ public class UserDetailServiceTest {
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
         when(userDetailRepository.save(ArgumentMatchers.any(UserDetail.class))).thenReturn(userDetail);
 
-        userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal);
+        ResponseEntity<?> response = userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal);
 
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
-        assertEquals(userDetailService.updateUserDetail(userDetail.getUserName(), userDetail, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(userDetailService.addUserDetail(userDetail, userPrincipal).getBody(), userDetail);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), userDetail);
     }
 
     @Test
@@ -126,10 +127,11 @@ public class UserDetailServiceTest {
 
         when(userRepository.findByIdAndEmail(ArgumentMatchers.anyLong(), ArgumentMatchers.any())).thenReturn(Optional.of(user));
 
-        userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal);
+        ResponseEntity<?> response = userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal);
 
         verify(userDetailRepository, times(1)).deleteById(userPrincipal.getId());
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
-        assertEquals(userDetailService.deleteUserDetail(userDetail.getUserName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }

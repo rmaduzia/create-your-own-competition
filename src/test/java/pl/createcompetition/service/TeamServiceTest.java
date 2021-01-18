@@ -7,6 +7,7 @@ import org.mockito.*;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
@@ -108,27 +109,29 @@ public class TeamServiceTest {
 
         when(userDetailRepository.findById(ArgumentMatchers.anyLong())).thenReturn(Optional.of(userDetail));
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(false);
+        when(userDetailRepository.save(userDetail)).thenReturn(userDetail);
 
-        teamService.addTeam(team, userPrincipal);
+        ResponseEntity<?> response = teamService.addTeam(team, userPrincipal);
 
         verify(teamRepository, times(1)).existsTeamByTeamNameIgnoreCase(team.getTeamName());
         verify(userDetailRepository, times(1)).save(userDetail);
-        assertEquals(teamService.addTeam(team, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), userDetail);
     }
 
     @Test
     public void shouldUpdateTeam() {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
-
+        when(teamRepository.save(team)).thenReturn(team);
         team.setMaxAmountMembers(15);
 
-        teamService.updateTeam(team.getTeamName(),team, userPrincipal);
+        ResponseEntity<?> response = teamService.updateTeam(team.getTeamName(),team, userPrincipal);
 
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         verify(teamRepository, times(1)).save(team);
-        assertEquals(teamService.updateTeam(team.getTeamName(),team, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(team.getMaxAmountMembers(), 15);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), team);
     }
 
     @Test
@@ -136,11 +139,11 @@ public class TeamServiceTest {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
 
-        teamService.deleteTeam(team.getTeamName(), userPrincipal);
+        ResponseEntity<?> response = teamService.deleteTeam(team.getTeamName(), userPrincipal);
 
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
         verify(teamRepository, times(1)).deleteById(team.getId());
-        assertEquals(teamService.deleteTeam(team.getTeamName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test
@@ -161,7 +164,6 @@ public class TeamServiceTest {
     public void shouldThrowExceptionTeamAlreadyExists() {
 
         when(teamRepository.existsTeamByTeamNameIgnoreCase(team.getTeamName())).thenReturn(true);
-
 
         Exception exception = assertThrows(
                 ResourceAlreadyExistException.class,
@@ -194,11 +196,11 @@ public class TeamServiceTest {
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
 
-        teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
+        ResponseEntity<?> response = teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
         verify(teamRepository, times(1)).save(team);
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        assertEquals(teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -207,12 +209,11 @@ public class TeamServiceTest {
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
 
-        teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
+        ResponseEntity<?> response = teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
 
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        assertEquals(teamService.deleteMemberFromTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-        verify(teamRepository, times(2)).save(team);
-
+        verify(teamRepository, times(1)).save(team);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
@@ -220,12 +221,14 @@ public class TeamServiceTest {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(teamRepository.save(team)).thenReturn(team);
 
-        teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+        ResponseEntity<?> response = teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
         verify(teamRepository, times(1)).save(team);
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        assertEquals(teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), team);
     }
 
     @Test
@@ -233,13 +236,14 @@ public class TeamServiceTest {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(tournamentRepository.findByTournamentName(ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(teamRepository.save(team)).thenReturn(team);
 
-        teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+        ResponseEntity<?> response = teamService.teamJoinTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        assertEquals(teamService.teamLeaveTournament(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-        verify(teamRepository, times(2)).save(team);
-
+        verify(teamRepository, times(1)).save(team);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), team);
     }
 
     @Test
@@ -247,13 +251,13 @@ public class TeamServiceTest {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
+        when(teamRepository.save(team)).thenReturn(team);
 
-        teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+        ResponseEntity<?> response =  teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
         verify(teamRepository, times(1)).save(team);
-        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
-        assertEquals(teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), team);
     }
 
     @Test
@@ -261,14 +265,13 @@ public class TeamServiceTest {
 
         when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
         when(competitionRepository.findByCompetitionName(ArgumentMatchers.anyString())).thenReturn(Optional.of(competition));
+        when(teamRepository.save(team)).thenReturn(team);
 
-        teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
+        ResponseEntity<?> response = teamService.teamJoinCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal);
 
         verify(teamRepository, times(1)).save(team);
-        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
-        assertEquals(teamService.teamLeaveCompetition(team.getTeamName(), tournament.getTournamentName(), userPrincipal).getStatusCode(), HttpStatus.OK);
-        verify(teamRepository, times(2)).save(team);
-
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), team);
     }
 
 

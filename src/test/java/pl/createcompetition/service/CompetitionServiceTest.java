@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
@@ -70,29 +71,28 @@ public class CompetitionServiceTest {
         when(competitionRepository.existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName())).thenReturn(false);
         when(userDetailRepository.save(userDetail)).thenReturn(userDetail);
 
-        competitionService.addCompetition(competition, userPrincipal);
+        ResponseEntity<?> response = competitionService.addCompetition(competition, userPrincipal);
 
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userDetailRepository, times(1)).findById(ArgumentMatchers.anyLong());
         verify(competitionRepository, times(1)).existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName());
-        assertEquals(competitionService.addCompetition(competition, userPrincipal).getBody(), userDetail);
-        assertEquals(competitionService.addCompetition(competition, userPrincipal).getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), userDetail);
     }
 
     @Test
     public void shouldUpdateCompetition() {
         
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
-
+        when(competitionRepository.save(competition)).thenReturn(competition);
         competition.setMaxAmountOfTeams(15);
 
-        competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal);
-
+        ResponseEntity<?> response = competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal);
 
         verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         verify(competitionRepository, times(1)).save(competition);
-        assertEquals(competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal).getStatusCode(), HttpStatus.OK);
-        assertEquals(competition.getMaxAmountOfTeams(), 15);
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), competition);
     }
 
     @Test
@@ -100,11 +100,11 @@ public class CompetitionServiceTest {
 
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
+        ResponseEntity<?> response = competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
         verify(competitionRepository, times(1)).deleteById(competition.getId());
-        assertEquals(competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal).getStatusCode(), HttpStatus.NO_CONTENT);
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
     @Test

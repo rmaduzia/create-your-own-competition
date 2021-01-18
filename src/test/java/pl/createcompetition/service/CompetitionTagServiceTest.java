@@ -75,26 +75,32 @@ public class CompetitionTagServiceTest {
     public void shouldAddTags() {
 
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(competition)).thenReturn(competition);
 
         Set<Tags> tags = Set.of(competitionTag);
-        ResponseEntity<?> status = competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
+        ResponseEntity<?> response = competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
         verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
-        assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), competition);
     }
 
     @Test
     public void shouldUpdateTag() {
 
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(competitionRepository.save(competition)).thenReturn(competition);
 
         competitionTag.setTag("updatedTag");
-        ResponseEntity<?> status = competitionTagService.updateCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
+        ResponseEntity<?> response = competitionTagService.updateCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
         verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
-        assertThat(status.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), competition);
     }
 
     @Test
@@ -153,10 +159,10 @@ public class CompetitionTagServiceTest {
         Set<Tags> tags = Set.of(competitionTag);
         competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
-        ResponseEntity<?> status = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
+        ResponseEntity<?> response = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(2)).findByCompetitionName(competition.getCompetitionName());
         verify(competitionRepository, times(1)).deleteById(competitionTag.getId());
-        assertThat(status.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 }
