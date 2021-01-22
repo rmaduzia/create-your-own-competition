@@ -1,5 +1,6 @@
 package pl.createcompetition.service;
 
+import com.sun.xml.bind.v2.TODO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -29,10 +30,13 @@ public class TournamentServiceTest {
     TournamentRepository tournamentRepository;
     @InjectMocks
     TournamentService tournamentService;
+    @Mock
+    VerifyMethodsForServices verifyMethodsForServices;
 
     User user;
     UserPrincipal userPrincipal;
     Tournament tournament;
+    Team team;
 
     @BeforeEach
     public void setUp() {
@@ -49,6 +53,14 @@ public class TournamentServiceTest {
                 .maxAmountOfTeams(10)
                 .tournamentOwner("test@mail.com")
                 .tournamentName("Tourtnament1").build();
+
+
+        team = Team.builder()
+                .id(1L)
+                .teamOwner("test@mail.com")
+                .teamName("team1")
+                .isOpenRecruitment(true)
+                .city("Gdynia").build();
 
     }
 
@@ -170,4 +182,28 @@ public class TournamentServiceTest {
         verify(tournamentRepository, times(2)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
         assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
+
+    //TODO IMPLEMENT
+    @Test
+    public void shouldDeleteTeamFromTournament() {
+
+        when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
+
+        ResponseEntity<?> response = tournamentService.removeTeamFromTournament(tournament.getTournamentName(), "1", userPrincipal);
+
+        verify(tournamentRepository, times(1)).save(tournament);
+        assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
+
+    }
+
+
+    //TODO IMPLEMENT
+    @Test
+    public void shouldStartTournament() {
+
+    }
+
+
+
 }
