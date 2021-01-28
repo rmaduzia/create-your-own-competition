@@ -70,7 +70,7 @@ public class TournamentService {
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName, userPrincipal.getUsername());
+        Team foundTeam = verifyMethodsForServices.shouldFindTeam(teamName);
 
         foundTournament.deleteTeamFromTournament(foundTeam);
         tournamentRepository.save(foundTournament);

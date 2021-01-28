@@ -18,10 +18,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class TournamentServiceTest {
@@ -188,7 +186,7 @@ public class TournamentServiceTest {
     public void shouldDeleteTeamFromTournament() {
 
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
-        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
+        lenient().when(verifyMethodsForServices.shouldFindTeam(team.getTeamName())).thenReturn(team);
 
         ResponseEntity<?> response = tournamentService.removeTeamFromTournament(tournament.getTournamentName(), "1", userPrincipal);
 

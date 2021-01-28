@@ -17,4 +17,9 @@ public class VerifyMethodsForServices {
                 new ResourceNotFoundException("Team not exists", "Name", teamName));
     }
 
+    public Team shouldFindTeam(String teamName) {
+        return teamRepository.findByTeamName(teamName).orElseThrow(() ->
+                new ResourceNotFoundException("Team not exists", "Name", teamName));
+    }
+
 }
