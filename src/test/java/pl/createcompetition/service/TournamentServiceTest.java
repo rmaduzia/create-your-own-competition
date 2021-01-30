@@ -13,10 +13,8 @@ import pl.createcompetition.model.*;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -181,27 +179,32 @@ public class TournamentServiceTest {
         assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
 
-    //TODO IMPLEMENT
     @Test
     public void shouldDeleteTeamFromTournament() {
-
         when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
         lenient().when(verifyMethodsForServices.shouldFindTeam(team.getTeamName())).thenReturn(team);
 
-        ResponseEntity<?> response = tournamentService.removeTeamFromTournament(tournament.getTournamentName(), "1", userPrincipal);
+        ResponseEntity<?> response = tournamentService.removeTeamFromTournament(tournament.getTournamentName(), team.getTeamName(), userPrincipal);
 
         verify(tournamentRepository, times(1)).save(tournament);
         assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
-
     }
 
-
-    //TODO IMPLEMENT
     @Test
     public void shouldStartTournament() {
 
+        when(tournamentRepository.findByTournamentNameAndTournamentOwner(ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(Optional.of(tournament));
+        when(tournamentRepository.save(tournament)).thenReturn(tournament);
+
+        Map<String, String> drawedTeams = new TreeMap<>();
+        drawedTeams.put("FirstKey", "FirstValue");
+        tournament.setDrawedTeams(drawedTeams);
+
+        ResponseEntity<?> response = tournamentService.startTournament(tournament.getTournamentName(), userPrincipal);
+
+        verify(tournamentRepository, times(1)).save(tournament);
+        verify(tournamentRepository, times(1)).findByTournamentNameAndTournamentOwner(tournament.getTournamentName(), userPrincipal.getUsername());
+        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getBody(), tournament);
     }
-
-
-
 }
