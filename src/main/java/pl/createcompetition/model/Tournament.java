@@ -63,8 +63,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @OneToMany(
             mappedBy = "tournament",
             cascade = CascadeType.ALL)
-    private List<MatchesInTournament> matchesInTournamentHistories = new ArrayList<>();
-
+    private List<MatchesInTournament> matchesInTournament = new ArrayList<>();
 
     @ManyToMany
     @JsonManagedReference
@@ -94,7 +93,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @Override
     public TournamentDto map() {
-        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags);
+        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags, matchesInTournament);
     }
 
     @Data
@@ -107,6 +106,8 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         private String street;
         private int street_number;
         private Set<Tags> tags;
+        private List<MatchesInTournament> matchesInTournament;
+
     }
 
 }

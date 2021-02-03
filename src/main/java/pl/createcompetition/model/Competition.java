@@ -75,6 +75,11 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
+    @OneToMany(
+            mappedBy = "competition",
+            cascade = CascadeType.ALL)
+    private List<MatchesInCompetition> matchesInCompetition = new ArrayList<>();
+
     public void addTagToCompetition(Tags tags) {
         this.tags.add(tags);
         tags.getCompetitions().add(this);
@@ -89,7 +94,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
 
     @Override
     public CompetitionDto map() {
-        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags);
+        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags, matchesInCompetition);
     }
 
     @Data
@@ -104,10 +109,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         private Boolean isOpenRecruitment;
         private Set<Team> teams;
         private Set<Tags> tags;
+        private List<MatchesInCompetition> matchesInCompetition;
     }
-
-
-
-
 
 }
