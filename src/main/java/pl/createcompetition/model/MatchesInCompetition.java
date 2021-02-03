@@ -2,19 +2,18 @@ package pl.createcompetition.model;
 
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
-
 import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@EqualsAndHashCode(of = {"id"})
+@EqualsAndHashCode(of="id")
+@Entity
 @Getter
 @Setter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class MatchesInTournament implements QueryDtoInterface<MatchesInTournament.MatchInTournamentDto> {
+@AllArgsConstructor
+public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetition.MatchesInCompetitionDto> {
 
 
     @Id
@@ -22,7 +21,7 @@ public class MatchesInTournament implements QueryDtoInterface<MatchesInTournamen
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Tournament tournament;
+    private Competition competition;
 
     private String firstTeamName;
 
@@ -40,25 +39,29 @@ public class MatchesInTournament implements QueryDtoInterface<MatchesInTournamen
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
 
-    @Override
-    public MatchInTournamentDto map() {
-        return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, voteForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
-    }
 
+    @Override
+    public MatchesInCompetition.MatchesInCompetitionDto map() {
+        return new MatchesInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, voteForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
+    }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MatchInTournamentDto {
-        private Tournament tournament;
+    public static class MatchesInCompetitionDto {
+        private Competition competition;
         private String firstTeamName;
         private String secondTeamName;
         private java.sql.Date matchDate;
         private String winnerTeam;
-        private Map<String, String> voteForWinnerTeam = new HashMap<>();
+        private Map<String, String> voteForWinnerTeam;
         private Boolean isWinnerConfirmed;
         private Boolean isMatchWasPlayed;
+
+
     }
+
+
 
 
 }

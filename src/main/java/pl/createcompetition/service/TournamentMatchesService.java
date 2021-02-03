@@ -2,7 +2,6 @@ package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.createcompetition.model.MatchesInCompetitionHistory;
 import pl.createcompetition.model.MatchesInTournament;
 import pl.createcompetition.model.Tournament;
 import pl.createcompetition.repository.MatchesInTournamentRepository;
