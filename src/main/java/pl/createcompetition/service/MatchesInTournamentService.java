@@ -10,7 +10,7 @@ import java.sql.Date;
 
 @Service
 @AllArgsConstructor
-public class TournamentMatchesService {
+public class MatchesInTournamentService {
 
     private final MatchesInTournamentRepository matchesInTournamentRepository;
 

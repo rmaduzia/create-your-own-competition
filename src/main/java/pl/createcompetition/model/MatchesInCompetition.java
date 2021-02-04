@@ -34,7 +34,7 @@ public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetit
 
     @ElementCollection
     //Structure: Key: Team, Value: User
-    private Map<String, String> voteForWinnerTeam = new HashMap<>();
+    private Map<String, String> votesForWinnerTeam = new HashMap<>();
 
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
@@ -42,7 +42,7 @@ public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetit
 
     @Override
     public MatchesInCompetition.MatchesInCompetitionDto map() {
-        return new MatchesInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, voteForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
+        return new MatchesInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
     }
 
     @Data

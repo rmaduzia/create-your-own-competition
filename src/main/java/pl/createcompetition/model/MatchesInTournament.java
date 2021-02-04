@@ -35,14 +35,14 @@ public class MatchesInTournament implements QueryDtoInterface<MatchesInTournamen
 
     @ElementCollection
     //Structure: Key: Team, Value: User
-    private Map<String, String> voteForWinnerTeam = new HashMap<>();
+    private Map<String, String> votesForWinnerTeam = new HashMap<>();
 
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
 
     @Override
     public MatchInTournamentDto map() {
-        return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, voteForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
+        return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
     }
 
 
