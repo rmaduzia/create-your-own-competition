@@ -8,20 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Base64;
 import java.util.Optional;
 
-
-/** Util class to manipulate cookies.
- * @author Grzegorz Szczęsny
- * @version 1.0
- * @since 1.0
- */
 public class CookieUtils {
 
-
-    /** Retrieve cookies from request.
-     * @param request The HTTP request.
-     * @param name The cookie’s name.
-     * @return A cookie if exists, otherwise empty object.
-     */
     public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
         Cookie[] cookies = request.getCookies();
 
@@ -36,11 +24,6 @@ public class CookieUtils {
         return Optional.empty();
     }
 
-    /** Create cookie from given credentials.
-     * @param response The HTTP response.
-     * @param name The cookie’s name.
-     * @param maxAge The cookie's maximum age.
-     */
     public static void addCookie(HttpServletResponse response, String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
@@ -49,11 +32,6 @@ public class CookieUtils {
         response.addCookie(cookie);
     }
 
-    /** Remove cookie from the request.
-     * @param request The HTTP request.
-     * @param response The HTTP's response.
-     * @param name The cookie’s name.
-     */
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String name) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null && cookies.length > 0) {
@@ -68,24 +46,13 @@ public class CookieUtils {
         }
     }
 
-    /** Serialize object to a string.
-     * @param object The object to serialize.
-     * @return A serialized object to a string
-     */
     public static String serialize(Object object) {
         return Base64.getUrlEncoder()
                 .encodeToString(SerializationUtils.serialize(object));
     }
 
-    /** Cast cookie to a class.
-     * @param cookie The Cookie to cast.
-     * @param cls Returned class with casted cookie.
-     * @return A cookie casted to a object.
-     */
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
         return cls.cast(SerializationUtils.deserialize(
                 Base64.getUrlDecoder().decode(cookie.getValue())));
     }
-
-
 }
