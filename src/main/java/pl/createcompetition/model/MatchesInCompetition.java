@@ -40,6 +40,12 @@ public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetit
     private Boolean isMatchWasPlayed;
 
 
+    public void addMatchesInCompetitinToCompetititon(Competition competition) {
+        this.competition = competition;
+        competition.getMatchesInCompetition().add(this);
+    }
+
+
     @Override
     public MatchesInCompetition.MatchesInCompetitionDto map() {
         return new MatchesInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
