@@ -25,6 +25,7 @@ public class CompetitionService {
     private final CompetitionRepository competitionRepository;
     private final UserDetailRepository userDetailRepository;
     private final GetQueryImplService<Competition,?> queryUserDetailService;
+    private final VerifyMethodsForServices verifyMethodsForServices;
 
     public PagedResponseDto<?> searchCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -49,21 +50,21 @@ public class CompetitionService {
         if (!competition.getCompetitionName().equals(competitionName)) {
             throw new BadRequestException("Competition Name doesn't match with Competition object");
         }
-        Competition findCompetition = shouldFindCompetition(competition.getCompetitionName());
-        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
+        Competition findCompetition = verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName());
+        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
         return ResponseEntity.ok(competitionRepository.save(competition));
     }
 
     public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
-        Competition findCompetition = shouldFindCompetition(competitionName);
-        checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
+        Competition findCompetition = verifyMethodsForServices.shouldFindCompetition(competitionName);
+        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
         competitionRepository.deleteById(findCompetition.getId());
         return ResponseEntity.noContent().build();
     }
-
+/*
     public Competition shouldFindCompetition(String competitionName) {
         return competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
@@ -74,4 +75,6 @@ public class CompetitionService {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }
+
+ */
 }

@@ -16,10 +16,8 @@ import java.sql.Date;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class CompetitionServiceTest {
@@ -30,6 +28,8 @@ public class CompetitionServiceTest {
     UserDetailRepository userDetailRepository;
     @InjectMocks
     CompetitionService competitionService;
+    @Mock
+    VerifyMethodsForServices verifyMethodsForServices;
 
     User user;
     UserDetail userDetail;
@@ -83,13 +83,13 @@ public class CompetitionServiceTest {
     @Test
     public void shouldUpdateCompetition() {
         
-        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
         when(competitionRepository.save(competition)).thenReturn(competition);
         competition.setMaxAmountOfTeams(15);
 
         ResponseEntity<?> response = competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal);
 
-        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
         verify(competitionRepository, times(1)).save(competition);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         assertEquals(response.getBody(), competition);
@@ -98,11 +98,11 @@ public class CompetitionServiceTest {
     @Test
     public void shouldDeleteCompetition() {
 
-        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
 
         ResponseEntity<?> response = competitionService.deleteCompetition(competition.getCompetitionName(), userPrincipal);
 
-        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
         verify(competitionRepository, times(1)).deleteById(competition.getId());
         assertEquals(response.getStatusCode(), HttpStatus.NO_CONTENT);
     }
@@ -110,12 +110,14 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotExists() {
 
+        when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenThrow(new ResourceNotFoundException("Competition not exists", "Name", competition.getCompetitionName()));
+
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
         assertEquals("Competition not exists not found with Name : '"+ competition.getCompetitionName()+ "'", exception.getMessage());
     }
 
@@ -136,16 +138,17 @@ public class CompetitionServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
-        when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
+        when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
+        competition.setOwner("OtfherOwner");
 
-        competition.setOwner("OtherOwner");
+        doThrow(new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername())).when(verifyMethodsForServices).checkIfCompetitionBelongToUser(competition, userPrincipal);
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
                 () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
-        verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
+        verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
         assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
     }
 }
