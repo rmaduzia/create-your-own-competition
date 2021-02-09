@@ -6,6 +6,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
@@ -141,14 +142,15 @@ public class CompetitionServiceTest {
         when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
         competition.setOwner("OtfherOwner");
 
-        doThrow(new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername())).when(verifyMethodsForServices).checkIfCompetitionBelongToUser(competition, userPrincipal);
+        doThrow(new BadRequestException("You are not owner of this Competition"))
+                .when(verifyMethodsForServices).checkIfCompetitionBelongToUser(competition.getCompetitionName(), userPrincipal.getUsername());
 
         Exception exception = assertThrows(
-                ResourceNotFoundException.class,
+                BadRequestException.class,
                 () -> competitionService.updateCompetition(competition.getCompetitionName(),competition, userPrincipal),
                 "Expected doThing() to throw, but it didn't");
 
         verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
-        assertEquals("Competition named: "+ competition.getCompetitionName()+ " not found with Owner : " + "'"+userPrincipal.getUsername()+"'", exception.getMessage());
+        assertEquals("You are not owner of this Competition", exception.getMessage());
     }
 }

@@ -2,6 +2,7 @@ package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.model.Team;
@@ -32,9 +33,9 @@ public class VerifyMethodsForServices {
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
 
-    public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
-        if(!competition.getOwner().equals(userPrincipal.getUsername())){
-            throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
+    public void checkIfCompetitionBelongToUser(String competitionName, String userName) {
+        if(!competitionName.equals(userName)){
+            throw new BadRequestException("You are not owner of this Competition");
         }
     }
 

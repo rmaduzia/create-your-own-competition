@@ -5,14 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
-import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
@@ -51,7 +49,7 @@ public class CompetitionService {
             throw new BadRequestException("Competition Name doesn't match with Competition object");
         }
         Competition findCompetition = verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName());
-        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
+        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition.getCompetitionName(), userPrincipal.getUsername());
 
         return ResponseEntity.ok(competitionRepository.save(competition));
     }
@@ -59,22 +57,9 @@ public class CompetitionService {
     public ResponseEntity<?> deleteCompetition(String competitionName, UserPrincipal userPrincipal){
 
         Competition findCompetition = verifyMethodsForServices.shouldFindCompetition(competitionName);
-        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
+        verifyMethodsForServices.checkIfCompetitionBelongToUser(findCompetition.getCompetitionName(), userPrincipal.getUsername());
 
         competitionRepository.deleteById(findCompetition.getId());
         return ResponseEntity.noContent().build();
     }
-/*
-    public Competition shouldFindCompetition(String competitionName) {
-        return competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
-                new ResourceNotFoundException("Competition not exists", "Name", competitionName));
-    }
-
-    public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
-        if(!competition.getOwner().equals(userPrincipal.getUsername())){
-            throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
-        }
-    }
-
- */
 }
