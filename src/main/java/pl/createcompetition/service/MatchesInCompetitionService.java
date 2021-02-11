@@ -1,0 +1,81 @@
+package pl.createcompetition.service;
+
+import lombok.AllArgsConstructor;;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import pl.createcompetition.exception.BadRequestException;
+import pl.createcompetition.exception.ResourceNotFoundException;
+import pl.createcompetition.model.*;
+import pl.createcompetition.payload.PaginationInfoRequest;
+import pl.createcompetition.repository.MatchInCompetitionRepository;
+import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.query.GetQueryImplService;
+
+@AllArgsConstructor
+@Service
+public class MatchesInCompetitionService {
+
+    private final GetQueryImplService<MatchInCompetition,?> queryUserDetailService;
+    private final VerifyMethodsForServices verifyMethodsForServices;
+    private final MatchInCompetitionRepository matchInCompetitionRepository;
+
+    public PagedResponseDto<?> searchMatchesInCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
+
+        return queryUserDetailService.execute(MatchInCompetition.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+    }
+
+    public ResponseEntity<?> addMatchesInCompetition(MatchInCompetition matchInCompetition, String competitionName, UserPrincipal userPrincipal) {
+
+
+        Competition foundCompetition = verifyMethodsForServices.shouldFindCompetition(competitionName);
+        checkIfCompetitionBelongToUser(competitionName, foundCompetition);
+        matchInCompetition.addMatchesInCompetitionToCompetititon(foundCompetition);
+
+        verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
+
+        return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
+    }
+
+
+    public ResponseEntity<?> updateMatchesInCompetition(MatchInCompetition matchInCompetition, Long matchId, UserPrincipal userPrincipal) {
+
+        MatchInCompetition foundMatch = findMatch(matchId);
+        checkIfCompetitionByNameBelongToUser(foundMatch.getCompetition().getOwner(), userPrincipal.getUsername());
+
+        return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
+    }
+
+
+
+    public ResponseEntity<?> deleteMatchesInCompetition(Long matchId, UserPrincipal userPrincipal) {
+
+        MatchInCompetition foundMatch = findMatch(matchId);
+        checkIfCompetitionByNameBelongToUser(foundMatch.getCompetition().getOwner(), userPrincipal.getUsername());
+
+        matchInCompetitionRepository.deleteById(matchId);
+
+        return ResponseEntity.noContent().build();
+    }
+
+
+    private void checkIfCompetitionBelongToUser(String competitionName, Competition findCompetition) {
+        if (!findCompetition.getCompetitionName().equals(competitionName)) {
+            throw new BadRequestException("Competition don't belong to you ");
+        }
+    }
+
+    private void checkIfCompetitionByNameBelongToUser(String owner, String username) {
+        if (!owner.equals(username)) {
+            throw new BadRequestException("Competition don't belong to you");
+        }
+    }
+
+    public MatchInCompetition findMatch(Long matchId) {
+        return matchInCompetitionRepository.findById(matchId).orElseThrow(() ->
+                new ResourceNotFoundException("Match not exists", "Id", matchId));
+    }
+
+
+
+
+}

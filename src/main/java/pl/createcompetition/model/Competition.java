@@ -2,18 +2,15 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.checkerframework.checker.units.qual.min;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.*;
 
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
-import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @EqualsAndHashCode(of = {"id", "competitionName"})
 @Entity
@@ -78,7 +75,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @OneToMany(
             mappedBy = "competition",
             cascade = CascadeType.ALL)
-    private List<MatchesInCompetition> matchesInCompetition = new ArrayList<>();
+    private List<MatchInCompetition> matchInCompetition = new ArrayList<>();
 
     public void addTagToCompetition(Tags tags) {
         this.tags.add(tags);
@@ -94,7 +91,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
 
     @Override
     public CompetitionDto map() {
-        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags, matchesInCompetition);
+        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags, matchInCompetition);
     }
 
     @Data
@@ -109,7 +106,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         private Boolean isOpenRecruitment;
         private Set<Team> teams;
         private Set<Tags> tags;
-        private List<MatchesInCompetition> matchesInCompetition;
+        private List<MatchInCompetition> matchInCompetition;
     }
 
 }

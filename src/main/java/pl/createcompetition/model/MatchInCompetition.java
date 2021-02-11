@@ -13,7 +13,7 @@ import java.util.Map;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetition.MatchesInCompetitionDto> {
+public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.MatchesInCompetitionDto> {
 
 
     @Id
@@ -40,15 +40,15 @@ public class MatchesInCompetition implements QueryDtoInterface<MatchesInCompetit
     private Boolean isMatchWasPlayed;
 
 
-    public void addMatchesInCompetitinToCompetititon(Competition competition) {
+    public void addMatchesInCompetitionToCompetititon(Competition competition) {
         this.competition = competition;
-        competition.getMatchesInCompetition().add(this);
+        competition.getMatchInCompetition().add(this);
     }
 
 
     @Override
-    public MatchesInCompetition.MatchesInCompetitionDto map() {
-        return new MatchesInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
+    public MatchInCompetition.MatchesInCompetitionDto map() {
+        return new MatchInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
     }
 
     @Data

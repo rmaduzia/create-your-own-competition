@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.createcompetition.model.MatchesInCompetition;
+import pl.createcompetition.model.MatchInCompetition;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
@@ -17,7 +17,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @RestController
 @RequestMapping("competition/{competitionName}")
-public class MatchesInCompetitionController {
+public class MatchInCompetitionController {
 
     private final MatchesInCompetitionService matchesInCompetitionService;
 
@@ -31,29 +31,28 @@ public class MatchesInCompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("{competitionName}")
-    public ResponseEntity<?> addMatchesInCompetition(@RequestBody MatchesInCompetition matchesInCompetition,
+    public ResponseEntity<?> addMatchesInCompetition(@RequestBody MatchInCompetition matchInCompetition,
                                                      @PathVariable String competitionName,
                                                      @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.addMatchesInCompetition(matchesInCompetition, competitionName, userPrincipal);
+        return matchesInCompetitionService.addMatchesInCompetition(matchInCompetition, competitionName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PutMapping("{matchesInCompetitionId}")
-    public ResponseEntity<?> updateMatchesInCompetition(@RequestBody MatchesInCompetition matchesInCompetition,
-                                                        @PathVariable Long matchesInCompetitionId,
+    @PutMapping("{matchId}")
+    public ResponseEntity<?> updateMatchesInCompetition(@RequestBody MatchInCompetition matchInCompetition,
+                                                        @PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.updateMatchesInCompetition(matchesInCompetition, matchesInCompetitionId, userPrincipal);
+        return matchesInCompetitionService.updateMatchesInCompetition(matchInCompetition, matchId, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{competitionName}/{matchesInCompetitionId}")
     public ResponseEntity<?> deleteMatchesInCompetition(@PathVariable Long matchesInCompetitionId,
-                                                        @PathVariable String competitionName,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.deleteMatchesInCompetition(matchesInCompetitionId, competitionName, userPrincipal);
+        return matchesInCompetitionService.deleteMatchesInCompetition(matchesInCompetitionId, userPrincipal);
     }
 
 }
