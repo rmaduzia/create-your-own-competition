@@ -14,7 +14,7 @@ import pl.createcompetition.service.query.GetQueryImplService;
 
 @AllArgsConstructor
 @Service
-public class MatchesInCompetitionService {
+public class MatchInCompetitionService {
 
     private final GetQueryImplService<MatchInCompetition,?> queryUserDetailService;
     private final VerifyMethodsForServices verifyMethodsForServices;

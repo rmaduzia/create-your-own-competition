@@ -9,7 +9,7 @@ import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.MatchesInCompetitionService;
+import pl.createcompetition.service.MatchInCompetitionService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
@@ -19,14 +19,14 @@ import javax.validation.constraints.NotBlank;
 @RequestMapping("competition/{competitionName}")
 public class MatchInCompetitionController {
 
-    private final MatchesInCompetitionService matchesInCompetitionService;
+    private final MatchInCompetitionService matchInCompetitionService;
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping()
     public PagedResponseDto<?> searchMatchesInCompetition(@RequestParam(value = "search") @NotBlank String search,
                                                           @Valid PaginationInfoRequest paginationInfoRequest) {
 
-        return matchesInCompetitionService.searchMatchesInCompetition(search, paginationInfoRequest);
+        return matchInCompetitionService.searchMatchesInCompetition(search, paginationInfoRequest);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -35,7 +35,7 @@ public class MatchInCompetitionController {
                                                      @PathVariable String competitionName,
                                                      @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.addMatchesInCompetition(matchInCompetition, competitionName, userPrincipal);
+        return matchInCompetitionService.addMatchesInCompetition(matchInCompetition, competitionName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -44,7 +44,7 @@ public class MatchInCompetitionController {
                                                         @PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.updateMatchesInCompetition(matchInCompetition, matchId, userPrincipal);
+        return matchInCompetitionService.updateMatchesInCompetition(matchInCompetition, matchId, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -52,7 +52,7 @@ public class MatchInCompetitionController {
     public ResponseEntity<?> deleteMatchesInCompetition(@PathVariable Long matchesInCompetitionId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchesInCompetitionService.deleteMatchesInCompetition(matchesInCompetitionId, userPrincipal);
+        return matchInCompetitionService.deleteMatchesInCompetition(matchesInCompetitionId, userPrincipal);
     }
 
 }
