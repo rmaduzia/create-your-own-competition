@@ -63,12 +63,12 @@ public class CompetitionTagService {
         }
     }
 
-    public Competition checkIfCompetitionExists(String competitionName) {
+    private Competition checkIfCompetitionExists(String competitionName) {
         return competitionRepository.findByCompetitionName(competitionName).orElseThrow(() ->
                 new ResourceNotFoundException("Competition not exists", "Name", competitionName));
     }
 
-    public void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
+    private void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
         if(!competition.getOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }

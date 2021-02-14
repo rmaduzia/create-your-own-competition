@@ -181,13 +181,13 @@ public class TeamService {
         return ResponseEntity.ok(teamRepository.save(foundTeam));
     }
 
-    public void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
+    private void checkIfTeamBelongToUser(Team team, UserPrincipal userPrincipal) {
             if (!team.getTeamOwner().equals(userPrincipal.getUsername())) {
                 throw new ResourceNotFoundException("Team named: " + team.getTeamName(), "Owner", userPrincipal.getUsername());
             }
         }
 
-    public void checkIfUserIsMemberOfTeam(Team team, UserDetail userDetail) {
+    private void checkIfUserIsMemberOfTeam(Team team, UserDetail userDetail) {
         if(!team.getUserDetails().contains(userDetail)) {
             throw new ResourceNotFoundException("User named: " + userDetail.getUserName(), "Team", team.getTeamName());
         }

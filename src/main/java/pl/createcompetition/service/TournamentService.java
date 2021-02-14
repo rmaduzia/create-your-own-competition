@@ -138,14 +138,14 @@ public class TournamentService {
     }
 
 
-    public Map<String,String> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
+    private Map<String,String> matchTeamsInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
         List<String> listOfTeams = shouldFindTeamInUserTournament(tournamentName, userPrincipal);
 
         return MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
     }
 
-    public Map<String,String>  matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
+    private Map<String,String>  matchTeamsWithEachOtherInTournament(String tournamentName, UserPrincipal userPrincipal) {
 
         List<String> listOfTeams = shouldFindTeamInUserTournament(tournamentName, userPrincipal);
 
@@ -165,13 +165,13 @@ public class TournamentService {
         return listOfTeams;
     }
 
-    public void checkIfTournamentBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {
+    private void checkIfTournamentBelongToUser(Tournament tournament, UserPrincipal userPrincipal) {
         if (!tournament.getTournamentOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Tournament named: " + tournament.getTournamentName(), "Owner", userPrincipal.getUsername());
         }
     }
 
-    public Tournament shouldFindTournament(String tournamentName, String tournamentOwner) {
+    private Tournament shouldFindTournament(String tournamentName, String tournamentOwner) {
         return tournamentRepository.findByTournamentNameAndTournamentOwner(tournamentName, tournamentOwner).orElseThrow(() ->
                 new ResourceNotFoundException("Tournament not exists", "Name", tournamentName));
     }

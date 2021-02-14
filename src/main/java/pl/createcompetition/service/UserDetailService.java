@@ -67,7 +67,7 @@ public class UserDetailService {
     public ResponseEntity<?> addOpinionAboutUser
 
  */
-    public User findUser(UserPrincipal userPrincipal) {
+    private User findUser(UserPrincipal userPrincipal) {
         return userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
