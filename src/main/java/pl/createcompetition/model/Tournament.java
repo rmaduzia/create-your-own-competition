@@ -49,7 +49,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     private Boolean isStarted;
     private Boolean isFinished;
-    
+
     @ElementCollection
     private Map<String, String> drawedTeams = new TreeMap<>();
 
