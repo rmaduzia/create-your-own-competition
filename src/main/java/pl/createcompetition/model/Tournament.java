@@ -3,13 +3,11 @@ package pl.createcompetition.model;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
-
 import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import java.util.*;
-
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @EqualsAndHashCode(of="id")
@@ -49,11 +47,9 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @NotBlank(message = "Pick time start of tournament")
     private java.sql.Date tournamentStart;
 
-
     private Boolean isStarted;
     private Boolean isFinished;
-
-
+    
     @ElementCollection
     private Map<String, String> drawedTeams = new TreeMap<>();
 
@@ -109,5 +105,4 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         private List<MatchInTournament> matchInTournament;
 
     }
-
 }
