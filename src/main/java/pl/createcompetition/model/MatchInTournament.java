@@ -14,7 +14,7 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class MatchesInTournament implements QueryDtoInterface<MatchesInTournament.MatchInTournamentDto> {
+public class MatchInTournament implements QueryDtoInterface<MatchInTournament.MatchInTournamentDto> {
 
 
     @Id

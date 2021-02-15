@@ -27,6 +27,9 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @Column(unique = true)
     @NotBlank(message = "Competition can't be empty")
     private String competitionName;
+
+    @NotBlank(message = "Tournament owner can't be empty")
+    private String competitionOwner;
     @NotBlank(message = "City can't be empty")
     private String city;
     @NotBlank(message = "Street can't be empty")

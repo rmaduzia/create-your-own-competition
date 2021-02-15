@@ -25,7 +25,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Pick time end of competition")
+    @NotBlank(message = "Tournament owner can't be empty")
     private String tournamentOwner;
 
     @NotBlank(message = "Tournament name can't be empty")
@@ -63,7 +63,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @OneToMany(
             mappedBy = "tournament",
             cascade = CascadeType.ALL)
-    private List<MatchesInTournament> matchesInTournament = new ArrayList<>();
+    private List<MatchInTournament> matchInTournament = new ArrayList<>();
 
     @ManyToMany
     @JsonManagedReference
@@ -93,7 +93,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @Override
     public TournamentDto map() {
-        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags, matchesInTournament);
+        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags, matchInTournament);
     }
 
     @Data
@@ -106,7 +106,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         private String street;
         private int street_number;
         private Set<Tags> tags;
-        private List<MatchesInTournament> matchesInTournament;
+        private List<MatchInTournament> matchInTournament;
 
     }
 
