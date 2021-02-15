@@ -26,7 +26,7 @@ public class MatchInCompetitionController {
     public PagedResponseDto<?> searchMatchesInCompetition(@RequestParam(value = "search") @NotBlank String search,
                                                           @Valid PaginationInfoRequest paginationInfoRequest) {
 
-        return matchInCompetitionService.searchMatchesInCompetition(search, paginationInfoRequest);
+        return matchInCompetitionService.searchMatchInCompetition(search, paginationInfoRequest);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -35,7 +35,7 @@ public class MatchInCompetitionController {
                                                      @PathVariable String competitionName,
                                                      @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchInCompetitionService.addMatchesInCompetition(matchInCompetition, competitionName, userPrincipal);
+        return matchInCompetitionService.addMatchInCompetition(matchInCompetition, competitionName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -44,7 +44,7 @@ public class MatchInCompetitionController {
                                                         @PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchInCompetitionService.updateMatchesInCompetition(matchInCompetition, matchId, userPrincipal);
+        return matchInCompetitionService.updateMatchInCompetition(matchInCompetition, matchId, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -52,7 +52,7 @@ public class MatchInCompetitionController {
     public ResponseEntity<?> deleteMatchesInCompetition(@PathVariable Long matchesInCompetitionId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchInCompetitionService.deleteMatchesInCompetition(matchesInCompetitionId, userPrincipal);
+        return matchInCompetitionService.deleteMatchInCompetition(matchesInCompetitionId, userPrincipal);
     }
 
 }

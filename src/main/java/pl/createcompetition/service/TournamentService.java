@@ -35,7 +35,6 @@ public class TournamentService {
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
         if (!tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())) {
-            tournament.setTournamentOwner(userPrincipal.getUsername());
             return ResponseEntity.ok(tournamentRepository.save(tournament));
         } else {
             throw new ResourceAlreadyExistException("Tournament", "Name", tournament.getTournamentName());
