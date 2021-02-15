@@ -23,15 +23,15 @@ public class MatchInCompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping()
-    public PagedResponseDto<?> searchMatchesInCompetition(@RequestParam(value = "search") @NotBlank String search,
+    public PagedResponseDto<?> searchMatchInCompetition(@RequestParam(value = "search") @NotBlank String search,
                                                           @Valid PaginationInfoRequest paginationInfoRequest) {
 
         return matchInCompetitionService.searchMatchInCompetition(search, paginationInfoRequest);
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("{competitionName}")
-    public ResponseEntity<?> addMatchesInCompetition(@RequestBody MatchInCompetition matchInCompetition,
+    @PostMapping()
+    public ResponseEntity<?> addMatchInCompetition(@RequestBody @Valid MatchInCompetition matchInCompetition,
                                                      @PathVariable String competitionName,
                                                      @CurrentUser UserPrincipal userPrincipal) {
 
@@ -40,7 +40,7 @@ public class MatchInCompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{matchId}")
-    public ResponseEntity<?> updateMatchesInCompetition(@RequestBody MatchInCompetition matchInCompetition,
+    public ResponseEntity<?> updateMatchInCompetition(@RequestBody @Valid MatchInCompetition matchInCompetition,
                                                         @PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
@@ -48,11 +48,10 @@ public class MatchInCompetitionController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("{competitionName}/{matchesInCompetitionId}")
-    public ResponseEntity<?> deleteMatchesInCompetition(@PathVariable Long matchesInCompetitionId,
+    @DeleteMapping("{matchId}")
+    public ResponseEntity<?> deleteMatchInCompetition(@PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 
-        return matchInCompetitionService.deleteMatchInCompetition(matchesInCompetitionId, userPrincipal);
+        return matchInCompetitionService.deleteMatchInCompetition(matchId, userPrincipal);
     }
-
 }

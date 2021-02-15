@@ -16,21 +16,22 @@ import pl.createcompetition.service.query.GetQueryImplService;
 @Service
 public class MatchInCompetitionService {
 
-    private final GetQueryImplService<MatchInCompetition,?> queryUserDetailService;
+    private final GetQueryImplService<MatchInCompetition,?> getQueryImplService;
     private final VerifyMethodsForServices verifyMethodsForServices;
     private final MatchInCompetitionRepository matchInCompetitionRepository;
+    private final CompetitionRepository competitionRepository;
 
-    public PagedResponseDto<?> searchMatchesInCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
+    public PagedResponseDto<?> searchMatchInCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
-        return queryUserDetailService.execute(MatchInCompetition.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
+        return getQueryImplService.execute(MatchInCompetition.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
     }
 
-    public ResponseEntity<?> addMatchesInCompetition(MatchInCompetition matchInCompetition, String competitionName, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addMatchInCompetition(MatchInCompetition matchInCompetition, String competitionName, UserPrincipal userPrincipal) {
 
         checkIfWinnerTeamHasNotBeenApprovedBeforeMatchStarted(matchInCompetition);
         Competition foundCompetition = verifyMethodsForServices.shouldFindCompetition(competitionName);
 
-        checkIfCompetitionBelongToUser(competitionName, foundCompetition);
+        checkIfCompetitionByNameBelongToUser(competitionName, foundCompetition);
         checkIfTeamParticipatingInCompetition(matchInCompetition.getFirstTeamName(), matchInCompetition.getSecondTeamName(), foundCompetition);
         matchInCompetition.addMatchesInCompetitionToCompetititon(foundCompetition);
 
@@ -39,47 +40,47 @@ public class MatchInCompetitionService {
         return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
     }
 
-    public ResponseEntity<?> updateMatchesInCompetition(MatchInCompetition matchInCompetition, Long matchId, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateMatchInCompetition(MatchInCompetition matchInCompetition, Long matchId, UserPrincipal userPrincipal) {
 
         checkIfWinnerTeamHasNotBeenApprovedBeforeMatchStarted(matchInCompetition);
         MatchInCompetition foundMatch = findMatch(matchId);
         Competition foundCompetition = verifyMethodsForServices.shouldFindCompetition(matchInCompetition.getCompetition().getCompetitionName());
 
-        checkIfCompetitionByNameBelongToUser(foundMatch.getCompetition().getOwner(), userPrincipal.getUsername());
+        checkIfCompetitionBelongToUser(foundMatch, userPrincipal);
         checkIfTeamParticipatingInCompetition(matchInCompetition.getFirstTeamName(), matchInCompetition.getSecondTeamName(), foundCompetition);
         verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
 
         return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
     }
 
-    public ResponseEntity<?> deleteMatchesInCompetition(Long matchId, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteMatchInCompetition(Long matchId, UserPrincipal userPrincipal) {
 
         MatchInCompetition foundMatch = findMatch(matchId);
-        checkIfCompetitionByNameBelongToUser(foundMatch.getCompetition().getOwner(), userPrincipal.getUsername());
+        checkIfCompetitionBelongToUser(foundMatch, userPrincipal);
 
         matchInCompetitionRepository.deleteById(matchId);
 
         return ResponseEntity.noContent().build();
     }
 
-    private void checkIfCompetitionBelongToUser(String competitionName, Competition findCompetition) {
-        if (!findCompetition.getCompetitionName().equals(competitionName)) {
+    private void checkIfCompetitionByNameBelongToUser(String competitionName, Competition competition) {
+        if (!competition.getCompetitionName().equals(competitionName)) {
             throw new BadRequestException("Competition don't belong to you ");
         }
     }
 
-    private void checkIfCompetitionByNameBelongToUser(String owner, String username) {
-        if (!owner.equals(username)) {
+    private void checkIfCompetitionBelongToUser(MatchInCompetition matchInCompetition, UserPrincipal userPrincipal) {
+        if (!matchInCompetition.getCompetition().getOwner().equals(userPrincipal.getUsername())) {
             throw new BadRequestException("Competition don't belong to you");
         }
     }
 
-    public MatchInCompetition findMatch(Long matchId) {
+    private MatchInCompetition findMatch(Long matchId) {
         return matchInCompetitionRepository.findById(matchId).orElseThrow(() ->
                 new ResourceNotFoundException("Match not exists", "Id", matchId));
     }
 
-    public void checkIfTeamParticipatingInCompetition(String team1, String team2, Competition competition) {
+    private void checkIfTeamParticipatingInCompetition(String team1, String team2, Competition competition) {
         if (!competition.getTeams().contains(team1)) {
             throw new BadRequestException(team1 + " are not part of competition named: " + competition.getCompetitionName());
         }
@@ -88,7 +89,7 @@ public class MatchInCompetitionService {
         }
     }
 
-    public void checkIfWinnerTeamHasNotBeenApprovedBeforeMatchStarted(MatchInCompetition matchInCompetition) {
+    private void checkIfWinnerTeamHasNotBeenApprovedBeforeMatchStarted(MatchInCompetition matchInCompetition) {
         if (!matchInCompetition.getIsMatchWasPlayed() && matchInCompetition.getIsWinnerConfirmed()) {
             throw new BadRequestException("You can't set up winner if match wasn't played");
         }
