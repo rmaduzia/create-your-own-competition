@@ -45,9 +45,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @Min(value = 1, message = "Street number can't be lower then 1")
     @NotBlank(message = "Street number can't be empty")
     private int street_number;
-
-
-
+    
     @Min(value = 2, message = "Number of team have to be beetwen 2 and 30" )
     @Max(value = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of team have to be beetwen 2 and 30"  )
     private int maxAmountOfTeams;
