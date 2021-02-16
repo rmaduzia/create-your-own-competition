@@ -3,6 +3,8 @@ package pl.createcompetition.model;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,13 +25,19 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     @ManyToOne(fetch = FetchType.LAZY)
     private Competition competition;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String firstTeamName;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String secondTeamName;
 
     @Column(columnDefinition="DATE")
     private java.sql.Date matchDate;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String winnerTeam;
 
     @ElementCollection

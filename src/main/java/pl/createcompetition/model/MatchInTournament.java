@@ -4,6 +4,8 @@ import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,13 +26,19 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
     @ManyToOne(fetch = FetchType.LAZY)
     private Tournament tournament;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String firstTeamName;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String secondTeamName;
 
     @Column(columnDefinition="DATE")
     private java.sql.Date matchDate;
 
+    @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
     private String winnerTeam;
 
     @ElementCollection
@@ -45,7 +53,6 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
         return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
     }
 
-
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
@@ -59,6 +66,4 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
         private Boolean isWinnerConfirmed;
         private Boolean isMatchWasPlayed;
     }
-
-
 }

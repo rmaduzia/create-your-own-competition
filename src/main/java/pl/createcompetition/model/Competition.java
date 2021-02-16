@@ -8,6 +8,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.*;
 
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
@@ -26,18 +27,26 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
 
     @Column(unique = true)
     @NotBlank(message = "Competition can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Competition name can't contain number")
     private String competitionName;
 
-    @NotBlank(message = "Tournament owner can't be empty")
+    @NotBlank(message = "Competition owner can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Competition owner name can't contain number")
     private String competitionOwner;
+
     @NotBlank(message = "City can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "City name can't contain number")
     private String city;
+
     @NotBlank(message = "Street can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Street name can't contain number")
     private String street;
+
+    @Min(value = 1, message = "Street number can't be lower then 1")
+    @NotBlank(message = "Street number can't be empty")
     private int street_number;
 
-    @NotBlank(message = "Owner of competition can't be empty")
-    private String owner;
+
 
     @Min(value = 2, message = "Number of team have to be beetwen 2 and 30" )
     @Max(value = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of team have to be beetwen 2 and 30"  )

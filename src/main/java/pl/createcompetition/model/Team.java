@@ -3,11 +3,11 @@ package pl.createcompetition.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,15 +27,19 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
     private Long id;
 
     @NotBlank(message = "Team name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
+    @Size(min = 3, max = 30, message = "team name length can't be less then 3 and exceed 30")
     private String teamName;
 
     @Max(value = MAX_AMOUNT_OF_USERS_IN_TEAM, message = "You can't have more members then: " + MAX_AMOUNT_OF_USERS_IN_TEAM)
+    @Min(value = 1, message = "You can't have less member then 1")
     private int maxAmountMembers;
 
     @NotBlank(message = "Team owner can't be empty")
     private String teamOwner;
 
     @NotBlank(message = "City can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "City can't contain number")
     private String city;
 
     private Boolean isOpenRecruitment;

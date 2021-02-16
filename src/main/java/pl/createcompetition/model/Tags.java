@@ -3,6 +3,7 @@ package pl.createcompetition.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -19,6 +20,7 @@ public class Tags {
     private Long id;
 
     @Column(unique=true)
+    @NotBlank(message = "Tag name can't be empty")
     private String tag;
 
     @ManyToMany(mappedBy = "tags")

@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.service.query.QueryDtoInterface;
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 import java.util.*;
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
@@ -27,6 +25,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     private String tournamentOwner;
 
     @NotBlank(message = "Tournament name can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Tournament name can't contain number")
     private String tournamentName;
 
     @NotBlank(message = "Pick time end of competition")
@@ -35,11 +34,14 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     private int maxAmountOfTeams;
 
     @NotBlank(message = "City can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Wrong city name")
     private String city;
 
     @NotBlank(message = "Street can't be empty")
+    @Pattern(regexp="^[a-zA-Z]*$", message = "Street name can't contain number")
     private String street;
 
+    @Min(value = 1, message = "Street number can't be lower then 1")
     @NotBlank(message = "Street number can't be empty")
     private int street_number;
 
