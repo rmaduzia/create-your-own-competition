@@ -62,8 +62,8 @@ public class MatchInTournamentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @PostMapping
-    @PutMapping
+    @PostMapping("matches")
+    @PutMapping("matches")
     public ResponseEntity<?> setTheDatesOfTheTeamsMatches(@PathVariable String tournamentName,
                                                           @RequestBody Map<String, Date> dateMatch,
                                                           @CurrentUser UserPrincipal userPrincipal) {
@@ -73,7 +73,7 @@ public class MatchInTournamentController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @DeleteMapping("{tournamentName}")
+    @DeleteMapping("matches")
     public ResponseEntity<?> deleteDateOfTheTeamsMatches(@PathVariable String tournamentName,
                                                          @RequestBody String idMatch,
                                                          @CurrentUser UserPrincipal userPrincipal) {
