@@ -18,14 +18,10 @@ import java.util.Map;
 
 @AllArgsConstructor
 @Controller
-public class WebSocketControllerTemp {
+public class WebSocketMessagingController {
 
-
-    @Autowired
-    private SimpMessageSendingOperations messagingTemplate;
-
+    private final SimpMessageSendingOperations messagingTemplate;
     private Gson gson = new Gson();
-
 
 
     @MessageMapping("/news")

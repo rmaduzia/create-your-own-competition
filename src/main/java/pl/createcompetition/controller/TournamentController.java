@@ -24,31 +24,35 @@ public class TournamentController {
     @GetMapping
     @ResponseBody
     public PagedResponseDto<?> searchTournament(@RequestParam(value = "search") @NotBlank String search,
-                                          @Valid PaginationInfoRequest paginationInfoRequest) {
+                                                @Valid PaginationInfoRequest paginationInfoRequest) {
         return tournamentService.searchTournament(search, paginationInfoRequest);
 
     }
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping
-    public ResponseEntity<?> addTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal) {
-        return tournamentService.addTournament(tournament,userPrincipal);
+    public ResponseEntity<?> addTournament(@Valid @RequestBody Tournament tournament,
+                                           @CurrentUser UserPrincipal userPrincipal) {
 
+        return tournamentService.addTournament(tournament,userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{tournamentName}")
-    public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament, @CurrentUser UserPrincipal userPrincipal,
+    public ResponseEntity<?> updateTournament(@Valid @RequestBody Tournament tournament,
+                                              @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String tournamentName) {
+
         return tournamentService.updateTournament(tournamentName, tournament, userPrincipal);
 
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{tournamentName}")
-    public ResponseEntity<?> deleteTournament(@PathVariable String tournamentName, @CurrentUser UserPrincipal userPrincipal) {
-        return tournamentService.deleteTournament(tournamentName, userPrincipal);
+    public ResponseEntity<?> deleteTournament(@PathVariable String tournamentName,
+                                              @CurrentUser UserPrincipal userPrincipal) {
 
+        return tournamentService.deleteTournament(tournamentName, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
@@ -56,6 +60,7 @@ public class TournamentController {
     public ResponseEntity<?> deleteTeamFromTournament(@PathVariable String tournamentName,
                                                       @RequestBody String teamName,
                                                       @CurrentUser UserPrincipal userPrincipal) {
+
         return tournamentService.removeTeamFromTournament(tournamentName, teamName, userPrincipal);
     }
 
@@ -75,7 +80,4 @@ public class TournamentController {
 
         return tournamentService.drawTeamOptions(matchWithEachOther, teamName, userPrincipal);
     }
-
-
-
 }

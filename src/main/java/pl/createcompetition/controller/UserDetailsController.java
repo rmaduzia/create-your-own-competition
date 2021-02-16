@@ -33,21 +33,26 @@ public class UserDetailsController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()
-    public ResponseEntity<?> addUserDetail(@Valid @RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal) {
-        System.out.println(userDetail.toString());
+    public ResponseEntity<?> addUserDetail(@Valid @RequestBody UserDetail userDetail,
+                                           @CurrentUser UserPrincipal userPrincipal) {
+
         return userDetailService.addUserDetail(userDetail, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{userName}")
-    public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UserDetail userDetail, @CurrentUser UserPrincipal userPrincipal,
+    public ResponseEntity<?> updateUserDetail(@Valid @RequestBody UserDetail userDetail,
+                                              @CurrentUser UserPrincipal userPrincipal,
                                               @PathVariable String userName) {
+
         return userDetailService.updateUserDetail(userName, userDetail, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{userName}")
-    public ResponseEntity<?> deleteUserDetail(@PathVariable String userName, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteUserDetail(@PathVariable String userName,
+                                              @CurrentUser UserPrincipal userPrincipal) {
+
         return userDetailService.deleteUserDetail(userName, userPrincipal);
     }
 

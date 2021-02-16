@@ -31,7 +31,7 @@ public class MatchInCompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()
-    public ResponseEntity<?> addMatchInCompetition(@RequestBody @Valid MatchInCompetition matchInCompetition,
+    public ResponseEntity<?> addMatchInCompetition(@Valid @RequestBody MatchInCompetition matchInCompetition,
                                                      @PathVariable String competitionName,
                                                      @CurrentUser UserPrincipal userPrincipal) {
 
@@ -40,7 +40,7 @@ public class MatchInCompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{matchId}")
-    public ResponseEntity<?> updateMatchInCompetition(@RequestBody @Valid MatchInCompetition matchInCompetition,
+    public ResponseEntity<?> updateMatchInCompetition(@Valid  @RequestBody MatchInCompetition matchInCompetition,
                                                         @PathVariable Long matchId,
                                                         @CurrentUser UserPrincipal userPrincipal) {
 

@@ -10,6 +10,7 @@ import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.CompetitionTagService;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -29,7 +30,7 @@ public class CompetitionTagController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("{competitionName}")
-    public ResponseEntity<?> addTagsToCompetition(@RequestBody Set<Tags> tagCompetition,
+    public ResponseEntity<?> addTagsToCompetition(@Valid @RequestBody Set<Tags> tagCompetition,
                                                   @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
@@ -38,7 +39,7 @@ public class CompetitionTagController {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{competitionName}")
-    public ResponseEntity<?> updateTagCompetition(@RequestBody Tags tagCompetition,
+    public ResponseEntity<?> updateTagCompetition(@Valid @RequestBody Tags tagCompetition,
                                                   @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 

@@ -30,20 +30,26 @@ public class CompetitionController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping()
-    public ResponseEntity<?> addCompetition(@Valid @RequestBody Competition competition, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addCompetition(@Valid @RequestBody Competition competition,
+                                            @CurrentUser UserPrincipal userPrincipal) {
+
         return competitionService.addCompetition(competition, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{competitionName}")
-    public ResponseEntity<?> updateCompetition(@Valid @RequestBody Competition competition, @CurrentUser UserPrincipal userPrincipal,
+    public ResponseEntity<?> updateCompetition(@Valid @RequestBody Competition competition,
+                                               @CurrentUser UserPrincipal userPrincipal,
                                                @PathVariable String competitionName) {
+
         return competitionService.updateCompetition(competitionName, competition, userPrincipal);
     }
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{competitionName}")
-    public ResponseEntity<?> deleteCompetition(@PathVariable String competitionName, @CurrentUser UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteCompetition(@PathVariable String competitionName,
+                                               @CurrentUser UserPrincipal userPrincipal) {
+
         return competitionService.deleteCompetition(competitionName, userPrincipal);
     }
 }
