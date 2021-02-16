@@ -59,7 +59,7 @@ public class CompetitionTagServiceTest {
 
         competition = Competition.builder()
                 .id(1L)
-                .owner("test@mail.com")
+                .competitionOwner("test@mail.com")
                 .competitionName("zawody1")
                 .competitionStart(Date.valueOf("2020-01-01"))
                 .competitionEnd(Date.valueOf("2020-01-15"))
@@ -140,7 +140,7 @@ public class CompetitionTagServiceTest {
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
         Set<Tags> tags = Set.of(competitionTag);
 
-        competition.setOwner("OtherOwner");
+        competition.setCompetitionOwner("OtherOwner");
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,

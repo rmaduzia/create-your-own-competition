@@ -69,7 +69,7 @@ public class CompetitionTagService {
     }
 
     private void checkIfCompetitionBelongToUser(Competition competition, UserPrincipal userPrincipal) {
-        if(!competition.getOwner().equals(userPrincipal.getUsername())) {
+        if(!competition.getCompetitionOwner().equals(userPrincipal.getUsername())) {
             throw new ResourceNotFoundException("Competition named: " + competition.getCompetitionName(), "Owner", userPrincipal.getUsername());
         }
     }

@@ -56,7 +56,7 @@ public class CompetitionServiceTest {
 
         competition = Competition.builder()
                 .id(1L)
-                .owner("test@mail.com")
+                .competitionOwner("test@mail.com")
                 .competitionName("zawody1")
                 .competitionStart(Date.valueOf("2020-01-01"))
                 .competitionEnd(Date.valueOf("2020-01-15"))
@@ -140,7 +140,7 @@ public class CompetitionServiceTest {
     public void shouldThrowExceptionCompetitionNotBelongToUser() {
 
         when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
-        competition.setOwner("OtfherOwner");
+        competition.setCompetitionOwner("OtfherOwner");
 
         doThrow(new BadRequestException("You are not owner of this Competition"))
                 .when(verifyMethodsForServices).checkIfCompetitionBelongToUser(competition.getCompetitionName(), userPrincipal.getUsername());

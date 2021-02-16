@@ -70,7 +70,7 @@ public class MatchInCompetitionService {
     }
 
     private void checkIfCompetitionBelongToUser(MatchInCompetition matchInCompetition, UserPrincipal userPrincipal) {
-        if (!matchInCompetition.getCompetition().getOwner().equals(userPrincipal.getUsername())) {
+        if (!matchInCompetition.getCompetition().getCompetitionOwner().equals(userPrincipal.getUsername())) {
             throw new BadRequestException("Competition don't belong to you");
         }
     }

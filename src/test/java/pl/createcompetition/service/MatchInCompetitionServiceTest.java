@@ -49,7 +49,7 @@ public class MatchInCompetitionServiceTest {
 
         competition = Competition.builder()
                 .id(1L)
-                .owner("test@mail.com")
+                .competitionOwner("test@mail.com")
                 .competitionName("zawody1")
                 .competitionStart(Date.valueOf("2020-01-01"))
                 .competitionEnd(Date.valueOf("2020-01-15"))

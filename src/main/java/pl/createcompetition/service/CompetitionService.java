@@ -34,7 +34,7 @@ public class CompetitionService {
 
         if(!competitionRepository.existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName())) {
             Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
-            competition.setOwner(userPrincipal.getUsername());
+            competition.setCompetitionOwner(userPrincipal.getUsername());
             userDetail.get().addUserToCompetition(competition);
             return ResponseEntity.ok(userDetailRepository.save(userDetail.get()));
 
