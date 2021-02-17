@@ -2,10 +2,10 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -43,21 +43,19 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     private String street;
 
     @Min(value = 1, message = "Street number can't be lower then 1")
-    @NotBlank(message = "Street number can't be empty")
     private int street_number;
-    
-    @Min(value = 2, message = "Number of team have to be beetwen 2 and 30" )
-    @Max(value = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of team have to be beetwen 2 and 30"  )
+
+    @Range(min = 2, max = MAX_AMOUNT_OF_TEAMS_IN_COMPETITION, message = "Number of team have to be between 2 and 30")
     private int maxAmountOfTeams;
 
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time start of competition")
-    private java.sql.Date competitionStart;
+    private java.sql.Timestamp competitionStart;
 
     //java.sql.Date = "RRRR-MM-DD"
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time end of competition")
-    private java.sql.Date competitionEnd;
+    private java.sql.Timestamp competitionEnd;
 
     private Boolean isOpenRecruitment;
 
@@ -111,8 +109,8 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         private String city;
         private String street;
         private int street_number;
-        private java.sql.Date competitionStart;
-        private java.sql.Date competitionEnd;
+        private java.sql.Timestamp competitionStart;
+        private java.sql.Timestamp competitionEnd;
         private Boolean isOpenRecruitment;
         private Set<Team> teams;
         private Set<Tags> tags;

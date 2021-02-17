@@ -35,7 +35,7 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
     private String secondTeamName;
 
     @Column(columnDefinition="DATE")
-    private java.sql.Date matchDate;
+    private java.sql.Timestamp matchDate;
 
     @NotBlank(message = "Team name can't be empty")
     @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
@@ -60,7 +60,7 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
         private Tournament tournament;
         private String firstTeamName;
         private String secondTeamName;
-        private java.sql.Date matchDate;
+        private java.sql.Timestamp matchDate;
         private String winnerTeam;
         private Map<String, String> voteForWinnerTeam = new HashMap<>();
         private Boolean isWinnerConfirmed;

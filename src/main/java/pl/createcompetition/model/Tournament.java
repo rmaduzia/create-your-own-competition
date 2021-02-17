@@ -2,6 +2,7 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import org.hibernate.validator.constraints.Range;
 import pl.createcompetition.service.query.QueryDtoInterface;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -28,9 +29,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @Pattern(regexp="^[a-zA-Z]*$", message = "Tournament name can't contain number")
     private String tournamentName;
 
-    @NotBlank(message = "Pick time end of competition")
-    @Min(value = 2, message = "Number of teams have to be beetwen 2 and 30" )
-    @Max(value = MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT, message = "Number of teams have to be beetwen 2 and 30"  )
+    @Range(min = 2, max =MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT, message = "Number of teams have to be beetwen 2 and 30")
     private int maxAmountOfTeams;
 
     @NotBlank(message = "City can't be empty")
@@ -42,12 +41,11 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     private String street;
 
     @Min(value = 1, message = "Street number can't be lower then 1")
-    @NotBlank(message = "Street number can't be empty")
     private int street_number;
 
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time start of tournament")
-    private java.sql.Date tournamentStart;
+    private java.sql.Timestamp tournamentStart;
 
     private Boolean isStarted;
     private Boolean isFinished;

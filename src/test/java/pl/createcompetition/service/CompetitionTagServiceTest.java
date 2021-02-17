@@ -14,7 +14,7 @@ import pl.createcompetition.model.*;
 import pl.createcompetition.model.Tags;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
@@ -22,7 +22,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,8 +60,8 @@ public class CompetitionTagServiceTest {
                 .id(1L)
                 .competitionOwner("test@mail.com")
                 .competitionName("zawody1")
-                .competitionStart(Date.valueOf("2020-01-01"))
-                .competitionEnd(Date.valueOf("2020-01-15"))
+                .competitionStart(Timestamp.valueOf("2020-05-01 12:30:00"))
+                .competitionEnd(Timestamp.valueOf("2020-05-02 12:30:00"))
                 .city("Gdynia")
                 .maxAmountOfTeams(10)
                 .tags(Sets.newHashSet())

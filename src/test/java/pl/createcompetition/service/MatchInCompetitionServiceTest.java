@@ -11,7 +11,7 @@ import pl.createcompetition.model.*;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @ExtendWith(MockitoExtension.class)
 public class MatchInCompetitionServiceTest {
@@ -51,8 +51,8 @@ public class MatchInCompetitionServiceTest {
                 .id(1L)
                 .competitionOwner("test@mail.com")
                 .competitionName("zawody1")
-                .competitionStart(Date.valueOf("2020-01-01"))
-                .competitionEnd(Date.valueOf("2020-01-15"))
+                .competitionStart(Timestamp.valueOf("2020-05-01 12:30:00"))
+                .competitionEnd(Timestamp.valueOf("2020-05-02 12:30:00"))
                 .city("Gdynia")
                 .maxAmountOfTeams(10)
                 .build();
