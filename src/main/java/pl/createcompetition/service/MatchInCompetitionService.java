@@ -19,7 +19,6 @@ public class MatchInCompetitionService {
     private final GetQueryImplService<MatchInCompetition,?> getQueryImplService;
     private final VerifyMethodsForServices verifyMethodsForServices;
     private final MatchInCompetitionRepository matchInCompetitionRepository;
-    private final CompetitionRepository competitionRepository;
 
     public PagedResponseDto<?> searchMatchInCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -33,7 +32,7 @@ public class MatchInCompetitionService {
 
         checkIfCompetitionByNameBelongToUser(competitionName, foundCompetition);
         checkIfTeamParticipatingInCompetition(matchInCompetition.getFirstTeamName(), matchInCompetition.getSecondTeamName(), foundCompetition);
-        matchInCompetition.addMatchesInCompetitionToCompetititon(foundCompetition);
+        matchInCompetition.addMatchToCompetition(foundCompetition);
 
         verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
 

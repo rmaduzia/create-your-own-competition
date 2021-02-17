@@ -18,7 +18,6 @@ public class UserNotification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@JsonIgnore
     private Long id;
     private String recipient;
     private String content;

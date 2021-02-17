@@ -47,12 +47,10 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
 
-
-    public void addMatchesInCompetitionToCompetititon(Competition competition) {
+    public void addMatchToCompetition(Competition competition) {
         this.competition = competition;
         competition.getMatchInCompetition().add(this);
     }
-
 
     @Override
     public MatchInCompetition.MatchesInCompetitionDto map() {
@@ -71,11 +69,5 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
         private Map<String, String> voteForWinnerTeam;
         private Boolean isWinnerConfirmed;
         private Boolean isMatchWasPlayed;
-
-
     }
-
-
-
-
 }

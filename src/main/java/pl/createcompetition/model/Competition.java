@@ -116,5 +116,4 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         private Set<Tags> tags;
         private List<MatchInCompetition> matchInCompetition;
     }
-
 }
