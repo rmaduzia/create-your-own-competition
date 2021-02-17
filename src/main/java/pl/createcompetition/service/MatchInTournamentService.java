@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -34,7 +35,7 @@ public class MatchInTournamentService {
         checkIfTeamParticipatingInTournament(matchInTournament, foundTournament);
         matchInTournament.setTournament(foundTournament);
 
-        return ResponseEntity.ok(matchInTournamentRepository.save(matchInTournament));
+        return ResponseEntity.status(HttpStatus.CREATED).body(matchInTournamentRepository.save(matchInTournament));
     }
 
     public ResponseEntity<?> updateMatchInTournament(MatchInTournament matchInTournament, Long matchId, UserPrincipal userPrincipal) {

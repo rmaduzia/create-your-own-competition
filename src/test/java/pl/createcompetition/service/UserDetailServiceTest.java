@@ -90,7 +90,7 @@ public class UserDetailServiceTest {
 
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userRepository, times(1)).findByIdAndEmail(userPrincipal.getId(), userPrincipal.getEmail());
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), userDetail);
 
     }

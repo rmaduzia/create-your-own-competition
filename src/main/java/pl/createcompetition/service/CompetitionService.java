@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -36,8 +37,7 @@ public class CompetitionService {
             Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
             competition.setCompetitionOwner(userPrincipal.getUsername());
             userDetail.get().addUserToCompetition(competition);
-            return ResponseEntity.ok(userDetailRepository.save(userDetail.get()));
-
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDetailRepository.save(userDetail.get()));
         } else{
             throw new ResourceAlreadyExistException("Competition", "Name", competition.getCompetitionName());
         }

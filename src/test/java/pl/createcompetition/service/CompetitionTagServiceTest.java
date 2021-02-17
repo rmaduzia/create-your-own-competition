@@ -82,7 +82,7 @@ public class CompetitionTagServiceTest {
         verify(competitionRepository, times(1)).save(competition);
         verify(competitionRepository, times(1)).findByCompetitionName(competition.getCompetitionName());
 
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), competition);
     }
 

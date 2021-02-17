@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -37,7 +38,7 @@ public class TeamService {
             Optional<UserDetail> userDetail = userDetailRepository.findById(userPrincipal.getId());
             team.setTeamOwner(userPrincipal.getUsername());
             userDetail.get().addUserToTeam(team);
-            return ResponseEntity.ok(userDetailRepository.save(userDetail.get()));
+            return ResponseEntity.status(HttpStatus.CREATED).body(userDetailRepository.save(userDetail.get()));
         } else{
             throw new ResourceAlreadyExistException("Team", "Name", team.getTeamName());
         }
@@ -79,7 +80,7 @@ public class TeamService {
 
         notificationMessagesToUsersService.notificationMessageToUser(recruitName, "Team","invite", foundTeam.getTeamName());
 
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     public ResponseEntity<?> deleteMemberFromTeam(String teamName, String userNameToDelete, UserPrincipal userPrincipal) {

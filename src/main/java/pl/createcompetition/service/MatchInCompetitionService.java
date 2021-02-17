@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -36,7 +37,7 @@ public class MatchInCompetitionService {
 
         verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
 
-        return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
+        return ResponseEntity.status(HttpStatus.CREATED).body(matchInCompetitionRepository.save(matchInCompetition));
     }
 
     public ResponseEntity<?> updateMatchInCompetition(MatchInCompetition matchInCompetition, Long matchId, UserPrincipal userPrincipal) {

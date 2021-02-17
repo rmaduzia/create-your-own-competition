@@ -38,7 +38,7 @@ public class UserDetailService {
         userDetail.setUser(foundUser);
         userDetail.setId(foundUser.getId());
 
-        return ResponseEntity.ok(userDetailRepository.save(userDetail));
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDetailRepository.save(userDetail));
     }
 
     public ResponseEntity<?> updateUserDetail(String userName, UserDetail userDetail, UserPrincipal userPrincipal){

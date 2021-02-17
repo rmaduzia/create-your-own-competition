@@ -70,7 +70,7 @@ public class TournamentServiceTest {
 
         verify(tournamentRepository, times(1)).save(tournament);
         verify(tournamentRepository, times(1)).existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName());
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), tournament);
     }
 

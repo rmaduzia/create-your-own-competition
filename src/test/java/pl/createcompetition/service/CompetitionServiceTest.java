@@ -77,7 +77,7 @@ public class CompetitionServiceTest {
         verify(userDetailRepository, times(1)).save(userDetail);
         verify(userDetailRepository, times(1)).findById(ArgumentMatchers.anyLong());
         verify(competitionRepository, times(1)).existsCompetitionByCompetitionNameIgnoreCase(competition.getCompetitionName());
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), userDetail);
     }
 

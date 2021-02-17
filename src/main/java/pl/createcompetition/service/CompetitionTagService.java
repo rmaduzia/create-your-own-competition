@@ -2,6 +2,7 @@ package pl.createcompetition.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
@@ -33,7 +34,7 @@ public class CompetitionTagService {
         findCompetition.addManyTagToCompetition(competitionTag);
 
         try {
-            return ResponseEntity.ok(competitionRepository.save(findCompetition));
+            return ResponseEntity.status(HttpStatus.CREATED).body(competitionRepository.save(findCompetition));
         } catch (DataIntegrityViolationException exception) {
             throw new ResourceAlreadyExistException("Tag", "CompetitionTag", competitionTag.iterator().next().getTag());
         }

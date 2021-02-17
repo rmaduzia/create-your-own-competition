@@ -115,7 +115,7 @@ public class TeamServiceTest {
 
         verify(teamRepository, times(1)).existsTeamByTeamNameIgnoreCase(team.getTeamName());
         verify(userDetailRepository, times(1)).save(userDetail);
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
         assertEquals(response.getBody(), userDetail);
     }
 
@@ -200,20 +200,7 @@ public class TeamServiceTest {
 
         verify(teamRepository, times(1)).save(team);
         verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
-    }
-
-    @Test
-    public void shouldDeleteMemberFromTeam() {
-
-        when(verifyMethodsForServices.shouldFindTeam(team.getTeamName(), team.getTeamOwner())).thenReturn(team);
-        when(userDetailRepository.findByUserName(userDetailTeamMember.getUserName())).thenReturn(Optional.of(userDetailTeamMember));
-
-        ResponseEntity<?> response = teamService.addRecruitToTeam(team.getTeamName(), userDetailTeamMember.getUserName(), userPrincipal);
-
-        verify(verifyMethodsForServices, times(1)).shouldFindTeam(team.getTeamName(), team.getTeamOwner());
-        verify(teamRepository, times(1)).save(team);
-        assertEquals(response.getStatusCode(), HttpStatus.OK);
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
     }
 
     @Test

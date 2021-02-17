@@ -1,6 +1,7 @@
 package pl.createcompetition.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
@@ -35,7 +36,7 @@ public class TournamentService {
     public ResponseEntity<?> addTournament(Tournament tournament, UserPrincipal userPrincipal) {
 
         if (!tournamentRepository.existsTournamentByTournamentNameIgnoreCase(tournament.getTournamentName())) {
-            return ResponseEntity.ok(tournamentRepository.save(tournament));
+            return ResponseEntity.status(HttpStatus.CREATED).body(tournamentRepository.save(tournament));
         } else {
             throw new ResourceAlreadyExistException("Tournament", "Name", tournament.getTournamentName());
 
