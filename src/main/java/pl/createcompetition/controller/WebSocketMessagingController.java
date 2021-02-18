@@ -2,6 +2,7 @@ package pl.createcompetition.controller;
 
 import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
+import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,8 +14,6 @@ import pl.createcompetition.model.websockets.UserNotification;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 
-import java.security.Principal;
-import java.util.Map;
 
 @AllArgsConstructor
 @Controller
@@ -23,13 +22,15 @@ public class WebSocketMessagingController {
     private final SimpMessageSendingOperations messagingTemplate;
     private Gson gson = new Gson();
 
-
     @MessageMapping("/news")
     @SendTo("/topic/news")
     public String broadcastNews(@Payload String message) {
         return message;
     }
 
+
+
+    /* Test Code
     @MessageMapping("/message")
     @SendToUser("/queue/reply")
     public String processMessageFromClient(
@@ -39,7 +40,7 @@ public class WebSocketMessagingController {
                 .fromJson(message, Map.class)
                 .get("name").toString();
     }
-
+*/
 
     @MessageMapping("/notification")
     @SendToUser("/queue/notification")
