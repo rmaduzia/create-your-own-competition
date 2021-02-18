@@ -6,9 +6,7 @@ import org.hibernate.validator.constraints.Range;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.*;
 
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
@@ -50,11 +48,13 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
 
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time start of competition")
+    @Future
     private java.sql.Timestamp competitionStart;
 
     //java.sql.Date = "RRRR-MM-DD"
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time end of competition")
+    @Past
     private java.sql.Timestamp competitionEnd;
 
     private Boolean isOpenRecruitment;

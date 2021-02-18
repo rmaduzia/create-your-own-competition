@@ -45,6 +45,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @Column(columnDefinition = "DATE")
     @NotBlank(message = "Pick time start of tournament")
+    @Future
     private java.sql.Timestamp tournamentStart;
 
     private Boolean isStarted;
