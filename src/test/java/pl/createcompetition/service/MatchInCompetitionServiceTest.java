@@ -10,7 +10,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
-
 import java.sql.Timestamp;
 
 @ExtendWith(MockitoExtension.class)
@@ -22,7 +21,6 @@ public class MatchInCompetitionServiceTest {
     MatchInCompetitionService matchInCompetitionService;
     @Mock
     VerifyMethodsForServices verifyMethodsForServices;
-
 
     User user;
     UserDetail userDetail;
@@ -77,18 +75,6 @@ public class MatchInCompetitionServiceTest {
 
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

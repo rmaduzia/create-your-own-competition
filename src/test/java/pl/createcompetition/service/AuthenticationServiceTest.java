@@ -7,7 +7,6 @@ import pl.createcompetition.payload.SignUpRequest;
 import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.TokenProvider;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,6 +22,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import java.util.Optional;
 import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceTest {
@@ -55,7 +55,7 @@ public class AuthenticationServiceTest {
         when(userRepository.findByEmail(ArgumentMatchers.any(String.class))).thenReturn(Optional.empty());
         when(userRepository.save(ArgumentMatchers.any(User.class))).thenReturn(user);
 
-        Assert.assertEquals(authenticationService.registerUser(signUpRequest).getStatusCode(), HttpStatus.CREATED);
+        assertEquals(authenticationService.registerUser(signUpRequest).getStatusCode(), HttpStatus.CREATED);
     }
 
     @Test
@@ -64,7 +64,7 @@ public class AuthenticationServiceTest {
         when(tokenProvider.createToken(ArgumentMatchers.any(Authentication.class))).thenReturn("Token");
         when(authenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(authentication);
 
-        Assert.assertEquals(authenticationService.authenticationUser(loginRequest).getStatusCode(), HttpStatus.OK);
+        assertEquals(authenticationService.authenticationUser(loginRequest).getStatusCode(), HttpStatus.OK);
 
     }
 }

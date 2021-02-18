@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import com.sun.xml.bind.v2.TODO;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -12,11 +11,10 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
-
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

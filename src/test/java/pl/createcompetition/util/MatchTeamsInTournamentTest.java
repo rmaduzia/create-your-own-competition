@@ -1,6 +1,7 @@
 package pl.createcompetition.util;
 
-import org.junit.Assert;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 import java.util.*;
 
@@ -20,7 +21,7 @@ public class MatchTeamsInTournamentTest {
 
         Map<String,String> matchedTeams = MatchTeamsInTournament.matchTeamsInTournament(listOfTeams);
 
-        Assert.assertTrue(matchedTeams.equals(exceptedMatchedTeams1) || matchedTeams.equals(exceptedMatchedTeams2));
+        assertTrue(matchedTeams.equals(exceptedMatchedTeams1) || matchedTeams.equals(exceptedMatchedTeams2));
 
     }
 
@@ -39,6 +40,6 @@ public class MatchTeamsInTournamentTest {
 
         Map<String,String> matchedTeams = MatchTeamsInTournament.matchTeamsWithEachOtherInTournament(listOfTeams);
 
-        Assert.assertEquals(matchedTeams, exceptedMatchedTeams);
+        assertEquals(matchedTeams, exceptedMatchedTeams);
     }
 }

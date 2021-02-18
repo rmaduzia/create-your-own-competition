@@ -1,6 +1,5 @@
 package pl.createcompetition.service;
 
-import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -23,9 +22,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 import java.util.Optional;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -68,7 +65,7 @@ public class UserServiceTest {
     @Test
     public void should_GetCurrentUser() {
         when(userRepository.findById(ArgumentMatchers.any())).thenReturn(Optional.of(user));
-        Assert.assertEquals(userService.getCurrentUser(userPrincipal).getEmail(),user.getEmail());
+        assertEquals(userService.getCurrentUser(userPrincipal).getEmail(),user.getEmail());
     }
 
     @Test
@@ -80,14 +77,13 @@ public class UserServiceTest {
         User user = userRepository.findByIdAndPassword(this.user.getId(), "Password").get();
 
         assertTrue(Objects.requireNonNull(isChanged.getBody()).isSuccess());
-        assertEquals("testChangeEmail Success", "test2@test.com", user.getEmail());
+        assertEquals( "test2@test.com", user.getEmail());
         verify(userRepository, times(1)).save(this.user);
         verify(mailService, times(1)).send(any(Mail.class));
     }
 
     @Test
     public void should_NotChangeEmail() {
-
         when(userRepository.findByIdAndPassword(this.user.getId(), "Password")).thenReturn(Optional.empty());
 
         assertThrows(ResourceNotFoundException.class, () ->{

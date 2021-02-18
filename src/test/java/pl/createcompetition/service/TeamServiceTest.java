@@ -2,9 +2,7 @@ package pl.createcompetition.service;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.runner.RunWith;
 import org.mockito.*;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +17,7 @@ import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
@@ -42,7 +40,6 @@ public class TeamServiceTest {
     VerifyMethodsForServices verifyMethodsForServices;
     @Mock
     NotificationMessagesToUsersService notificationMessagesToUsersService;
-
 
     User user;
     User userTeamMember;
@@ -262,6 +259,7 @@ public class TeamServiceTest {
     }
 
 
+    //Working on this test Case
 /*
     @Test
     public void shouldSendNotification() {
@@ -280,8 +278,6 @@ public class TeamServiceTest {
         verify(notificationRepository, times(1)).save(ArgumentMatchers.any(UserNotification.class));
     }
  */
-
-
 
 
 }
