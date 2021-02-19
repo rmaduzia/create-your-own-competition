@@ -66,6 +66,7 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
     private Set<Team> teams = new HashSet<>();
 
     @ElementCollection
+    //Key: username, Value: opinion
     private Map<String,String> opinionAboutUser = new TreeMap<>();
 
     public void addUserToCompetition(Competition competition) {

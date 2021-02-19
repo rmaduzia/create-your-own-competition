@@ -15,7 +15,7 @@ import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
-import java.util.Optional;
+import java.util.Collections;
 
 @RequiredArgsConstructor
 @Service
@@ -33,7 +33,7 @@ public class UserDetailService {
 
     public ResponseEntity<?> addUserDetail(UserDetail userDetail, UserPrincipal userPrincipal)  {
 
-        User foundUser = findUser(userPrincipal);
+        User foundUser = findUserByIdAndEmail(userPrincipal);
 
         userDetail.setUser(foundUser);
         userDetail.setId(foundUser.getId());
@@ -47,7 +47,7 @@ public class UserDetailService {
             throw new BadRequestException("User Name doesn't match with UserDetail object");
         }
 
-        findUser(userPrincipal);
+        findUserByIdAndEmail(userPrincipal);
         userDetail.setId(userPrincipal.getId());
 
         return ResponseEntity.ok(userDetailRepository.save(userDetail));
@@ -55,7 +55,7 @@ public class UserDetailService {
 
     public ResponseEntity<?> deleteUserDetail(String userName, UserPrincipal userPrincipal) {
 
-        findUser(userPrincipal);
+        findUserByIdAndEmail(userPrincipal);
 
         if (userPrincipal.getUsername().equals(userName)) {
                 userDetailRepository.deleteById(userPrincipal.getId());
@@ -63,14 +63,23 @@ public class UserDetailService {
             }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
-/*
-    public ResponseEntity<?> addOpinionAboutUser
 
- */
-    private User findUser(UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addOpinionAboutUser(String recipientUserName, String opinionContent, UserPrincipal userPrincipal) {
+
+        UserDetail foundUserDetail = findUserByUserName(recipientUserName);
+
+        foundUserDetail.setOpinionAboutUser(Collections.singletonMap(userPrincipal.getUsername(), opinionContent));
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(userDetailRepository.save(foundUserDetail));
+    }
+
+    private User findUserByIdAndEmail(UserPrincipal userPrincipal) {
         return userRepository.findByIdAndEmail(userPrincipal.getId(), userPrincipal.getUsername()).orElseThrow(() ->
                 new ResourceNotFoundException("UserProfile", "ID", userPrincipal.getUsername()));
     }
 
-
+    private UserDetail findUserByUserName(String userName) {
+        return userDetailRepository.findByUserName(userName).orElseThrow(() ->
+                new BadRequestException(userName + " does not exists"));
+    }
 }

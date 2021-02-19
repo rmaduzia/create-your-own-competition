@@ -56,13 +56,13 @@ public class UserDetailsController {
         return userDetailService.deleteUserDetail(userName, userPrincipal);
     }
 
-/*
+
     @PreAuthorize("hasRole('USER')")
-    @PostMapping("addOpinion")
-    public ResponseEntity<?> addOpinionAboutUser(@RequestBody String opinionDetails, @CurrentUser UserPrincipal userPrincipal) {
+    @PostMapping("{userName}/addOpinion")
+    public ResponseEntity<?> addOpinionAboutUser(@PathVariable String userName,
+                                                 @RequestBody String opinionContent,
+                                                 @CurrentUser UserPrincipal userPrincipal) {
 
+        return userDetailService.addOpinionAboutUser(userName, opinionContent, userPrincipal);
     }
-
- */
-
 }
