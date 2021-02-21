@@ -8,7 +8,6 @@ import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
@@ -32,7 +31,8 @@ public class MatchInCompetitionService {
         Competition foundCompetition = verifyMethodsForServices.shouldFindCompetition(competitionName);
 
         checkIfCompetitionByNameBelongToUser(competitionName, foundCompetition);
-        checkIfTeamParticipatingInCompetition(matchInCompetition.getFirstTeamName(), matchInCompetition.getSecondTeamName(), foundCompetition);
+        checkIfTeamParticipatingInCompetition(matchInCompetition, foundCompetition);
+
         matchInCompetition.addMatchToCompetition(foundCompetition);
 
         verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
@@ -47,7 +47,7 @@ public class MatchInCompetitionService {
         Competition foundCompetition = verifyMethodsForServices.shouldFindCompetition(matchInCompetition.getCompetition().getCompetitionName());
 
         checkIfCompetitionBelongToUser(foundMatch, userPrincipal);
-        checkIfTeamParticipatingInCompetition(matchInCompetition.getFirstTeamName(), matchInCompetition.getSecondTeamName(), foundCompetition);
+        checkIfTeamParticipatingInCompetition(matchInCompetition, foundCompetition);
         verifyMethodsForServices.checkIfCompetitionBelongToUser(foundCompetition.getCompetitionName(), userPrincipal.getUsername());
 
         return ResponseEntity.ok(matchInCompetitionRepository.save(matchInCompetition));
@@ -80,12 +80,9 @@ public class MatchInCompetitionService {
                 new ResourceNotFoundException("Match not exists", "Id", matchId));
     }
 
-    private void checkIfTeamParticipatingInCompetition(String team1, String team2, Competition competition) {
-        if (!competition.getTeams().contains(team1)) {
-            throw new BadRequestException(team1 + " are not part of competition named: " + competition.getCompetitionName());
-        }
-        if (!competition.getTeams().contains(team2)) {
-            throw new BadRequestException(team1 + " are not part of competition named: " + competition.getCompetitionName());
+    private void checkIfTeamParticipatingInCompetition(MatchInCompetition matchInCompetition, Competition competition) {
+        if (!competition.getMatchInCompetition().contains(matchInCompetition)) {
+            throw new BadRequestException("Match are not part of competition named: " + competition.getCompetitionName());
         }
     }
 
