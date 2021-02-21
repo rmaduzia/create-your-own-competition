@@ -80,6 +80,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "competition",
             cascade = CascadeType.ALL)
