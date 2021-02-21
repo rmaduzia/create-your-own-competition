@@ -1,16 +1,20 @@
 package pl.createcompetition.service;
 
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Timestamp;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class MatchInCompetitionServiceTest {
@@ -59,22 +63,27 @@ public class MatchInCompetitionServiceTest {
                 .id(1L)
                 .firstTeamName("firstName")
                 .secondTeamName("secondTeam")
-                //.winnerTeam("team1")
                 .isMatchWasPlayed(false)
                 .isWinnerConfirmed(false)
                 .build();
 
-
+        matchInCompetition.addMatchToCompetition(competition);
     }
 
 
     @Test
     public void shouldAddMatchInCompetition() {
 
+        lenient().when(verifyMethodsForServices.shouldFindCompetition(competition.getCompetitionName())).thenReturn(competition);
+        when(matchInCompetitionRepository.save(matchInCompetition)).thenReturn(matchInCompetition);
 
+        ResponseEntity<?> response = matchInCompetitionService.addMatchInCompetition(matchInCompetition, competition.getCompetitionName(), userPrincipal);
 
+        verify(matchInCompetitionRepository, times(1)).save(matchInCompetition);
+        verify(verifyMethodsForServices, times(1)).shouldFindCompetition(competition.getCompetitionName());
 
+        assertEquals(response.getStatusCode(), HttpStatus.CREATED);
+        assertEquals(response.getBody(), matchInCompetition);
     }
-
 
 }
