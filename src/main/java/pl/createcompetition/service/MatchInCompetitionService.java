@@ -65,7 +65,7 @@ public class MatchInCompetitionService {
 
     private void checkIfCompetitionByNameBelongToUser(String competitionName, Competition competition) {
         if (!competition.getCompetitionName().equals(competitionName)) {
-            throw new BadRequestException("Competition don't belong to you ");
+            throw new BadRequestException("Competition don't belong to you");
         }
     }
 
