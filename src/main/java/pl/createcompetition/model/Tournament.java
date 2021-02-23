@@ -57,6 +57,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @ElementCollection
     private Map<String, Date> timesOfTeamMeetings = new TreeMap<>();
 
+    @Builder.Default
     @OneToMany(
             mappedBy = "tournament",
             cascade = CascadeType.ALL)
