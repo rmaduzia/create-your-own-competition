@@ -48,7 +48,7 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
 
-    public void addMatchToCompetition(Tournament tournament) {
+    public void addMatchToTournament(Tournament tournament) {
         this.tournament = tournament;
         tournament.getMatchInTournament().add(this);
     }
