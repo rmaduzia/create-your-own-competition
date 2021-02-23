@@ -83,10 +83,7 @@ public class MatchInTournamentService {
     }
 
     private void checkIfTeamParticipatingInTournament(MatchInTournament matchInTournament, Tournament tournament) {
-        if (!tournament.getTeams().contains(matchInTournament.getFirstTeamName())) {
-            throw new BadRequestException(matchInTournament.getFirstTeamName() + " are not part of competition named: " + tournament.getTournamentName());
-        }
-        if (!tournament.getTeams().contains(matchInTournament.getFirstTeamName())) {
+        if (!tournament.getMatchInTournament().contains(matchInTournament)) {
             throw new BadRequestException(matchInTournament.getFirstTeamName() + " are not part of competition named: " + tournament.getTournamentName());
         }
     }
