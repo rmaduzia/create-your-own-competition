@@ -52,6 +52,10 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
         competition.getMatchInCompetition().add(this);
     }
 
+    public void addVotesForWinnerTeam(String teamName, String userName) {
+        this.votesForWinnerTeam.put(teamName, userName);
+    }
+
     @Override
     public MatchInCompetition.MatchesInCompetitionDto map() {
         return new MatchInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);

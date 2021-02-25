@@ -9,6 +9,7 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.MatchInTournamentRepository;
+import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
@@ -20,6 +21,7 @@ public class MatchInTournamentService {
     private final GetQueryImplService<MatchInTournament, ?> getQueryImplService;
     private final MatchInTournamentRepository matchInTournamentRepository;
     private final TournamentRepository tournamentRepository;
+    private final TeamRepository teamRepository;
 
     public PagedResponseDto<?> searchMatchInTournament(String search, PaginationInfoRequest paginationInfoRequest) {
         return getQueryImplService.execute(MatchInTournament.class, search, paginationInfoRequest.getPageNumber(), paginationInfoRequest.getPageSize());
@@ -58,6 +60,24 @@ public class MatchInTournamentService {
 
         return ResponseEntity.noContent().build();
     }
+
+    public ResponseEntity<?> addVoteForWinnerTeam(Long matchId, String winnerTeam, UserPrincipal userPrincipal) {
+
+        MatchInTournament foundMatch = findMatch(matchId);
+
+        Team foundTeam = teamRepository.findByTeamName(winnerTeam).orElseThrow(() ->
+                new ResourceNotFoundException("Team not exists", "Name", winnerTeam));
+
+        if (foundMatch.getTournament().getTeams().contains(foundTeam)) {
+            foundMatch.addVotesForWinnerTeam(winnerTeam, userPrincipal.getUsername());
+            matchInTournamentRepository.save(foundMatch);
+        } else {
+            throw new BadRequestException("You didn't take part in this match");
+        }
+
+        return ResponseEntity.ok("You have voted");
+    }
+
 
     private void checkIfTournamentNameEqualsToPath(String tournamentName, Tournament tournament) {
         if (!tournamentName.equals(tournament.getTournamentName())) {

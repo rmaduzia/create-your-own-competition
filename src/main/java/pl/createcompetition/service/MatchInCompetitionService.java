@@ -9,6 +9,7 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
+import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
@@ -19,6 +20,7 @@ public class MatchInCompetitionService {
     private final GetQueryImplService<MatchInCompetition,?> getQueryImplService;
     private final VerifyMethodsForServices verifyMethodsForServices;
     private final MatchInCompetitionRepository matchInCompetitionRepository;
+    private final TeamRepository teamRepository;
 
     public PagedResponseDto<?> searchMatchInCompetition(String search, PaginationInfoRequest paginationInfoRequest) {
 
@@ -62,6 +64,25 @@ public class MatchInCompetitionService {
 
         return ResponseEntity.noContent().build();
     }
+
+
+    public ResponseEntity<?> addVoteForWinnerTeam(Long matchId, String winnerTeam, UserPrincipal userPrincipal) {
+
+        MatchInCompetition foundMatch = findMatch(matchId);
+
+        Team foundTeam = teamRepository.findByTeamName(winnerTeam).orElseThrow(() ->
+                new ResourceNotFoundException("Team not exists", "Name", winnerTeam));
+
+        if (foundMatch.getCompetition().getTeams().contains(foundTeam)) {
+            foundMatch.addVotesForWinnerTeam(winnerTeam, userPrincipal.getUsername());
+            matchInCompetitionRepository.save(foundMatch);
+        } else {
+            throw new BadRequestException("You didn't take part in this match");
+        }
+
+        return ResponseEntity.ok("You have voted");
+    }
+
 
     private void checkIfCompetitionByNameBelongToUser(String competitionName, Competition competition) {
         if (!competition.getCompetitionName().equals(competitionName)) {

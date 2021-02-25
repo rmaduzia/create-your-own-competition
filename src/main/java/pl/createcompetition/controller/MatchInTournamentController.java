@@ -80,4 +80,13 @@ public class MatchInTournamentController {
 
         return tournamentService.deleteDateOfTheTeamsMatches(tournamentName, idMatch, userPrincipal);
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("matches/{matchId}/voting")
+    public ResponseEntity<?> addVoteForWinnerTeam(@PathVariable Long matchId,
+                                                  @RequestBody String winnerTeam,
+                                                  @CurrentUser UserPrincipal userPrincipal) {
+
+        return matchInTournamentService.addVoteForWinnerTeam(matchId, winnerTeam, userPrincipal);
+    }
 }

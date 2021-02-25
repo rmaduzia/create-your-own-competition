@@ -53,6 +53,11 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
         tournament.getMatchInTournament().add(this);
     }
 
+    public void addVotesForWinnerTeam(String teamName, String userName) {
+        this.votesForWinnerTeam.put(teamName, userName);
+    }
+
+
     @Override
     public MatchInTournamentDto map() {
         return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
