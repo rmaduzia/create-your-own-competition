@@ -41,11 +41,12 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private String winnerTeam;
 
     @ElementCollection
-    //Structure: Key: Team, Value: User
+    //Structure: Key: User, Value: Team
     private Map<String, String> votesForWinnerTeam = new HashMap<>();
 
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
+    private Boolean isClosed;
 
     public void addMatchToCompetition(Competition competition) {
         this.competition = competition;

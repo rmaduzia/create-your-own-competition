@@ -42,19 +42,21 @@ public class MatchInTournament implements QueryDtoInterface<MatchInTournament.Ma
     private String winnerTeam;
 
     @ElementCollection
-    //Structure: Key: Team, Value: User
+    //Structure: Key: User, Value: Team
     private Map<String, String> votesForWinnerTeam = new HashMap<>();
 
     private Boolean isWinnerConfirmed;
     private Boolean isMatchWasPlayed;
+    private Boolean isClosed;
+
 
     public void addMatchToTournament(Tournament tournament) {
         this.tournament = tournament;
         tournament.getMatchInTournament().add(this);
     }
 
-    public void addVotesForWinnerTeam(String teamName, String userName) {
-        this.votesForWinnerTeam.put(teamName, userName);
+    public void addVotesForWinnerTeam(String userName, String teamName) {
+        this.votesForWinnerTeam.put(userName, teamName);
     }
 
 

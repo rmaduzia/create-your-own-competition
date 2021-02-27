@@ -89,4 +89,13 @@ public class MatchInTournamentController {
 
         return matchInTournamentService.addVoteForWinnerTeam(matchId, winnerTeam, userPrincipal);
     }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("matches/{matchId}/close")
+    public ResponseEntity<?> closeMatch (@PathVariable Long matchId,
+                                         @CurrentUser UserPrincipal userPrincipal) {
+
+        return matchInTournamentService.closeMatch(matchId, userPrincipal);
+    }
+
 }

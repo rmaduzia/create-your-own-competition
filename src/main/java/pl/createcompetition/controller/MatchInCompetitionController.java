@@ -54,7 +54,7 @@ public class MatchInCompetitionController {
 
         return matchInCompetitionService.deleteMatchInCompetition(matchId, userPrincipal);
     }
-    
+
     @PreAuthorize("hasRole('USER')")
     @PostMapping("matches/{matchId}/voting")
     public ResponseEntity<?> addVoteForWinnerTeam(@PathVariable Long matchId,
@@ -62,5 +62,13 @@ public class MatchInCompetitionController {
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
         return matchInCompetitionService.addVoteForWinnerTeam(matchId, winnerTeam, userPrincipal);
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("matches/{matchId}/close")
+    public ResponseEntity<?> closeMatch (@PathVariable Long matchId,
+                                         @CurrentUser UserPrincipal userPrincipal) {
+
+        return matchInCompetitionService.closeMatch(matchId, userPrincipal);
     }
 }

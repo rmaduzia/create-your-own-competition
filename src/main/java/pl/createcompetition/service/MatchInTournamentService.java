@@ -14,6 +14,9 @@ import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
+import java.util.Collections;
+import java.util.Map;
+
 @Service
 @AllArgsConstructor
 public class MatchInTournamentService {
@@ -69,7 +72,9 @@ public class MatchInTournamentService {
                 new ResourceNotFoundException("Team not exists", "Name", winnerTeam));
 
         if (foundMatch.getTournament().getTeams().contains(foundTeam)) {
-            foundMatch.addVotesForWinnerTeam(winnerTeam, userPrincipal.getUsername());
+            foundMatch.addVotesForWinnerTeam(userPrincipal.getUsername(), winnerTeam);
+            String countedWinnerTeam = getTheWinnerTeamBasedOnTheNumberOfVotes(foundMatch);
+            foundMatch.setWinnerTeam(countedWinnerTeam);
             matchInTournamentRepository.save(foundMatch);
         } else {
             throw new BadRequestException("You didn't take part in this match");
@@ -77,6 +82,27 @@ public class MatchInTournamentService {
 
         return ResponseEntity.ok("You have voted");
     }
+
+    public ResponseEntity<?> closeMatch(Long matchId, UserPrincipal userPrincipal) {
+
+        MatchInTournament foundMatch = findMatch(matchId);
+        Tournament foundTournament = shouldFindTournament(foundMatch.getTournament().getTournamentName(), userPrincipal.getUsername());
+
+        checkIfTournamentBelongToUser(foundTournament, userPrincipal);
+        foundMatch.setIsClosed(true);
+
+        return ResponseEntity.ok("Zamknięto mecz");
+    }
+
+    private String getTheWinnerTeamBasedOnTheNumberOfVotes(MatchInTournament matchInTournament) {
+
+        int amountOfVotesForFirstTeam = Collections.frequency(matchInTournament.getVotesForWinnerTeam().values(), matchInTournament.getFirstTeamName());
+        int amountOfVotesForSecondTeam = Collections.frequency(matchInTournament.getVotesForWinnerTeam().values(), matchInTournament.getSecondTeamName());
+
+        //RETURN NAME OF WINNER TEAM
+        return amountOfVotesForFirstTeam > amountOfVotesForSecondTeam ? matchInTournament.getFirstTeamName() : matchInTournament.getSecondTeamName();
+    }
+
 
 
     private void checkIfTournamentNameEqualsToPath(String tournamentName, Tournament tournament) {

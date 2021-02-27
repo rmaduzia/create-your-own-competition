@@ -1,6 +1,6 @@
 package pl.createcompetition.service;
 
-import lombok.AllArgsConstructor;;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,8 @@ import pl.createcompetition.repository.MatchInCompetitionRepository;
 import pl.createcompetition.repository.TeamRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
+
+import java.util.Collections;
 
 @AllArgsConstructor
 @Service
@@ -74,13 +76,35 @@ public class MatchInCompetitionService {
                 new ResourceNotFoundException("Team not exists", "Name", winnerTeam));
 
         if (foundMatch.getCompetition().getTeams().contains(foundTeam)) {
-            foundMatch.addVotesForWinnerTeam(winnerTeam, userPrincipal.getUsername());
+            foundMatch.addVotesForWinnerTeam(userPrincipal.getUsername(), winnerTeam);
+            String countedWinnerTeam = getTheWinnerTeamBasedOnTheNumberOfVotes(foundMatch);
+            foundMatch.setWinnerTeam(countedWinnerTeam);
             matchInCompetitionRepository.save(foundMatch);
         } else {
             throw new BadRequestException("You didn't take part in this match");
         }
 
         return ResponseEntity.ok("You have voted");
+    }
+
+    public ResponseEntity<?> closeMatch(Long matchId, UserPrincipal userPrincipal) {
+
+        MatchInCompetition foundMatch = findMatch(matchId);
+        verifyMethodsForServices.shouldFindCompetition(foundMatch.getCompetition().getCompetitionName());
+
+        checkIfCompetitionBelongToUser(foundMatch, userPrincipal);
+        foundMatch.setIsClosed(true);
+
+        return ResponseEntity.ok("Zamknięto mecz");
+    }
+
+    private String getTheWinnerTeamBasedOnTheNumberOfVotes(MatchInCompetition matchInCompetition) {
+
+        int amountOfVotesForFirstTeam = Collections.frequency(matchInCompetition.getVotesForWinnerTeam().values(), matchInCompetition.getFirstTeamName());
+        int amountOfVotesForSecondTeam = Collections.frequency(matchInCompetition.getVotesForWinnerTeam().values(), matchInCompetition.getSecondTeamName());
+
+        //RETURN NAME OF WINNER TEAM
+        return amountOfVotesForFirstTeam > amountOfVotesForSecondTeam ? matchInCompetition.getFirstTeamName() : matchInCompetition.getSecondTeamName();
     }
 
 
