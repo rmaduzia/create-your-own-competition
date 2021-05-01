@@ -4,15 +4,25 @@ import com.google.gson.Gson;
 import lombok.AllArgsConstructor;
 import org.aspectj.weaver.ast.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.websockets.UserNotification;
+import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.NotificationMessagesToUsersService;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 
 
 @AllArgsConstructor
@@ -21,6 +31,7 @@ public class WebSocketMessagingController {
 
     private final SimpMessageSendingOperations messagingTemplate;
     private Gson gson = new Gson();
+    private final NotificationMessagesToUsersService notificationMessagesToUsersService;
 
     @MessageMapping("/news")
     @SendTo("/topic/news")
@@ -42,11 +53,22 @@ public class WebSocketMessagingController {
     }
 */
 
-    @MessageMapping("/notification")
-    @SendToUser("/queue/notification")
+    @MessageMapping("/notifications")
+    @SendToUser("/queue/notifications")
     public UserNotification send(@Payload UserNotification userNotification, @CurrentUser UserPrincipal userPrincipal) {
         return userNotification;
     }
+
+
+    @GetMapping("/klop")
+    public ResponseEntity<?> execute() {
+
+        notificationMessagesToUsersService.notificationMessageToUser("name rekruta", "Team","invite","nazwa teamu");
+        return ResponseEntity.ok("costam");
+    }
+
+
+
 
 
 
