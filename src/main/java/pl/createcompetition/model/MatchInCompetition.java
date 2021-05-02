@@ -41,7 +41,10 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private String winnerTeam;
 
     @ElementCollection
-    //Structure: Key: User, Value: Team
+    @CollectionTable(name="votes_for_winning_team_in_competition_matches", joinColumns = @JoinColumn(name = "match_in_competition_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "FK_VOTES_FOR_WINNING_TEAM_IN_COMPETITION_MATCHES_COMPETITION_ID"))
+    @MapKeyColumn(name = "user_name")
+    @Column(name = "team_name")
     private Map<String, String> votesForWinnerTeam = new HashMap<>();
 
     private Boolean isWinnerConfirmed;

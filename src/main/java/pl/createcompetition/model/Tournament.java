@@ -52,6 +52,10 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     private Boolean isFinished;
 
     @ElementCollection
+    @CollectionTable(name = "drawed_teams_in_tournament", joinColumns = @JoinColumn(name = "tournament_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "FK_DRAWED_TEAMS_IN_TOURNAMENT_TOURNAMENT_ID"))
+    @MapKeyColumn(name = "id")
+    @Column(name = "duel")
     private Map<String, String> drawedTeams = new TreeMap<>();
 
     @ElementCollection
@@ -67,16 +71,16 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @JsonManagedReference
     @Builder.Default
     @JoinTable(name = "tournament_tags",
-    joinColumns = @JoinColumn(name = "tournament_id"),
-    inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "tournament_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TAGS_TOURNAMENT_ID")),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TAGS_TAG_ID")))
     private Set<Tags> tags = new HashSet<>();
 
     @ManyToMany
     @JsonManagedReference
     @Builder.Default
-    @JoinTable(name = "tournament_team",
-            joinColumns = @JoinColumn(name = "tournament_id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id"))
+    @JoinTable(name = "tournament_teams",
+            joinColumns = @JoinColumn(name = "tournament_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TEAMS_TOURNAMENT_ID")),
+            inverseJoinColumns = @JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TEAMS_TEAM_ID")))
     private Set<Team> teams = new HashSet<>();
 
     public void addTeamToTournament(Team teams) {

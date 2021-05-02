@@ -51,6 +51,9 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
 
     @JsonManagedReference
     @ManyToMany
+    @JoinTable(name = "teams_tags",
+            joinColumns = @JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "FK_TEAM_TAGS_TEAM_ID")),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name = "FK_TEAM_TAGS_TAG_ID") ))
     @Builder.Default
     private Set<Tags> tags = new HashSet<>();
 

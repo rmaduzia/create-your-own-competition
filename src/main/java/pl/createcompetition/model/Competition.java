@@ -67,16 +67,16 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "competition_tag",
-            joinColumns = @JoinColumn(name = "competition_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id"))
+            joinColumns = @JoinColumn(name = "competition_id", foreignKey = @ForeignKey(name = "FK_COMPETITION_TAG_COMPETITION_ID")),
+            inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name="FK_COMPETITION_TAG_TAGS_ID")))
     @Builder.Default
     private Set<Tags> tags = new HashSet<>();
 
     @JsonManagedReference
     @ManyToMany
     @JoinTable(name = "competition_team",
-            joinColumns = @JoinColumn(name = "tournament_id"),
-            inverseJoinColumns = @JoinColumn(name = "team_id"))
+            joinColumns = @JoinColumn(name = "competition_id", foreignKey = @ForeignKey(name = "FK_COMPETITION_TEAM_COMPETITION_ID")),
+            inverseJoinColumns = @JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "FK_COMPETITION_TEAM_TEAM_ID")))
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
