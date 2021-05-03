@@ -51,22 +51,25 @@ public class UserDetail implements QueryDtoInterface<UserDetail.UserDetailDto> {
 
     @JsonBackReference
     @ManyToMany
-    @JoinTable(name="user_competition",
-        joinColumns=@JoinColumn(name="user_id"),
-        inverseJoinColumns=@JoinColumn(name="competition_id"))
+    @JoinTable(name="user_competitions",
+        joinColumns=@JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "FK_USER_COMPETITIONS_USER_ID")),
+        inverseJoinColumns=@JoinColumn(name="competition_id", foreignKey = @ForeignKey(name = "FK_USER_COMPETITIONS_COMPETITION_ID")))
     @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany
-    @JoinTable(name="user_team",
-        joinColumns=@JoinColumn(name="user_id"),
-        inverseJoinColumns=@JoinColumn(name="team_id"))
+    @JoinTable(name="user_teams",
+        joinColumns=@JoinColumn(name="user_id", foreignKey = @ForeignKey(name = "FK_USER_TEAMS_USER_ID")),
+        inverseJoinColumns=@JoinColumn(name="team_id", foreignKey = @ForeignKey(name = "FK_USER_TEAMS_TEAM_ID")))
     @Builder.Default
     private Set<Team> teams = new HashSet<>();
 
     @ElementCollection
-    //Key: username, Value: opinion
+    @CollectionTable(name = "user_detail_opinion_about_users", joinColumns = @JoinColumn(name = "user_detail_id", referencedColumnName = "user_user_id",
+            foreignKey = @ForeignKey(name = "FK_USER_DETAIL_OPINION_ABOUT_USERS_USER_DETAIL_ID")))
+    @MapKeyColumn(name = "user_name")
+    @Column(name = "opinion")
     private Map<String,String> opinionAboutUser = new TreeMap<>();
 
     public void addUserToCompetition(Competition competition) {

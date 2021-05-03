@@ -12,6 +12,7 @@ import java.util.*;
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_COMPETITION;
 
 @EqualsAndHashCode(of = {"id", "competitionName"})
+@Table(name = "competitions")
 @Entity
 @Getter
 @Setter
@@ -70,7 +71,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
             joinColumns = @JoinColumn(name = "competition_id", foreignKey = @ForeignKey(name = "FK_COMPETITION_TAG_COMPETITION_ID")),
             inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name="FK_COMPETITION_TAG_TAGS_ID")))
     @Builder.Default
-    private Set<Tags> tags = new HashSet<>();
+    private Set<Tag> tag = new HashSet<>();
 
     @JsonManagedReference
     @ManyToMany
@@ -86,21 +87,21 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
             cascade = CascadeType.ALL)
     private List<MatchInCompetition> matchInCompetition = new ArrayList<>();
 
-    public void addTagToCompetition(Tags tags) {
-        this.tags.add(tags);
-        tags.getCompetitions().add(this);
+    public void addTagToCompetition(Tag tag) {
+        this.tag.add(tag);
+        tag.getCompetitions().add(this);
     }
 
-    public void addManyTagToCompetition(Set<Tags> tags) {
-        for(Tags tag: tags) {
-            this.tags.add(tag);
-            tag.getCompetitions().add(this);
+    public void addManyTagToCompetition(Set<Tag> tag) {
+        for(Tag valueTag: tag) {
+            this.tag.add(valueTag);
+            valueTag.getCompetitions().add(this);
         }
     }
 
     @Override
     public CompetitionDto map() {
-        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tags, matchInCompetition);
+        return new CompetitionDto(competitionName, city, street, street_number, competitionStart, competitionEnd, isOpenRecruitment, teams,tag, matchInCompetition);
     }
 
     @Data
@@ -114,7 +115,7 @@ public class Competition implements QueryDtoInterface<Competition.CompetitionDto
         private java.sql.Timestamp competitionEnd;
         private Boolean isOpenRecruitment;
         private Set<Team> teams;
-        private Set<Tags> tags;
+        private Set<Tag> tag;
         private List<MatchInCompetition> matchInCompetition;
     }
 }

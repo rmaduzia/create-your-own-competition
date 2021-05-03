@@ -56,10 +56,16 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
             foreignKey = @ForeignKey(name = "FK_DRAWED_TEAMS_IN_TOURNAMENT_TOURNAMENT_ID"))
     @MapKeyColumn(name = "id")
     @Column(name = "duel")
+    @Builder.Default
     private Map<String, String> drawedTeams = new TreeMap<>();
 
     @ElementCollection
-    private Map<String, Date> timesOfTeamMeetings = new TreeMap<>();
+    @CollectionTable(name = "match_times_in_tournament", joinColumns = @JoinColumn(name = "tournament_id", referencedColumnName = "id",
+            foreignKey = @ForeignKey(name = "FK_MATCH_TIMES_IN_TOURNAMENT_TOURNAMENT_ID")))
+    @MapKeyColumn(name = "id")
+    @Column(name = "match_time")
+    @Builder.Default
+    private Map<String, Date> matchTimes = new TreeMap<>();
 
     @Builder.Default
     @OneToMany(
@@ -73,7 +79,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
     @JoinTable(name = "tournament_tags",
             joinColumns = @JoinColumn(name = "tournament_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TAGS_TOURNAMENT_ID")),
             inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name = "FK_TOURNAMENT_TAGS_TAG_ID")))
-    private Set<Tags> tags = new HashSet<>();
+    private Set<Tag> tag = new HashSet<>();
 
     @ManyToMany
     @JsonManagedReference
@@ -95,7 +101,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
 
     @Override
     public TournamentDto map() {
-        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tags, matchInTournament);
+        return new TournamentDto(tournamentOwner, tournamentName, maxAmountOfTeams, city, street, street_number, tag, matchInTournament);
     }
 
     @Data
@@ -107,7 +113,7 @@ public class Tournament implements QueryDtoInterface<Tournament.TournamentDto> {
         private String city;
         private String street;
         private int street_number;
-        private Set<Tags> tags;
+        private Set<Tag> tag;
         private List<MatchInTournament> matchInTournament;
 
     }

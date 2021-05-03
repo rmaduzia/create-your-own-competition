@@ -3,7 +3,6 @@ package pl.createcompetition.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
-import org.hibernate.validator.constraints.Length;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;
@@ -55,7 +54,7 @@ public class Team implements QueryDtoInterface<Team.TeamDto> {
             joinColumns = @JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "FK_TEAM_TAGS_TEAM_ID")),
             inverseJoinColumns = @JoinColumn(name = "tag_id", foreignKey = @ForeignKey(name = "FK_TEAM_TAGS_TAG_ID") ))
     @Builder.Default
-    private Set<Tags> tags = new HashSet<>();
+    private Set<Tag> tag = new HashSet<>();
 
     @JsonBackReference
     @ManyToMany(mappedBy = "teams")

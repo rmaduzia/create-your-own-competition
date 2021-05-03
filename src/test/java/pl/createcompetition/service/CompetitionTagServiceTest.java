@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.model.Tags;
+import pl.createcompetition.model.Tag;
 import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Timestamp;
@@ -36,7 +36,7 @@ public class CompetitionTagServiceTest {
     UserDetail userDetail;
     UserPrincipal userPrincipal;
     Competition competition;
-    Tags competitionTag;
+    Tag competitionTag;
 
     @BeforeEach
     public void setUp() {
@@ -64,10 +64,10 @@ public class CompetitionTagServiceTest {
                 .competitionEnd(Timestamp.valueOf("2020-05-02 12:30:00"))
                 .city("Gdynia")
                 .maxAmountOfTeams(10)
-                .tags(Sets.newHashSet())
+                .tag(Sets.newHashSet())
                 .build();
 
-        competitionTag = Tags.builder().tag("Tag").id(1L).competitions(Sets.newHashSet()).build();
+        competitionTag = Tag.builder().tag("Tag").id(1L).competitions(Sets.newHashSet()).build();
     }
 
     @Test
@@ -76,7 +76,7 @@ public class CompetitionTagServiceTest {
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
         when(competitionRepository.save(competition)).thenReturn(competition);
 
-        Set<Tags> tags = Set.of(competitionTag);
+        Set<Tag> tags = Set.of(competitionTag);
         ResponseEntity<?> response = competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         verify(competitionRepository, times(1)).save(competition);
@@ -105,7 +105,7 @@ public class CompetitionTagServiceTest {
     @Test
     public void shouldThrowExceptionCompetitionNotExistsWhenAddTag() {
 
-        Set<Tags> tags = Set.of(competitionTag);
+        Set<Tag> tags = Set.of(competitionTag);
 
         Exception exception = assertThrows(
                 ResourceNotFoundException.class,
@@ -120,7 +120,7 @@ public class CompetitionTagServiceTest {
     public void shouldThrowExceptionTagAlreadyExists() {
 
         when(competitionRepository.findByCompetitionName(eq(competition.getCompetitionName()))).thenReturn(Optional.of(competition));
-        Set<Tags> tags = Set.of(competitionTag);
+        Set<Tag> tags = Set.of(competitionTag);
 
         when(competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal)).thenThrow(DataIntegrityViolationException.class);
 
@@ -137,7 +137,7 @@ public class CompetitionTagServiceTest {
     public void shouldThrowExceptionWhenCompetitionNotBelongToUser() {
 
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
-        Set<Tags> tags = Set.of(competitionTag);
+        Set<Tag> tags = Set.of(competitionTag);
 
         competition.setCompetitionOwner("OtherOwner");
 
@@ -155,7 +155,7 @@ public class CompetitionTagServiceTest {
 
         when(competitionRepository.findByCompetitionName(competition.getCompetitionName())).thenReturn(Optional.of(competition));
 
-        Set<Tags> tags = Set.of(competitionTag);
+        Set<Tag> tags = Set.of(competitionTag);
         competitionTagService.addCompetitionTag(tags, competition.getCompetitionName(), userPrincipal);
 
         ResponseEntity<?> response = competitionTagService.deleteCompetitionTag(competitionTag, competition.getCompetitionName(), userPrincipal);

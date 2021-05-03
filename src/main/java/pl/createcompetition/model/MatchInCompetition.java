@@ -10,6 +10,7 @@ import java.util.Map;
 
 @EqualsAndHashCode(of="id")
 @Entity
+@Table(name = "matches_in_competitions")
 @Getter
 @Setter
 @Builder

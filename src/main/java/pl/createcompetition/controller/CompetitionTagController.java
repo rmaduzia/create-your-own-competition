@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.createcompetition.model.Tags;
+import pl.createcompetition.model.Tag;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.CompetitionTagService;
@@ -30,7 +30,7 @@ public class CompetitionTagController {
 
     @PreAuthorize("hasRole('USER')")
     @PostMapping("{competitionName}")
-    public ResponseEntity<?> addTagsToCompetition(@Valid @RequestBody Set<Tags> tagCompetition,
+    public ResponseEntity<?> addTagsToCompetition(@Valid @RequestBody Set<Tag> tagCompetition,
                                                   @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
@@ -39,7 +39,7 @@ public class CompetitionTagController {
 
     @PreAuthorize("hasRole('USER')")
     @PutMapping("{competitionName}")
-    public ResponseEntity<?> updateTagCompetition(@Valid @RequestBody Tags tagCompetition,
+    public ResponseEntity<?> updateTagCompetition(@Valid @RequestBody Tag tagCompetition,
                                                   @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 
@@ -48,7 +48,7 @@ public class CompetitionTagController {
 
     @PreAuthorize("hasRole('USER')")
     @DeleteMapping("{competitionName}")
-    public ResponseEntity<?> deleteTagCompetition(@RequestBody Tags tagCompetition,
+    public ResponseEntity<?> deleteTagCompetition(@RequestBody Tag tagCompetition,
                                                   @PathVariable String competitionName,
                                                   @CurrentUser UserPrincipal userPrincipal) {
 

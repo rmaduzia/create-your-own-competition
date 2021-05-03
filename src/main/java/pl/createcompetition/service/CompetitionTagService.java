@@ -8,9 +8,8 @@ import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.Competition;
-import pl.createcompetition.model.Tags;
+import pl.createcompetition.model.Tag;
 import pl.createcompetition.repository.CompetitionRepository;
-import pl.createcompetition.repository.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class CompetitionTagService {
         return ResponseEntity.noContent().build();
     }
 
-    public ResponseEntity<?> addCompetitionTag(Set<Tags> competitionTag, String competitionName, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> addCompetitionTag(Set<Tag> competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
@@ -40,7 +39,7 @@ public class CompetitionTagService {
         }
     }
 
-    public ResponseEntity<?> updateCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> updateCompetitionTag(Tag competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
@@ -51,12 +50,12 @@ public class CompetitionTagService {
 
     }
 
-    public ResponseEntity<?> deleteCompetitionTag(Tags competitionTag, String competitionName, UserPrincipal userPrincipal) {
+    public ResponseEntity<?> deleteCompetitionTag(Tag competitionTag, String competitionName, UserPrincipal userPrincipal) {
 
         Competition findCompetition =  checkIfCompetitionExists(competitionName);
         checkIfCompetitionBelongToUser(findCompetition, userPrincipal);
 
-        if (findCompetition.getTags().contains(competitionTag)) {
+        if (findCompetition.getTag().contains(competitionTag)) {
             competitionRepository.deleteById(findCompetition.getId());
             return ResponseEntity.noContent().build();
         } else {

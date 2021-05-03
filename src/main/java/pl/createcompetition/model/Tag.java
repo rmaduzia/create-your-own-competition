@@ -8,13 +8,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @EqualsAndHashCode(of = {"id", "tag"})
+@Table(name = "tags")
 @Entity
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Tags {
+public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,17 +24,17 @@ public class Tags {
     @NotBlank(message = "Tag name can't be empty")
     private String tag;
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tag")
     @JsonBackReference
     @Builder.Default
     private Set<Competition> competitions = new HashSet<>();
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tag")
     @JsonBackReference
     @Builder.Default
     private Set<Tournament> tournaments = new HashSet<>();
 
-    @ManyToMany(mappedBy = "tags")
+    @ManyToMany(mappedBy = "tag")
     @JsonBackReference
     @Builder.Default
     private Set<Team> teams = new HashSet<>();

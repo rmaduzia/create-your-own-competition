@@ -121,7 +121,7 @@ public class TournamentService {
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        foundTournament.setTimesOfTeamMeetings(dateMatch);
+        foundTournament.setMatchTimes(dateMatch);
 
         return ResponseEntity.ok(tournamentRepository.save(foundTournament));
     }
@@ -131,7 +131,7 @@ public class TournamentService {
         Tournament foundTournament = shouldFindTournament(tournamentName, userPrincipal.getUsername());
         checkIfTournamentBelongToUser(foundTournament, userPrincipal);
 
-        foundTournament.getTimesOfTeamMeetings().remove(idDateMatch);
+        foundTournament.getMatchTimes().remove(idDateMatch);
         tournamentRepository.save(foundTournament);
 
         return ResponseEntity.noContent().build();

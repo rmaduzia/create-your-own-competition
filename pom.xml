@@ -311,7 +311,6 @@
             <artifactId>spring-boot-starter-reactor-netty</artifactId>
         </dependency>
 
-
         <!-- https://mvnrepository.com/artifact/com.github.fridujo/rabbitmq-mock -->
         <dependency>
             <groupId>com.github.fridujo</groupId>
@@ -320,11 +319,11 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
+
 
     </dependencies>
 
@@ -388,6 +387,13 @@
                     </dependency>
                 </dependencies>
             </plugin>
+
+            <plugin>
+                <groupId>org.flywaydb</groupId>
+                <artifactId>flyway-maven-plugin</artifactId>
+                <version>7.8.2</version>
+            </plugin>
+
 
         </plugins>
 

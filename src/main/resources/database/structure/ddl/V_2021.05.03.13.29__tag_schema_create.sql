@@ -1,0 +1,7 @@
+CREATE TABLE tag
+(
+    id  BIGINT PRIMARY KEY,
+    tag VARCHAR(255)
+
+
+);

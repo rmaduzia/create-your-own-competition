@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @EqualsAndHashCode(of = {"id"})
+@Table(name = "matches_in_tournaments")
 @Getter
 @Setter
 @Builder
