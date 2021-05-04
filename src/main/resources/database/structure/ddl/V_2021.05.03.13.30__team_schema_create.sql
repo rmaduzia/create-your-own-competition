@@ -8,5 +8,3 @@ CREATE TABLE team
     team_owner          VARCHAR(255)
 
 );
-
-

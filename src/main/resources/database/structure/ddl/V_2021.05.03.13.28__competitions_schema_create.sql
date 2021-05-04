@@ -18,7 +18,6 @@ CREATE TABLE competitions
 
 
 
-
 CREATE TABLE matches_in_competitions
 (
     id                  BIGINT PRIMARY KEY,
@@ -63,41 +62,3 @@ CREATE TABLE votes_for_winning_team_in_competition_matches
             REFERENCES matches_in_competition (id)
 );
 
-
-
-
-CREATE TABLE competition_tag
-(
-    competition_id BIGINT NOT NULL,
-    tag_id         BIGINT NOT NULL,
-    PRIMARY KEY (competition_id, tag_id),
-
-    KEY FK_COMPETITION_TAG_TAGS_ID (tag_id),
-
-    CONSTRAINT FK_COMPETITION_TAG_TAGS_ID
-        FOREIGN KEY (tag_id)
-            REFERENCES tag (id),
-
-    CONSTRAINT FK_COMPETITION_TAG_COMPETITION_ID
-        FOREIGN KEY (competition_id)
-            REFERENCES competitions (id)
-
-);
-
-CREATE TABLE competition_team
-(
-    competition_id BIGINT NOT NULL,
-    team_id        BIGINT NOT NULL,
-
-    PRIMARY KEY (competition_id, team_id),
-
-    KEY FK_COMPETITION_TEAM_TEAM_ID (team_id),
-
-    CONSTRAINT FK_COMPETITION_TEAM_TEAM_ID
-        FOREIGN KEY (team_id)
-            REFERENCES team (id),
-
-    CONSTRAINT FK_COMPETITION_TEAM_COMPETITION_ID
-        FOREIGN KEY (competition_id)
-            REFERENCES competitions (id)
-);
