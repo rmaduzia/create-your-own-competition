@@ -7,11 +7,11 @@ CREATE TABLE tournament_teams
 
     CONSTRAINT FK_TOURNAMENT_TEAMS_TOURNAMENT_ID
         FOREIGN KEY (tournament_id)
-            REFERENCES tournament (id),
+            REFERENCES tournaments (id),
 
     CONSTRAINT FK_TOURNAMENT_TEAMS_TEAM_ID
         FOREIGN KEY (team_id)
-            REFERENCES team (id)
+            REFERENCES teams (id)
 
 );
 
@@ -27,10 +27,10 @@ CREATE TABLE tournament_tags
 
     CONSTRAINT FK_TOURNAMENT_TAGS_TOURNAMENT_ID
         FOREIGN KEY (tournament_id)
-            REFERENCES tournament (id),
+            REFERENCES tournaments (id),
 
     CONSTRAINT FK_TOURNAMENT_TAGS_TAG_ID
         FOREIGN KEY (tag_id)
-            REFERENCES tag (id)
+            REFERENCES tags (id)
 
 );

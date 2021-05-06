@@ -12,7 +12,7 @@ CREATE TABLE user_teams
 
     CONSTRAINT FK_USER_TEAMS_TEAM_ID
         FOREIGN KEY (team_id)
-            REFERENCES team (id)
+            REFERENCES teams (id)
 
 );
 

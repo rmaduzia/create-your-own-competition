@@ -9,7 +9,7 @@ CREATE TABLE competition_team
 
     CONSTRAINT FK_COMPETITION_TEAM_TEAM_ID
         FOREIGN KEY (team_id)
-            REFERENCES team (id),
+            REFERENCES teams (id),
 
     CONSTRAINT FK_COMPETITION_TEAM_COMPETITION_ID
         FOREIGN KEY (competition_id)

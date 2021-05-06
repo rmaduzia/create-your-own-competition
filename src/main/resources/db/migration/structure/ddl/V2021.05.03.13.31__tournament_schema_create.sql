@@ -1,4 +1,4 @@
-CREATE TABLE tournament
+CREATE TABLE tournaments
 (
     id                  BIGINT NOT NULL PRIMARY KEY,
     city                VARCHAR(255),
@@ -76,7 +76,7 @@ CREATE TABLE drawed_teams_in_tournament
 
     CONSTRAINT FK_DRAWED_TEAMS_IN_TOURNAMENT_TOURNAMENT_ID
         FOREIGN KEY (tournament_id)
-            REFERENCES tournament (id)
+            REFERENCES tournaments (id)
 
 
 );
@@ -92,5 +92,5 @@ CREATE TABLE match_times_in_tournament
 
     CONSTRAINT FK_MATCH_TIMES_IN_TOURNAMENT_TOURNAMENT_ID
         FOREIGN KEY (tournament_id)
-            REFERENCES tournament (id)
+            REFERENCES tournaments (id)
 );

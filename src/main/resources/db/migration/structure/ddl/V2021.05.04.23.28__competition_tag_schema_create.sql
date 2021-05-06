@@ -8,7 +8,7 @@ CREATE TABLE competition_tag
 
     CONSTRAINT FK_COMPETITION_TAG_TAGS_ID
         FOREIGN KEY (tag_id)
-            REFERENCES tag (id),
+            REFERENCES tags (id),
 
     CONSTRAINT FK_COMPETITION_TAG_COMPETITION_ID
         FOREIGN KEY (competition_id)

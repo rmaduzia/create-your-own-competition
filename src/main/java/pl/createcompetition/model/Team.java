@@ -13,6 +13,7 @@ import java.util.Set;
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_USERS_IN_TEAM;
 
 @EqualsAndHashCode(of="id")
+@Table(name = "teams")
 @Getter
 @Setter
 @Builder

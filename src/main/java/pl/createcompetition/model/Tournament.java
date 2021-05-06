@@ -10,6 +10,7 @@ import java.util.*;
 import static pl.createcompetition.config.AppConstants.MAX_AMOUNT_OF_TEAMS_IN_TOURNAMENT;
 
 @EqualsAndHashCode(of="id")
+@Table(name = "tournaments")
 @Entity
 @Getter
 @Setter
