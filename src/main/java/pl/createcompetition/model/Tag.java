@@ -2,6 +2,9 @@ package pl.createcompetition.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.*;
+import pl.createcompetition.competition.Competition;
+import pl.createcompetition.team.Team;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.HashSet;

@@ -1,8 +1,12 @@
-package pl.createcompetition.model;
+package pl.createcompetition.competition;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
+import pl.createcompetition.model.MatchInCompetition;
+import pl.createcompetition.model.Tag;
+import pl.createcompetition.team.Team;
+import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package pl.createcompetition.repository;
+package pl.createcompetition.competition;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import pl.createcompetition.model.Tag;

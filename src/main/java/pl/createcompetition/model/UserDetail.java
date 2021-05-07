@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
-import org.hibernate.validator.constraints.UniqueElements;
+import pl.createcompetition.competition.Competition;
 import pl.createcompetition.service.query.QueryDtoInterface;
+import pl.createcompetition.team.Team;
 
 import javax.persistence.*;
 

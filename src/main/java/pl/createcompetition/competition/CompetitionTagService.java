@@ -1,4 +1,4 @@
-package pl.createcompetition.service;
+package pl.createcompetition.competition;
 
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.Competition;
 import pl.createcompetition.model.Tag;
-import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.List;

@@ -4,12 +4,14 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import pl.createcompetition.competition.Competition;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.MatchInCompetitionRepository;
-import pl.createcompetition.repository.TeamRepository;
+import pl.createcompetition.team.Team;
+import pl.createcompetition.team.TeamRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 

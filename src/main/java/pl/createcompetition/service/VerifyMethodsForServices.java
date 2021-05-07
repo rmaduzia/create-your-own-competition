@@ -4,13 +4,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.Competition;
-import pl.createcompetition.model.Team;
-import pl.createcompetition.model.Tournament;
-import pl.createcompetition.repository.CompetitionRepository;
-import pl.createcompetition.repository.TeamRepository;
-import pl.createcompetition.repository.TournamentRepository;
-import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.competition.Competition;
+import pl.createcompetition.team.Team;
+import pl.createcompetition.competition.CompetitionRepository;
+import pl.createcompetition.team.TeamRepository;
 
 @Service
 @AllArgsConstructor

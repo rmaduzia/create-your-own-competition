@@ -11,6 +11,8 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.team.Team;
+
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;

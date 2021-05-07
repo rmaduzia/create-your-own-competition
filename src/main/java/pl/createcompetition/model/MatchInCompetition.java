@@ -1,6 +1,7 @@
 package pl.createcompetition.model;
 
 import lombok.*;
+import pl.createcompetition.competition.Competition;
 import pl.createcompetition.service.query.QueryDtoInterface;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;

@@ -1,15 +1,15 @@
-package pl.createcompetition.controller;
+package pl.createcompetition.team;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.PagedResponseDto;
-import pl.createcompetition.model.Team;
+import pl.createcompetition.team.Team;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.TeamService;
+import pl.createcompetition.team.TeamService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;

@@ -1,8 +1,12 @@
-package pl.createcompetition.model;
+package pl.createcompetition.team;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
+import pl.createcompetition.competition.Competition;
+import pl.createcompetition.model.Tag;
+import pl.createcompetition.model.Tournament;
+import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
 import javax.persistence.*;

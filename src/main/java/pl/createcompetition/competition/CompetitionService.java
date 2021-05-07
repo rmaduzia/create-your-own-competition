@@ -1,4 +1,4 @@
-package pl.createcompetition.service;
+package pl.createcompetition.competition;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -6,13 +6,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
-import pl.createcompetition.model.Competition;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.CompetitionRepository;
 import pl.createcompetition.repository.UserDetailRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.service.VerifyMethodsForServices;
 import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Optional;

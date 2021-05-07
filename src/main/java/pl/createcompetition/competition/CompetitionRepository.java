@@ -1,7 +1,7 @@
-package pl.createcompetition.repository;
+package pl.createcompetition.competition;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.createcompetition.model.Competition;
+
 import java.util.Optional;
 
 public interface CompetitionRepository extends JpaRepository<Competition, Long>{

@@ -9,13 +9,13 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.repository.MatchInTournamentRepository;
-import pl.createcompetition.repository.TeamRepository;
+import pl.createcompetition.team.Team;
+import pl.createcompetition.team.TeamRepository;
 import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor

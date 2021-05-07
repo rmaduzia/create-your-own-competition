@@ -1,4 +1,4 @@
-package pl.createcompetition.controller;
+package pl.createcompetition.competition;
 
 
 import lombok.AllArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.createcompetition.model.Tag;
 import pl.createcompetition.security.CurrentUser;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.CompetitionTagService;
+import pl.createcompetition.competition.CompetitionTagService;
 
 import javax.validation.Valid;
 import java.util.List;
