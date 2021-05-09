@@ -1,7 +1,6 @@
-package pl.createcompetition.repository;
+package pl.createcompetition.tournament;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.createcompetition.model.Tournament;
 
 import java.util.Optional;
 

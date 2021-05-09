@@ -8,10 +8,12 @@ import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.MatchInTournamentRepository;
+import pl.createcompetition.tournament.MatchInTournament;
+import pl.createcompetition.tournament.MatchInTournamentRepository;
 import pl.createcompetition.team.Team;
 import pl.createcompetition.team.TeamRepository;
-import pl.createcompetition.repository.TournamentRepository;
+import pl.createcompetition.tournament.Tournament;
+import pl.createcompetition.tournament.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 

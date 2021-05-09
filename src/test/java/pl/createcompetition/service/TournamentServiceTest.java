@@ -9,9 +9,11 @@ import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.repository.TournamentRepository;
+import pl.createcompetition.tournament.Tournament;
+import pl.createcompetition.tournament.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.team.Team;
+import pl.createcompetition.tournament.TournamentService;
 
 import java.util.*;
 

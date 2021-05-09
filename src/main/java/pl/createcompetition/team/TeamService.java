@@ -16,6 +16,8 @@ import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.NotificationMessagesToUsersService;
 import pl.createcompetition.service.VerifyMethodsForServices;
 import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.tournament.Tournament;
+import pl.createcompetition.tournament.TournamentRepository;
 
 import java.util.Optional;
 

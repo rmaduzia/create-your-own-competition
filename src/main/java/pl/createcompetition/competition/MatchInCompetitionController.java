@@ -1,10 +1,10 @@
-package pl.createcompetition.controller;
+package pl.createcompetition.competition;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import pl.createcompetition.model.MatchInCompetition;
+import pl.createcompetition.competition.MatchInCompetition;
 import pl.createcompetition.model.PagedResponseDto;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.CurrentUser;

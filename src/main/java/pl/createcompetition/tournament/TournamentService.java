@@ -1,4 +1,4 @@
-package pl.createcompetition.service;
+package pl.createcompetition.tournament;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,10 +8,9 @@ import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
+import pl.createcompetition.service.VerifyMethodsForServices;
 import pl.createcompetition.team.Team;
-import pl.createcompetition.model.Tournament;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.service.query.GetQueryImplService;
 import pl.createcompetition.util.MatchTeamsInTournament;

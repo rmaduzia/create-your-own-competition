@@ -16,6 +16,8 @@ import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.team.Team;
 import pl.createcompetition.team.TeamRepository;
 import pl.createcompetition.team.TeamService;
+import pl.createcompetition.tournament.Tournament;
+import pl.createcompetition.tournament.TournamentRepository;
 
 import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;

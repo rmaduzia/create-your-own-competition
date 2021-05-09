@@ -1,23 +1,23 @@
-package pl.createcompetition.model;
+package pl.createcompetition.tournament;
 
 import lombok.*;
-import pl.createcompetition.competition.Competition;
 import pl.createcompetition.service.query.QueryDtoInterface;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import java.util.HashMap;
 import java.util.Map;
 
-@EqualsAndHashCode(of="id")
-@Entity
-@Table(name = "matches_in_competitions")
+@EqualsAndHashCode(of = {"id"})
+@Table(name = "matches_in_tournaments")
 @Getter
 @Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.MatchesInCompetitionDto> {
+@NoArgsConstructor
+@Entity
+public class MatchInTournament implements QueryDtoInterface<MatchInTournament.MatchInTournamentDto> {
 
 
     @Id
@@ -25,7 +25,7 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Competition competition;
+    private Tournament tournament;
 
     @NotBlank(message = "Team name can't be empty")
     @Pattern(regexp="^[a-zA-Z]*$", message = "Team name can't contain number")
@@ -43,8 +43,8 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private String winnerTeam;
 
     @ElementCollection
-    @CollectionTable(name="votes_for_winning_team_in_competition_matches", joinColumns = @JoinColumn(name = "match_in_competition_id", referencedColumnName = "id"),
-            foreignKey = @ForeignKey(name = "FK_VOTES_FOR_WINNING_TEAM_IN_COMPETITION_MATCHES_COMPETITION_ID"))
+    @CollectionTable(name = "votes_for_winning_team_in_tournament_matches", joinColumns = @JoinColumn(name ="match_in_tournament_id", referencedColumnName = "id"),
+                     foreignKey = @ForeignKey(name = "FK_VOTES_FOR_WINNING_TEAM_IN_TOURNAMENT_MATCHES_COMPETITION_ID"))
     @MapKeyColumn(name = "user_name")
     @Column(name = "team_name")
     private Map<String, String> votesForWinnerTeam = new HashMap<>();
@@ -53,30 +53,32 @@ public class MatchInCompetition implements QueryDtoInterface<MatchInCompetition.
     private Boolean isMatchWasPlayed;
     private Boolean isClosed;
 
-    public void addMatchToCompetition(Competition competition) {
-        this.competition = competition;
-        competition.getMatchInCompetition().add(this);
+
+    public void addMatchToTournament(Tournament tournament) {
+        this.tournament = tournament;
+        tournament.getMatchInTournament().add(this);
     }
 
-    public void addVotesForWinnerTeam(String teamName, String userName) {
-        this.votesForWinnerTeam.put(teamName, userName);
+    public void addVotesForWinnerTeam(String userName, String teamName) {
+        this.votesForWinnerTeam.put(userName, teamName);
     }
+
 
     @Override
-    public MatchInCompetition.MatchesInCompetitionDto map() {
-        return new MatchInCompetition.MatchesInCompetitionDto(competition, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
+    public MatchInTournamentDto map() {
+        return new MatchInTournamentDto(tournament, firstTeamName, secondTeamName, matchDate, winnerTeam, votesForWinnerTeam, isWinnerConfirmed, isMatchWasPlayed);
     }
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MatchesInCompetitionDto {
-        private Competition competition;
+    public static class MatchInTournamentDto {
+        private Tournament tournament;
         private String firstTeamName;
         private String secondTeamName;
         private java.sql.Timestamp matchDate;
         private String winnerTeam;
-        private Map<String, String> voteForWinnerTeam;
+        private Map<String, String> voteForWinnerTeam = new HashMap<>();
         private Boolean isWinnerConfirmed;
         private Boolean isMatchWasPlayed;
     }

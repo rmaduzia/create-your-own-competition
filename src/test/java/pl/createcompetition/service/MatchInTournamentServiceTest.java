@@ -9,8 +9,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.createcompetition.model.*;
-import pl.createcompetition.repository.MatchInTournamentRepository;
-import pl.createcompetition.repository.TournamentRepository;
+import pl.createcompetition.tournament.MatchInTournament;
+import pl.createcompetition.tournament.MatchInTournamentRepository;
+import pl.createcompetition.tournament.Tournament;
+import pl.createcompetition.tournament.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.util.Optional;

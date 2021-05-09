@@ -9,10 +9,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.createcompetition.competition.Competition;
+import pl.createcompetition.competition.MatchInCompetition;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.repository.MatchInCompetitionRepository;
+import pl.createcompetition.competition.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
 import java.sql.Timestamp;
 

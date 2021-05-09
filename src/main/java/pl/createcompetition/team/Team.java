@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import pl.createcompetition.competition.Competition;
 import pl.createcompetition.model.Tag;
-import pl.createcompetition.model.Tournament;
+import pl.createcompetition.tournament.Tournament;
 import pl.createcompetition.model.UserDetail;
 import pl.createcompetition.service.query.QueryDtoInterface;
 
