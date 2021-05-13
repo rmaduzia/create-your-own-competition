@@ -13,8 +13,12 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.competition.CompetitionRepository;
-import pl.createcompetition.repository.UserDetailRepository;
+import pl.createcompetition.user.detail.UserDetail;
+import pl.createcompetition.user.detail.UserDetailRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.user.User;
+import pl.createcompetition.util.VerifyMethodsForServices;
+
 import java.sql.Timestamp;
 import java.util.Optional;
 

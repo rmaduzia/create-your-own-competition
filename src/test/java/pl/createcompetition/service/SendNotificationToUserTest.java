@@ -5,7 +5,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import pl.createcompetition.repository.NotificationRepository;
+import pl.createcompetition.notification.NotificationMessagesToUsersService;
+import pl.createcompetition.notification.NotificationRepository;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

@@ -6,8 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
@@ -17,7 +15,8 @@ import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.payload.ApiResponse;
 import pl.createcompetition.payload.ChangeMailRequest;
 import pl.createcompetition.payload.ChangePasswordRequest;
-import pl.createcompetition.service.UserService;
+import pl.createcompetition.user.UserController;
+import pl.createcompetition.user.UserService;
 
 import static org.hamcrest.core.Is.is;
 import static org.mockito.ArgumentMatchers.any;

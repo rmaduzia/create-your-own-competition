@@ -8,11 +8,11 @@ import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.PagedResponseDto;
-import pl.createcompetition.service.VerifyMethodsForServices;
+import pl.createcompetition.util.VerifyMethodsForServices;
 import pl.createcompetition.team.Team;
 import pl.createcompetition.payload.PaginationInfoRequest;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.util.query.GetQueryImplService;
 import pl.createcompetition.util.MatchTeamsInTournament;
 
 import java.util.*;

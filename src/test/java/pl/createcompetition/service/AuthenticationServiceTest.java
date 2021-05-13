@@ -1,10 +1,11 @@
 package pl.createcompetition.service;
 
+import pl.createcompetition.authentication.AuthenticationService;
 import pl.createcompetition.model.AuthProvider;
-import pl.createcompetition.model.User;
+import pl.createcompetition.user.User;
 import pl.createcompetition.payload.LoginRequest;
 import pl.createcompetition.payload.SignUpRequest;
-import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.user.UserRepository;
 import pl.createcompetition.security.TokenProvider;
 
 import org.junit.jupiter.api.BeforeAll;

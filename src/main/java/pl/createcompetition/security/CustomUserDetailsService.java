@@ -7,9 +7,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.createcompetition.exception.ResourceNotFoundException;
-import pl.createcompetition.model.User;
-import pl.createcompetition.repository.UserRepository;
-import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.user.User;
+import pl.createcompetition.user.UserRepository;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {

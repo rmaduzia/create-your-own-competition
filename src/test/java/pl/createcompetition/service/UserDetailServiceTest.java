@@ -9,10 +9,13 @@ import org.springframework.http.ResponseEntity;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.UserDetailRepository;
-import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.user.detail.UserDetail;
+import pl.createcompetition.user.detail.UserDetailRepository;
+import pl.createcompetition.user.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.util.query.GetQueryImplService;
+import pl.createcompetition.user.User;
+import pl.createcompetition.user.detail.UserDetailService;
 
 import java.util.ArrayList;
 import java.util.List;

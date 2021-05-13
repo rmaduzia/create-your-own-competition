@@ -4,8 +4,9 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.validator.constraints.Range;
 import pl.createcompetition.model.Tag;
-import pl.createcompetition.service.query.QueryDtoInterface;
+import pl.createcompetition.util.query.QueryDtoInterface;
 import pl.createcompetition.team.Team;
+import pl.createcompetition.tournament.match.MatchInTournament;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;

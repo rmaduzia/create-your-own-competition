@@ -9,12 +9,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.createcompetition.competition.Competition;
-import pl.createcompetition.competition.MatchInCompetition;
+import pl.createcompetition.competition.match.MatchInCompetition;
+import pl.createcompetition.competition.match.MatchInCompetitionService;
 import pl.createcompetition.exception.BadRequestException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
-import pl.createcompetition.competition.MatchInCompetitionRepository;
+import pl.createcompetition.competition.match.MatchInCompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.user.User;
+import pl.createcompetition.user.detail.UserDetail;
+import pl.createcompetition.util.VerifyMethodsForServices;
+
 import java.sql.Timestamp;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

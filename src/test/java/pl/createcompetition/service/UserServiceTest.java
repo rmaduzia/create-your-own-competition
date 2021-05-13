@@ -7,15 +7,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.web.SpringJUnitWebConfig;
+import pl.createcompetition.user.UserService;
 import pl.createcompetition.util.email.Mail;
 import pl.createcompetition.util.email.MailService;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.AuthProvider;
-import pl.createcompetition.model.User;
+import pl.createcompetition.user.User;
 import pl.createcompetition.payload.ApiResponse;
 import pl.createcompetition.payload.ChangeMailRequest;
 import pl.createcompetition.payload.ChangePasswordRequest;
-import pl.createcompetition.repository.UserRepository;
+import pl.createcompetition.user.UserRepository;
 import pl.createcompetition.security.UserPrincipal;
 
 import java.lang.reflect.InvocationTargetException;

@@ -14,6 +14,8 @@ import pl.createcompetition.tournament.TournamentRepository;
 import pl.createcompetition.security.UserPrincipal;
 import pl.createcompetition.team.Team;
 import pl.createcompetition.tournament.TournamentService;
+import pl.createcompetition.user.User;
+import pl.createcompetition.util.VerifyMethodsForServices;
 
 import java.util.*;
 

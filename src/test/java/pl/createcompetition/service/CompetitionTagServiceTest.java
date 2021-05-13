@@ -16,6 +16,9 @@ import pl.createcompetition.model.*;
 import pl.createcompetition.model.Tag;
 import pl.createcompetition.competition.CompetitionRepository;
 import pl.createcompetition.security.UserPrincipal;
+import pl.createcompetition.user.User;
+import pl.createcompetition.user.detail.UserDetail;
+
 import java.sql.Timestamp;
 import java.util.*;
 

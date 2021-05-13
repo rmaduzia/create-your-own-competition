@@ -6,8 +6,8 @@ import lombok.*;
 import pl.createcompetition.competition.Competition;
 import pl.createcompetition.model.Tag;
 import pl.createcompetition.tournament.Tournament;
-import pl.createcompetition.model.UserDetail;
-import pl.createcompetition.service.query.QueryDtoInterface;
+import pl.createcompetition.user.detail.UserDetail;
+import pl.createcompetition.util.query.QueryDtoInterface;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;

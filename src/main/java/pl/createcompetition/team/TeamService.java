@@ -11,13 +11,14 @@ import pl.createcompetition.exception.ResourceAlreadyExistException;
 import pl.createcompetition.exception.ResourceNotFoundException;
 import pl.createcompetition.model.*;
 import pl.createcompetition.payload.PaginationInfoRequest;
-import pl.createcompetition.repository.*;
 import pl.createcompetition.security.UserPrincipal;
-import pl.createcompetition.service.NotificationMessagesToUsersService;
-import pl.createcompetition.service.VerifyMethodsForServices;
-import pl.createcompetition.service.query.GetQueryImplService;
+import pl.createcompetition.notification.NotificationMessagesToUsersService;
+import pl.createcompetition.util.VerifyMethodsForServices;
+import pl.createcompetition.util.query.GetQueryImplService;
 import pl.createcompetition.tournament.Tournament;
 import pl.createcompetition.tournament.TournamentRepository;
+import pl.createcompetition.user.detail.UserDetail;
+import pl.createcompetition.user.detail.UserDetailRepository;
 
 import java.util.Optional;
 
