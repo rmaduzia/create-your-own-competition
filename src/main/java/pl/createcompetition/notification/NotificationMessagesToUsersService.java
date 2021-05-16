@@ -7,15 +7,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.stereotype.Service;
 import pl.createcompetition.model.websockets.UserNotification;
-import pl.createcompetition.notification.NotificationRepository;
 
 @AllArgsConstructor
 @Service
 public class NotificationMessagesToUsersService {
 
-    private final NotificationRepository notificationRepository;
+    //private final NotificationRepository notificationRepository;
     private final SimpMessagingTemplate simpMessagingTemplate;
-    private final RabbitTemplate rabbitTemplate;
+    //private final RabbitTemplate rabbitTemplate;
 
 
     @MessageMapping("/notifications")
