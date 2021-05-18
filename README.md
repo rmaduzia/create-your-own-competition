@@ -13,6 +13,7 @@ Project is created with:
 * Spring Security v.5.3.5
 * Spring Data JPA v.2.3.1
 * MySQL v.8.0.21
+* Flyway v.6.5.7
 * RabbitMQ v.3.8.12
 * Maven v.3.6.3
 * Lombok v.1.18.12.
@@ -22,7 +23,7 @@ Project is created with:
 * Swagger2 v.3.0.0
 
 
-### How to build container with RabbitMq Service:
+### How to build container with RabbitMq Service and MySQL database:
 1. Go to folder named docker
 2. Type command: docker-compose up -d
 
