@@ -12,6 +12,7 @@ Project is created with:
 * Spring Boot 2.3.1
 * Spring Security v.5.3.5
 * Spring Data JPA v.2.3.1
+* Hibernate v.5.4.22
 * MySQL v.8.0.21
 * Flyway v.6.5.7
 * RabbitMQ v.3.8.12
