@@ -4,6 +4,8 @@ _ _ _
 
 Application for organizing amateur informal and official sports events with tables, results, tree of matches, etc.
 
+Right now I'm working on migrating it to micro services architecture
+
 - - -
 
 Project is created with:
