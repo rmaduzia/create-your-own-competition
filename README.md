@@ -31,6 +31,26 @@ Project is created with:
 2. Type command: docker-compose up -d
 
 
+### System Variables:
+| Name                         | Value                               |
+| ---------------------------- | ----------------------------------- |
+| DATABASE_DRIVER              | mysql                               |
+| DATABASE_URL                 |                                     |
+| DATABASE_PORT                |                                     |
+| DATABASE_NAME                |                                     |
+| DATABASE_USERNAME            |                                     |
+| DATABASE_PASSWORD            |                                     |
+| DATABASE_DIALECT             | org.hibernate.dialect.MySQL8Dialect |
+| MAIL_USERNAME                |                                     |
+| MAIL_PASSWORD                |                                     |
+| GOOGLE_OAUTH_CLIENT_ID       |                                     |
+| GOOGLE_OAUTH_CLIENT_SECRET   |                                     |
+| FACEBOOK_OAUTH_CLIENT_ID     |                                     |
+| FACEBOOK_OAUTH_CLIENT_SECRET |                                     |
+| GITHUB_OAUTH_CLIENT_ID       |                                     |
+| GITHUB_OAUTH_CLIENT_SECRET   |                                     |
+| APP_AUTH_TOKEN_SECRET        |                                     |
+
 ### Features
 
 _ _ _
