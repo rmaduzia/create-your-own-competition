@@ -4,6 +4,8 @@ _ _ _
 
 Application for organizing amateur informal and official sports events with tables, results, tree of matches, etc.
 
+Right now I'm working on migrating it to microservices architecture
+
 - - -
 
 Project is created with:
@@ -12,7 +14,9 @@ Project is created with:
 * Spring Boot 2.3.1
 * Spring Security v.5.3.5
 * Spring Data JPA v.2.3.1
+* Hibernate v.5.4.22
 * MySQL v.8.0.21
+* Flyway v.6.5.7
 * RabbitMQ v.3.8.12
 * Maven v.3.6.3
 * Lombok v.1.18.12.
@@ -22,10 +26,30 @@ Project is created with:
 * Swagger2 v.3.0.0
 
 
-### How to build container with RabbitMq Service:
+### How to build container with RabbitMq Service and MySQL database:
 1. Go to folder named docker
 2. Type command: docker-compose up -d
 
+
+### System Variables:
+| Name                         | Value                               |
+| ---------------------------- | ----------------------------------- |
+| DATABASE_DRIVER              | mysql                               |
+| DATABASE_URL                 |                                     |
+| DATABASE_PORT                |                                     |
+| DATABASE_NAME                |                                     |
+| DATABASE_USERNAME            |                                     |
+| DATABASE_PASSWORD            |                                     |
+| DATABASE_DIALECT             | org.hibernate.dialect.MySQL8Dialect |
+| MAIL_USERNAME                |                                     |
+| MAIL_PASSWORD                |                                     |
+| GOOGLE_OAUTH_CLIENT_ID       |                                     |
+| GOOGLE_OAUTH_CLIENT_SECRET   |                                     |
+| FACEBOOK_OAUTH_CLIENT_ID     |                                     |
+| FACEBOOK_OAUTH_CLIENT_SECRET |                                     |
+| GITHUB_OAUTH_CLIENT_ID       |                                     |
+| GITHUB_OAUTH_CLIENT_SECRET   |                                     |
+| APP_AUTH_TOKEN_SECRET        |                                     |
 
 ### Features
 
