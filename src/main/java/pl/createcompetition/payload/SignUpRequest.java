@@ -4,10 +4,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.*;
 
 
 @Getter
@@ -22,6 +19,6 @@ public class SignUpRequest {
     private String email;
 
     @NotBlank
-    @Min(6) @Max(20)
+    @Size(min = 6, max=32)
     private String password;
 }

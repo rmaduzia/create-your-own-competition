@@ -8,7 +8,7 @@ CREATE TABLE user_teams
 
     CONSTRAINT FK_USER_TEAMS_USER_ID
         FOREIGN KEY (user_id)
-            REFERENCES user_detail (user_user_id),
+            REFERENCES user_detail (id),
 
     CONSTRAINT FK_USER_TEAMS_TEAM_ID
         FOREIGN KEY (team_id)
@@ -25,7 +25,7 @@ CREATE TABLE user_competitions
 
     CONSTRAINT FK_USER_COMPETITIONS_USER_ID
         FOREIGN KEY (user_id)
-            REFERENCES user_detail (user_user_id),
+            REFERENCES user_detail (id),
 
     CONSTRAINT FK_USER_COMPETITIONS_COMPETITION_ID
         FOREIGN KEY (competition_id)
